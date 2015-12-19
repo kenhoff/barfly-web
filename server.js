@@ -1,7 +1,11 @@
 var app = require('express')();
+port = process.env.PORT || 1175
 
-
-port = process.env.PORT || 1001
-app.listen(port, function (req, res) {
+app.get("/", function (req, res) {
 	res.send(200)
+})
+
+
+app.listen(port, function () {
+	console.log("Listening on", port);
 })
