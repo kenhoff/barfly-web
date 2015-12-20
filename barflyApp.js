@@ -60,7 +60,6 @@ define(function () {
 					return
 				}
 				else {
-					console.log(profile);
 					this.setState({profile: profile})
 				}
 			}.bind(this))
