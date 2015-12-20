@@ -1,11 +1,29 @@
 define(function () {
 	var BarflyApp = React.createClass({
+		getInitialState: function () {
+			return {
+				profile: null,
+				orders: []
+			}
+		},
 		render: function () {
-			return (
-				<div>
-					Hello again!
-				</div>
-			)
+			if (this.state.profile) {
+				return (
+					<div>
+						<nav className="navbar navbar-default navbar-fixed-top">
+							<div className = "container">
+								<ul className = "nav navbar-nav navbar-right">
+									<li className = "navbar-text">Hi there, {this.state.profile.given_name}!</li>
+									<li className = "navbar-text" onClick={this.signOut}>Sign out</li>
+								</ul>
+							</div>
+						</nav>
+					</div>
+				)
+			}
+			else {
+				return (<h1>Loading...</h1>)
+			}
 		},
 		componentWillMount: function () {
 			$(document).ajaxError(function (event, request, settings) {
@@ -34,10 +52,20 @@ define(function () {
 			window.location.href = "/"
 		},
 		componentDidMount: function () {
+			this.props.lock.getProfile(localStorage.getItem("access_jwt"), function (err, profile) {
+				if (err) {
+					this.refreshToken(function () {
+						this.componentDidMount()
+					}.bind(this))
+					return
+				}
+				else {
+					this.setState({profile: profile})
+				}
+			}.bind(this))
 			this.loadOrders()
 		},
 		loadOrders: function () {
-			console.log("calling api...");
 			$.ajax({
 				url: this.props.apiUrl + "/orders",
 				headers: {
@@ -45,7 +73,6 @@ define(function () {
 				},
 				success:
 					function (data) {
-						console.log("success!");
 						console.log(data);
 						this.setState({orders: data})
 					}.bind(this)
