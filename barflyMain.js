@@ -19,7 +19,10 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 			}
 			else {
 				return (
-					<a onClick={this.showLock}>Show Lock</a>
+					<div>
+						<h1>Welcome to Barfly</h1>
+						<a onClick={this.showLock}>Sign in</a>
+					</div>
 				);
 			}
 		},
@@ -27,8 +30,6 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 			this.lock = new Auth0Lock('JeIT5hdK0PXWuMVE1GSYbDT4Uw2HQpKx', 'barfly.auth0.com');
 			this.setState({idToken: this.getIdToken()})
 
-
-			console.log(window.location.hostname);
 			// whatever, there's got to be a better way to do this
 			if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
 				var apiUrl = "https://api.barflyorders.com"
