@@ -14,7 +14,9 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 		render: function () {
 			if (this.state.idToken) {
 				return (
-					<BarflyApp lock={this.lock} idToken={this.state.idToken} apiUrl={this.state.apiUrl}/>
+					<div>
+						<BarflyApp lock={this.lock} idToken={this.state.idToken} apiUrl={this.state.apiUrl}/>
+					</div>
 				);
 			}
 			else {
@@ -61,9 +63,11 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 			return idToken
 		},
 		showLock: function () {
-			this.lock.show({ authParams: { scope: "openid offline_access user_id given_name"}})
+			this.lock.show({ authParams: { scope: "openid offline_access user_id given_name app_metadata"}})
 		}
 	})
+
+
 
 
 	ReactDOM.render(

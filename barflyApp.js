@@ -3,7 +3,7 @@ define(function () {
 		getInitialState: function () {
 			return {
 				profile: null,
-				orders: []
+				currentBar: null
 			}
 		},
 		render: function () {
@@ -12,6 +12,7 @@ define(function () {
 					<div>
 						<nav className="navbar navbar-default navbar-fixed-top">
 							<div className = "container">
+								<BarSelector currentBar = {this.state.currentBar}/>
 								<ul className = "nav navbar-nav navbar-right">
 									<li className = "navbar-text">Hi there, {this.state.profile.given_name}!</li>
 									<li className = "navbar-text" onClick={this.signOut}>Sign out</li>
@@ -74,9 +75,44 @@ define(function () {
 				success:
 					function (data) {
 						console.log(data);
-						this.setState({orders: data})
 					}.bind(this)
 			})
+		}
+	})
+	var BarSelector = React.createClass({
+		getInitialState: function () {
+			return {
+				showModal: false
+			}
+		},
+		render: function () {
+			if (!this.props.currentBar) {
+				return (
+					<div>
+						<div className="navbar-form navbar-left">
+							<button type = "button" data-toggle = "modal" data-target = "#newBarModal" className="btn btn-default">Add a new Bar</button>
+						</div>
+						<Modal show = {this.state.showModal} />
+					</div>
+				)
+			}
+			else {
+				return (
+					<ul className = "nav navbar-nav">
+						<li className = "dropdown">
+							<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentBar} <span className="caret"></span></a>
+							<ul className = "dropdown-menu">
+								<li><a href="#">Action</a></li>
+							</ul>
+						</li>
+					</ul>
+				)
+			}
+		},
+		componentWillMount: function () {
+		},
+		openNewBarModal: function () {
+
 		}
 	})
 	return BarflyApp
