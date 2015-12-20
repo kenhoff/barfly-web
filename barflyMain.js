@@ -1,4 +1,3 @@
-
 // Stupid, hacky shit that I hate. for the time being, this allows us to require react modules with the JSX compiler.
 // stolen from https://github.com/philix/jsx-requirejs-plugin
 requirejs.config({
@@ -13,16 +12,12 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 		render: function () {
 			if (this.state.idToken) {
 				return (
-					<div>
-						<BarflyApp lock={this.lock} idToken={this.idToken}/>
-					</div>
+					<BarflyApp lock={this.lock} idToken={this.idToken}/>
 				);
 			}
 			else {
 				return (
-					<div>
-						<a onClick={this.showLock}>Show Lock</a>
-					</div>
+					<a onClick={this.showLock}>Show Lock</a>
 				);
 			}
 		},
