@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/barflyorders/barfly-web#readme",
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "harp": "^0.20.1"
   }
 }
