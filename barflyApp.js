@@ -10,7 +10,9 @@ define(function () {
 		componentWillMount: function () {
 			$(document).ajaxError(function (event, request, settings) {
 				this.refreshToken(function () {
-					console.log("refreshed token!");
+					console.log("refreshed token, retrying call...");
+					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
+					$.ajax(settings)
 				})
 			}.bind(this))
 		},
@@ -24,7 +26,7 @@ define(function () {
 				else {
 					this.signOut()
 				}
-			})
+			}.bind(this))
 		},
 		signOut: function () {
 			localStorage.removeItem("access_jwt")
@@ -37,7 +39,7 @@ define(function () {
 		loadOrders: function () {
 			console.log("calling api...");
 			$.ajax({
-				url: "http://localhost:1310/orders",
+				url: this.props.apiUrl + "/orders",
 				headers: {
 					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 				},

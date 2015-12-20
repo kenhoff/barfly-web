@@ -1,3 +1,5 @@
+
+
 // Stupid, hacky shit that I hate. for the time being, this allows us to require react modules with the JSX compiler.
 // stolen from https://github.com/philix/jsx-requirejs-plugin
 requirejs.config({
@@ -12,7 +14,7 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 		render: function () {
 			if (this.state.idToken) {
 				return (
-					<BarflyApp lock={this.lock} idToken={this.idToken}/>
+					<BarflyApp lock={this.lock} idToken={this.state.idToken} apiUrl={this.state.apiUrl}/>
 				);
 			}
 			else {
@@ -24,6 +26,17 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 		componentWillMount: function() {
 			this.lock = new Auth0Lock('JeIT5hdK0PXWuMVE1GSYbDT4Uw2HQpKx', 'barfly.auth0.com');
 			this.setState({idToken: this.getIdToken()})
+
+			// whatever, there's got to be a better way to do this
+			if ((window.location.hostname == "https://barflyorders.com/") || (window.location.hostname == "https://www.barflyorders.com/")) {
+				var apiUrl = "https://api.barflyorders.com/"
+			}
+			else {
+				var apiUrl = "http://localhost:1310"
+			}
+
+			this.setState({apiUrl: apiUrl})
+
 		},
 		getIdToken: function () {
 			var idToken = localStorage.getItem("access_jwt")
