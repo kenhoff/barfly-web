@@ -61,7 +61,7 @@ requirejs(["jsx!barflyApp"], function (BarflyApp) {
 			return idToken
 		},
 		showLock: function () {
-			this.lock.show({ authParams: { scope: "openid offline_access"}})
+			this.lock.show({ authParams: { scope: "openid offline_access user_id given_name"}})
 		}
 	})
 
