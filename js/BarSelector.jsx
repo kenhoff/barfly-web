@@ -17,7 +17,7 @@ var BarSelector = React.createClass({
 						<button onClick={this.openNewBarModal} className="btn btn-default">Add a new Bar</button>
 					</div>
 
-					<NewBarModal showModal = {this.state.showModal} onHide = {this.closeNewBarModal} />
+					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal}/>
 
 				</div>
 			)
@@ -48,12 +48,9 @@ var BarSelector = React.createClass({
 })
 
 NewBarModal = React.createClass({
-	getInitialState: function () {
-		return {
-			isValid: false
-		}
-	},
-	render: function () {
+	isValid: false,
+	// getInitialState: function() {},
+	render: function() {
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide}>
 				<Modal.Header closeButton>
@@ -62,33 +59,46 @@ NewBarModal = React.createClass({
 				<Modal.Body>
 					<form>
 						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers"/>
-						<ZipCodeInput/>
+						<ZipCodeInput inputIsValid={this.formIsValid}/>
 					</form>
 				</Modal.Body>
 				<Modal.Footer>
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
-					<button className = "btn btn-primary" onClick = {this.submitBar}>Create</button>
+					<button className="btn btn-primary" onClick={this.submitBar}>Create</button>
 				</Modal.Footer>
 			</Modal>
 		)
 	},
-	submitBar: function () {
-
+	formIsValid: function(valid) {
+		// this only works for one validation checking element right now~!!!
+		this.isValid = valid
+	},
+	submitBar: function() {
+		if (this.isValid) {
+			console.log("everything looks good! submitting bar");
+		} else {
+			console.log("uh oh! stuff needs to get checked");
+		}
 	}
 })
 
 ZipCodeInput = React.createClass({
-	getInitialState: function () {
-		return {
-			value: ""
+	getInitialState: function() {
+		return {value: ""}
+	},
+	validationState: function() {
+		input = this.state.value
+		re = /^\d{5}$/ig
+		if (input.match(re) && input.match(re).length == 1) {
+			this.props.inputIsValid(true)
+			return 'success'
+		} else {
+			this.props.inputIsValid(false)
+			return 'error'
 		}
 	},
-	validationState: function () {
-		input = this.state.value
-	 	return 'error'
-	},
 	render: function() {
-		return (<Input type="text" label="What zip code is your bar in?" placeholder="80302" onChange = {this.handleChange} ref = "zipCodeInput" value = {this.state.value} bsStyle = {this.validationState()} onBlur = {function () {
+		return (<Input type="text" label="What zip code is your bar in?" placeholder="80302" onChange={this.handleChange} ref="zipCodeInput" value={this.state.value} bsStyle={this.validationState()} onBlur={function() {
 			console.log("blurred!");
 		}}/>)
 	},

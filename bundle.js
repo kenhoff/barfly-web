@@ -49,12 +49,9 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 })
 
 NewBarModal = React.createClass({displayName: "NewBarModal",
-	getInitialState: function () {
-		return {
-			isValid: false
-		}
-	},
-	render: function () {
+	isValid: false,
+	// getInitialState: function() {},
+	render: function() {
 		return (
 			React.createElement(Modal, {show: this.props.showModal, onHide: this.props.onHide}, 
 				React.createElement(Modal.Header, {closeButton: true}, 
@@ -63,7 +60,7 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				React.createElement(Modal.Body, null, 
 					React.createElement("form", null, 
 						React.createElement(Input, {type: "text", label: "What's the name of your bar?", placeholder: "Bob's Burgers"}), 
-						React.createElement(ZipCodeInput, null)
+						React.createElement(ZipCodeInput, {inputIsValid: this.formIsValid})
 					)
 				), 
 				React.createElement(Modal.Footer, null, 
@@ -73,23 +70,36 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 			)
 		)
 	},
-	submitBar: function () {
-
+	formIsValid: function(valid) {
+		// this only works for one validation checking element right now~!!!
+		this.isValid = valid
+	},
+	submitBar: function() {
+		if (this.isValid) {
+			console.log("everything looks good! submitting bar");
+		} else {
+			console.log("uh oh! stuff needs to get checked");
+		}
 	}
 })
 
 ZipCodeInput = React.createClass({displayName: "ZipCodeInput",
-	getInitialState: function () {
-		return {
-			value: ""
+	getInitialState: function() {
+		return {value: ""}
+	},
+	validationState: function() {
+		input = this.state.value
+		re = /^\d{5}$/ig
+		if (input.match(re) && input.match(re).length == 1) {
+			this.props.inputIsValid(true)
+			return 'success'
+		} else {
+			this.props.inputIsValid(false)
+			return 'error'
 		}
 	},
-	validationState: function () {
-		input = this.state.value
-	 	return 'error'
-	},
 	render: function() {
-		return (React.createElement(Input, {type: "text", label: "What zip code is your bar in?", placeholder: "80302", onChange: this.handleChange, ref: "zipCodeInput", value: this.state.value, bsStyle: this.validationState(), onBlur: function () {
+		return (React.createElement(Input, {type: "text", label: "What zip code is your bar in?", placeholder: "80302", onChange: this.handleChange, ref: "zipCodeInput", value: this.state.value, bsStyle: this.validationState(), onBlur: function() {
 			console.log("blurred!");
 		}}))
 	},
