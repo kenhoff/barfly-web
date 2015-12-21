@@ -97,7 +97,8 @@ NewBarModal = React.createClass({
 				},
 				success: function (data) {
 					console.log(data);
-				}
+					this.props.onHide()
+				}.bind(this)
 			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");

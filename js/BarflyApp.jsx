@@ -5,7 +5,7 @@ window.jQuery = window.$ = require('jquery');
 
 var BarflyApp = React.createClass({
 	getInitialState: function() {
-		return {profile: null, currentBar: null}
+		return {profile: null, currentBar: null, bars: []}
 	},
 	render: function() {
 		if (this.state.profile) {
@@ -13,9 +13,9 @@ var BarflyApp = React.createClass({
 				<div>
 					<nav className="navbar navbar-default navbar-fixed-top">
 						<div className="container">
-							<BarSelector currentBar={this.state.currentBar}/>
+							<BarSelector currentBar={this.state.currentBar} bars={this.state.bars}/>
 							<ul className="nav navbar-nav navbar-right">
-								<li className="navbar-text">Hi there, 
+								<li className="navbar-text">Hi there,
 									{this.state.profile.given_name}!</li>
 								<li className="navbar-text" onClick={this.signOut}>Sign out</li>
 							</ul>
@@ -67,7 +67,20 @@ var BarflyApp = React.createClass({
 				this.setState({profile: profile})
 			}
 		}.bind(this))
-		this.loadOrders()
+		this.loadBars()
+	},
+	loadBars: function() {
+		$.ajax({
+			url: window.API_URL + "/user/bars",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(data) {
+				if (data.length != 0){
+					this.setState({bars: data, currentBar: data[0]})
+				}
+			}.bind(this)
+		})
 	},
 	loadOrders: function() {
 		$.ajax({

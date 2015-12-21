@@ -98,7 +98,8 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				},
 				success: function (data) {
 					console.log(data);
-				}
+					this.props.onHide()
+				}.bind(this)
 			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");
@@ -142,7 +143,7 @@ window.jQuery = window.$ = require('jquery');
 
 var BarflyApp = React.createClass({displayName: "BarflyApp",
 	getInitialState: function() {
-		return {profile: null, currentBar: null}
+		return {profile: null, currentBar: null, bars: []}
 	},
 	render: function() {
 		if (this.state.profile) {
@@ -150,9 +151,9 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 				React.createElement("div", null, 
 					React.createElement("nav", {className: "navbar navbar-default navbar-fixed-top"}, 
 						React.createElement("div", {className: "container"}, 
-							React.createElement(BarSelector, {currentBar: this.state.currentBar}), 
+							React.createElement(BarSelector, {currentBar: this.state.currentBar, bars: this.state.bars}), 
 							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-								React.createElement("li", {className: "navbar-text"}, "Hi there,",  
+								React.createElement("li", {className: "navbar-text"}, "Hi there,", 
 									this.state.profile.given_name, "!"), 
 								React.createElement("li", {className: "navbar-text", onClick: this.signOut}, "Sign out")
 							)
@@ -204,7 +205,20 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 				this.setState({profile: profile})
 			}
 		}.bind(this))
-		this.loadOrders()
+		this.loadBars()
+	},
+	loadBars: function() {
+		$.ajax({
+			url: window.API_URL + "/user/bars",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(data) {
+				if (data.length != 0){
+					this.setState({bars: data, currentBar: data[0]})
+				}
+			}.bind(this)
+		})
 	},
 	loadOrders: function() {
 		$.ajax({
