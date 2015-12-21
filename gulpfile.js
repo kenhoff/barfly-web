@@ -12,7 +12,7 @@ gulp.task('default', function() {
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
 	browserify({
-			entries: "./js/barflyMain.js",
+			entries: "./js/BarflyMain.jsx",
 			transform: [reactify]
 		}).bundle()
 		.on('error', function(err) {

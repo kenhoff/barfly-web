@@ -23,7 +23,9 @@
     "gulp-minify": "0.0.5",
     "gulp-rename": "^1.2.2",
     "harp": "^0.20.1",
+    "jquery": "^2.1.4",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.28.1",
     "react-dom": "^0.14.3",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0"

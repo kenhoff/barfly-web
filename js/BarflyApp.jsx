@@ -1,4 +1,7 @@
 var React = require('react');
+var BarSelector = require('./BarSelector.jsx');
+
+window.jQuery = window.$ = require('jquery');
 
 var BarflyApp = React.createClass({
 	getInitialState: function () {
@@ -80,39 +83,5 @@ var BarflyApp = React.createClass({
 		})
 	}
 })
-var BarSelector = React.createClass({
-	getInitialState: function () {
-		return {
-			showModal: false
-		}
-	},
-	render: function () {
-		if (!this.props.currentBar) {
-			return (
-				<div>
-					<div className="navbar-form navbar-left">
-						<button type = "button" data-toggle = "modal" data-target = "#newBarModal" className="btn btn-default">Add a new Bar</button>
-					</div>
-				</div>
-			)
-		}
-		else {
-			return (
-				<ul className = "nav navbar-nav">
-					<li className = "dropdown">
-						<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentBar} <span className="caret"></span></a>
-						<ul className = "dropdown-menu">
-							<li><a href="#">Action</a></li>
-						</ul>
-					</li>
-				</ul>
-			)
-		}
-	},
-	componentWillMount: function () {
-	},
-	openNewBarModal: function () {
 
-	}
-})
 module.exports = BarflyApp
