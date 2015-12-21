@@ -1,10 +1,10 @@
 html
 	head
 		title Barfly
-		
+
 		//- setting viewport
 		meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
-		
+
 		//- scripts
 		script(type = "application/javascript", src="//cdn.auth0.com/js/lock-7.12.min.js")
 		script(src = "//cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.min.js")
@@ -18,10 +18,11 @@ html
 		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous")
 		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
 			
+			
 		link(rel="stylesheet", type="text/css", href="/style.css")
 
 			
 	body
 		.container
 			#content
-		script(type = "text/babel", src = "/barflyMain.js")
+		script(type = "text/babel", src = "/bundle.js")
