@@ -1,4 +1,10 @@
-var BarflyApp = require('./barflyApp');
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+window.jQuery = window.$ = require('jquery');
+require("bootstrap")
+
+var BarflyApp = require('./BarflyApp.jsx');
 
 var BarflyMain = React.createClass({
 	render: function () {
