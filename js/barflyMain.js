@@ -1,3 +1,6 @@
+var React = require('react');
+var ReactDOM = require('react-dom');
+
 var BarflyApp = require('./barflyApp');
 
 var BarflyMain = React.createClass({

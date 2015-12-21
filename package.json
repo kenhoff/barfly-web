@@ -20,8 +20,11 @@
     "browserify": "^12.0.1",
     "express": "^4.13.3",
     "gulp": "^3.9.0",
+    "gulp-minify": "0.0.5",
     "gulp-rename": "^1.2.2",
     "harp": "^0.20.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.1.0"
   }

@@ -1,3 +1,5 @@
+var React = require('react');
+
 var BarflyApp = React.createClass({
 	getInitialState: function () {
 		return {
