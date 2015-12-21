@@ -50,7 +50,14 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 
 NewBarModal = React.createClass({displayName: "NewBarModal",
 	isValid: false,
-	// getInitialState: function() {},
+	// this whole bit is absurd. this needs to get fixed
+	zipCodeInput: null,
+	getInitialState: function() {
+		return {
+			barName: "",
+			zipCode: ""
+		}
+	},
 	render: function() {
 		return (
 			React.createElement(Modal, {show: this.props.showModal, onHide: this.props.onHide}, 
@@ -59,8 +66,8 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				), 
 				React.createElement(Modal.Body, null, 
 					React.createElement("form", null, 
-						React.createElement(Input, {type: "text", label: "What's the name of your bar?", placeholder: "Bob's Burgers"}), 
-						React.createElement(ZipCodeInput, {inputIsValid: this.formIsValid})
+						React.createElement(Input, {type: "text", label: "What's the name of your bar?", placeholder: "Bob's Burgers", ref: "barNameInput"}), 
+						React.createElement(ZipCodeInput, {inputIsValid: this.formIsValid, ref: (ZipCodeInput) => this.zipCodeInput = ZipCodeInput.refs.zipCodeInput})
 					)
 				), 
 				React.createElement(Modal.Footer, null, 
@@ -77,6 +84,22 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 	submitBar: function() {
 		if (this.isValid) {
 			console.log("everything looks good! submitting bar");
+			console.log(this.refs.barNameInput.getValue());
+			console.log(this.zipCodeInput.getValue());
+			$.ajax({
+				url: window.API_URL + "/user/bars",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "POST",
+				data: {
+					barName: this.refs.barNameInput.getValue(),
+					zipCode: this.zipCodeInput.getValue()
+				},
+				success: function (data) {
+					console.log(data);
+				}
+			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");
 		}
@@ -118,13 +141,10 @@ var BarSelector = require('./BarSelector.jsx');
 window.jQuery = window.$ = require('jquery');
 
 var BarflyApp = React.createClass({displayName: "BarflyApp",
-	getInitialState: function () {
-		return {
-			profile: null,
-			currentBar: null
-		}
+	getInitialState: function() {
+		return {profile: null, currentBar: null}
 	},
-	render: function () {
+	render: function() {
 		if (this.state.profile) {
 			return (
 				React.createElement("div", null, 
@@ -132,68 +152,69 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 						React.createElement("div", {className: "container"}, 
 							React.createElement(BarSelector, {currentBar: this.state.currentBar}), 
 							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
-								React.createElement("li", {className: "navbar-text"}, "Hi there, ", this.state.profile.given_name, "!"), 
+								React.createElement("li", {className: "navbar-text"}, "Hi there,",  
+									this.state.profile.given_name, "!"), 
 								React.createElement("li", {className: "navbar-text", onClick: this.signOut}, "Sign out")
 							)
 						)
 					)
 				)
 			)
-		}
-		else {
-			return (React.createElement("h1", null, "Loading..."))
+		} else {
+			return (
+				React.createElement("h1", null, "Loading...")
+			)
 		}
 	},
-	componentWillMount: function () {
-		$(document).ajaxError(function (event, request, settings) {
-			this.refreshToken(function () {
-				console.log("refreshed token, retrying call...");
-				settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
-				$.ajax(settings)
-			})
+	componentWillMount: function() {
+		$(document).ajaxError(function(event, request, settings) {
+			if (request.status == 401) {
+				this.refreshToken(function() {
+					console.log("refreshed token, retrying call...");
+					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
+					$.ajax(settings)
+				})
+			}
 		}.bind(this))
 	},
-	refreshToken: function (cb) {
-		this.props.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function (err, delegationResult) {
+	refreshToken: function(cb) {
+		this.props.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
 				localStorage.setItem("access_jwt", delegationResult.id_token)
 				cb()
-			}
-			else {
+			} else {
 				this.signOut()
 			}
 		}.bind(this))
 	},
-	signOut: function () {
+	signOut: function() {
 		localStorage.removeItem("access_jwt")
 		localStorage.removeItem("refresh_token")
 		window.location.href = "/"
 	},
-	componentDidMount: function () {
-		this.props.lock.getProfile(localStorage.getItem("access_jwt"), function (err, profile) {
+	componentDidMount: function() {
+		this.props.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
 			if (err) {
-				this.refreshToken(function () {
+				this.refreshToken(function() {
 					this.componentDidMount()
 				}.bind(this))
 				return
-			}
-			else {
+			} else {
 				this.setState({profile: profile})
 			}
 		}.bind(this))
 		this.loadOrders()
 	},
-	loadOrders: function () {
+	loadOrders: function() {
 		$.ajax({
-			url: this.props.apiUrl + "/orders",
+			url: window.API_URL + "/legacy_orders",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
-			success:
-				function (data) {
-					console.log(data);
-				}.bind(this)
+			success: function(data) {
+				console.log(data);
+			}.bind(this)
 		})
 	}
 })
@@ -210,15 +231,14 @@ require("bootstrap")
 var BarflyApp = require('./BarflyApp.jsx');
 
 var BarflyMain = React.createClass({displayName: "BarflyMain",
-	render: function () {
+	render: function() {
 		if (this.state.idToken) {
 			return (
 				React.createElement("div", null, 
-					React.createElement(BarflyApp, {lock: this.lock, idToken: this.state.idToken, apiUrl: this.state.apiUrl})
+					React.createElement(BarflyApp, {lock: this.lock, idToken: this.state.idToken})
 				)
 			);
-		}
-		else {
+		} else {
 			return (
 				React.createElement("div", null, 
 					React.createElement("h1", null, "Welcome to Barfly"), 
@@ -233,16 +253,12 @@ var BarflyMain = React.createClass({displayName: "BarflyMain",
 
 		// whatever, there's got to be a better way to do this
 		if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
-			var apiUrl = "https://api.barflyorders.com"
+			window.API_URL = "https://api.barflyorders.com"
+		} else {
+			window.API_URL = "http://localhost:1310"
 		}
-		else {
-			var apiUrl = "http://localhost:1310"
-		}
-
-		this.setState({apiUrl: apiUrl})
-
 	},
-	getIdToken: function () {
+	getIdToken: function() {
 		var idToken = localStorage.getItem("access_jwt")
 		var authHash = this.lock.parseHash(window.location.hash)
 		if (!idToken && authHash) {
@@ -254,22 +270,23 @@ var BarflyMain = React.createClass({displayName: "BarflyMain",
 				// this is pretty hacky - get rid of the hash when the page gets redirected.
 				window.location.hash = ""
 			}
-			if (authHash.error){
+			if (authHash.error) {
 				console.log("Error signing in with authHash:", authHash);
 				return null
 			}
 		}
 		return idToken
 	},
-	showLock: function () {
-		this.lock.show({ authParams: { scope: "openid offline_access user_id given_name app_metadata"}})
+	showLock: function() {
+		this.lock.show({
+			authParams: {
+				scope: "openid offline_access user_id given_name app_metadata"
+			}
+		})
 	}
 })
 
-ReactDOM.render(
-	React.createElement(BarflyMain, null),
-	document.getElementById('content')
-)
+ReactDOM.render(React.createElement(BarflyMain, null), document.getElementById('content'))
 
 },{"./BarflyApp.jsx":2,"bootstrap":14,"jquery":108,"react":415,"react-dom":262}],4:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };

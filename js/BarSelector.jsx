@@ -49,7 +49,14 @@ var BarSelector = React.createClass({
 
 NewBarModal = React.createClass({
 	isValid: false,
-	// getInitialState: function() {},
+	// this whole bit is absurd. this needs to get fixed
+	zipCodeInput: null,
+	getInitialState: function() {
+		return {
+			barName: "",
+			zipCode: ""
+		}
+	},
 	render: function() {
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide}>
@@ -58,8 +65,8 @@ NewBarModal = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					<form>
-						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers"/>
-						<ZipCodeInput inputIsValid={this.formIsValid}/>
+						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref = "barNameInput"/>
+						<ZipCodeInput inputIsValid={this.formIsValid} ref = {(ZipCodeInput) => this.zipCodeInput = ZipCodeInput.refs.zipCodeInput}/>
 					</form>
 				</Modal.Body>
 				<Modal.Footer>
@@ -76,6 +83,22 @@ NewBarModal = React.createClass({
 	submitBar: function() {
 		if (this.isValid) {
 			console.log("everything looks good! submitting bar");
+			console.log(this.refs.barNameInput.getValue());
+			console.log(this.zipCodeInput.getValue());
+			$.ajax({
+				url: window.API_URL + "/user/bars",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "POST",
+				data: {
+					barName: this.refs.barNameInput.getValue(),
+					zipCode: this.zipCodeInput.getValue()
+				},
+				success: function (data) {
+					console.log(data);
+				}
+			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");
 		}

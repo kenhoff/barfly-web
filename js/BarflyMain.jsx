@@ -7,15 +7,14 @@ require("bootstrap")
 var BarflyApp = require('./BarflyApp.jsx');
 
 var BarflyMain = React.createClass({
-	render: function () {
+	render: function() {
 		if (this.state.idToken) {
 			return (
 				<div>
-					<BarflyApp lock={this.lock} idToken={this.state.idToken} apiUrl={this.state.apiUrl}/>
+					<BarflyApp lock={this.lock} idToken={this.state.idToken}/>
 				</div>
 			);
-		}
-		else {
+		} else {
 			return (
 				<div>
 					<h1>Welcome to Barfly</h1>
@@ -30,16 +29,12 @@ var BarflyMain = React.createClass({
 
 		// whatever, there's got to be a better way to do this
 		if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
-			var apiUrl = "https://api.barflyorders.com"
+			window.API_URL = "https://api.barflyorders.com"
+		} else {
+			window.API_URL = "http://localhost:1310"
 		}
-		else {
-			var apiUrl = "http://localhost:1310"
-		}
-
-		this.setState({apiUrl: apiUrl})
-
 	},
-	getIdToken: function () {
+	getIdToken: function() {
 		var idToken = localStorage.getItem("access_jwt")
 		var authHash = this.lock.parseHash(window.location.hash)
 		if (!idToken && authHash) {
@@ -51,19 +46,20 @@ var BarflyMain = React.createClass({
 				// this is pretty hacky - get rid of the hash when the page gets redirected.
 				window.location.hash = ""
 			}
-			if (authHash.error){
+			if (authHash.error) {
 				console.log("Error signing in with authHash:", authHash);
 				return null
 			}
 		}
 		return idToken
 	},
-	showLock: function () {
-		this.lock.show({ authParams: { scope: "openid offline_access user_id given_name app_metadata"}})
+	showLock: function() {
+		this.lock.show({
+			authParams: {
+				scope: "openid offline_access user_id given_name app_metadata"
+			}
+		})
 	}
 })
 
-ReactDOM.render(
-	<BarflyMain />,
-	document.getElementById('content')
-)
+ReactDOM.render(< BarflyMain />, document.getElementById('content'))
