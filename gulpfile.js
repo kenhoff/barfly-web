@@ -4,7 +4,7 @@ var source = require('vinyl-source-stream');
 var reactify = require('reactify');
 
 gulp.task('default', function() {
-	var watcher = gulp.watch("js/*.js", ["build"])
+	var watcher = gulp.watch("js/*.jsx", ["build"])
 	gulp.start('build')
 
 })

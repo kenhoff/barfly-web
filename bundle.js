@@ -2,16 +2,15 @@
 var React = require('react');
 
 var Modal = require('react-bootstrap').Modal;
+var Input = require('react-bootstrap').Input;
 
 window.jQuery = window.$ = require('jquery');
 
 var BarSelector = React.createClass({displayName: "BarSelector",
-	getInitialState: function () {
-		return {
-			showModal: false
-		}
+	getInitialState: function() {
+		return {showModal: false}
 	},
-	render: function () {
+	render: function() {
 		if (!this.props.currentBar) {
 			return (
 				React.createElement("div", null, 
@@ -19,37 +18,87 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 						React.createElement("button", {onClick: this.openNewBarModal, className: "btn btn-default"}, "Add a new Bar")
 					), 
 
-					React.createElement(Modal, {show: this.state.showModal, onHide: this.close}, 
-						React.createElement(Modal.Header, {closeButton: true}, 
-							React.createElement(Modal.Title, null, "Let's add a new bar.")
-						)
-					)
+					React.createElement(NewBarModal, {showModal: this.state.showModal, onHide: this.closeNewBarModal})
 
 				)
 			)
-		}
-		else {
+		} else {
 			return (
 				React.createElement("ul", {className: "nav navbar-nav"}, 
 					React.createElement("li", {className: "dropdown"}, 
-						React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}, this.props.currentBar, " ", React.createElement("span", {className: "caret"})), 
+						React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}, this.props.currentBar, 
+							React.createElement("span", {className: "caret"})
+						), 
 						React.createElement("ul", {className: "dropdown-menu"}, 
-							React.createElement("li", null, React.createElement("a", {href: "#"}, "Action"))
+							React.createElement("li", null, 
+								React.createElement("a", {href: "#"}, "Action")
+							)
 						)
 					)
 				)
 			)
 		}
 	},
-	componentWillMount: function () {
-	},
-	openNewBarModal: function () {
+	componentWillMount: function() {},
+	openNewBarModal: function() {
 		this.setState({showModal: true})
 	},
-	closeNewBarModal: function () {
+	closeNewBarModal: function() {
 		this.setState({showModal: false})
 	}
 })
+
+NewBarModal = React.createClass({displayName: "NewBarModal",
+	getInitialState: function () {
+		return {
+			isValid: false
+		}
+	},
+	render: function () {
+		return (
+			React.createElement(Modal, {show: this.props.showModal, onHide: this.props.onHide}, 
+				React.createElement(Modal.Header, {closeButton: true}, 
+					React.createElement(Modal.Title, null, "Let's add a new bar.")
+				), 
+				React.createElement(Modal.Body, null, 
+					React.createElement("form", null, 
+						React.createElement(Input, {type: "text", label: "What's the name of your bar?", placeholder: "Bob's Burgers"}), 
+						React.createElement(ZipCodeInput, null)
+					)
+				), 
+				React.createElement(Modal.Footer, null, 
+					React.createElement("button", {className: "btn btn-default", onClick: this.props.onHide}, "Cancel"), 
+					React.createElement("button", {className: "btn btn-primary", onClick: this.submitBar}, "Create")
+				)
+			)
+		)
+	},
+	submitBar: function () {
+
+	}
+})
+
+ZipCodeInput = React.createClass({displayName: "ZipCodeInput",
+	getInitialState: function () {
+		return {
+			value: ""
+		}
+	},
+	validationState: function () {
+		input = this.state.value
+	 	return 'error'
+	},
+	render: function() {
+		return (React.createElement(Input, {type: "text", label: "What zip code is your bar in?", placeholder: "80302", onChange: this.handleChange, ref: "zipCodeInput", value: this.state.value, bsStyle: this.validationState(), onBlur: function () {
+			console.log("blurred!");
+		}}))
+	},
+	handleChange: function() {
+		this.setState({value: this.refs.zipCodeInput.getValue()})
+		console.log("changing");
+	}
+})
+
 module.exports = BarSelector
 
 },{"jquery":108,"react":415,"react-bootstrap":251}],2:[function(require,module,exports){
