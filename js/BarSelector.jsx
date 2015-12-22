@@ -17,22 +17,22 @@ var BarSelector = React.createClass({
 						<button onClick={this.openNewBarModal} className="btn btn-default">Add a new Bar</button>
 					</div>
 
-					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal}/>
+					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.onBarChange}/>
 
 				</div>
 			)
 		} else {
+			bars = this.props.bars
+			// index of current bar
+			index = bars.indexOf(this.props.currentBar)
+			console.log(index);
+			bars.splice(index, 1)
+			console.log(bars);
 			return (
 				<ul className="nav navbar-nav">
 					<li className="dropdown">
-						<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.props.currentBar}
-							<span className="caret"></span>
-						</a>
-						<ul className="dropdown-menu">
-							<li>
-								<a href="#">Action</a>
-							</li>
-						</ul>
+						<BarSelectorDropdownDisplayed currentBar={this.props.currentBar}/>
+						<BarSelectorDropdownList bars={bars}/>
 					</li>
 				</ul>
 			)
@@ -47,16 +47,57 @@ var BarSelector = React.createClass({
 	}
 })
 
-NewBarModal = React.createClass({
-	isValid: false,
-	// this whole bit is absurd. this needs to get fixed
-	zipCodeInput: null,
-	getInitialState: function() {
-		return {
-			barName: "",
-			zipCode: ""
-		}
+BarSelectorDropdownDisplayed = React.createClass({
+	getInitialState: function () {
+		return ({
+			barName: "Loading bars..."
+		})
 	},
+	render: function() {
+		return (
+			<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.barName}
+				<span className="caret"></span>
+			</a>
+		)
+	},
+	componentDidMount: function () {
+		resolveBarName(this.props.currentBar, function (barName) {
+			this.setState({barName: barName})
+		}.bind(this))
+	}
+})
+
+BarSelectorDropdownList = React.createClass({
+	render: function() {
+		bars = this.props.bars
+		return (
+			<ul className="dropdown-menu">
+				{bars.map(function(bar) {
+					return (
+						<li key={bar}>
+							<a>{bar}</a>
+						</li>
+					)
+				})}
+			</ul>
+		)
+	}
+})
+
+resolveBarName = function(barID, cb) {
+	console.log("getting name for", barID);
+	$.ajax({
+		url: window.API_URL + "/bars/" + barID,
+		headers: {
+			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+		},
+		success: function(barInfo) {
+			cb(barInfo.barName)
+		}
+	})
+}
+
+NewBarModal = React.createClass({
 	render: function() {
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide}>
@@ -65,8 +106,8 @@ NewBarModal = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					<form>
-						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref = "barNameInput"/>
-						<ZipCodeInput inputIsValid={this.formIsValid} ref = {(ZipCodeInput) => this.zipCodeInput = ZipCodeInput.refs.zipCodeInput}/>
+						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref="barNameInput"/>
+						<Input type="text" label="What zip code is your bar in?" placeholder="80302" ref="zipCodeInput"/>
 					</form>
 				</Modal.Body>
 				<Modal.Footer>
@@ -76,15 +117,16 @@ NewBarModal = React.createClass({
 			</Modal>
 		)
 	},
-	formIsValid: function(valid) {
-		// this only works for one validation checking element right now~!!!
-		this.isValid = valid
-	},
 	submitBar: function() {
-		if (this.isValid) {
+		re = /^\d{5}$/ig
+		zipCode = this.refs.zipCodeInput.getValue()
+
+		isValid = (zipCode.match(re) && (zipCode.match(re).length == 1))
+
+		if (isValid) {
 			console.log("everything looks good! submitting bar");
 			console.log(this.refs.barNameInput.getValue());
-			console.log(this.zipCodeInput.getValue());
+			console.log(this.refs.zipCodeInput.getValue());
 			$.ajax({
 				url: window.API_URL + "/user/bars",
 				headers: {
@@ -93,42 +135,17 @@ NewBarModal = React.createClass({
 				method: "POST",
 				data: {
 					barName: this.refs.barNameInput.getValue(),
-					zipCode: this.zipCodeInput.getValue()
+					zipCode: this.refs.zipCodeInput.getValue()
 				},
-				success: function (data) {
+				success: function(data) {
 					console.log(data);
+					this.props.onBarChange()
 					this.props.onHide()
 				}.bind(this)
 			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");
 		}
-	}
-})
-
-ZipCodeInput = React.createClass({
-	getInitialState: function() {
-		return {value: ""}
-	},
-	validationState: function() {
-		input = this.state.value
-		re = /^\d{5}$/ig
-		if (input.match(re) && input.match(re).length == 1) {
-			this.props.inputIsValid(true)
-			return 'success'
-		} else {
-			this.props.inputIsValid(false)
-			return 'error'
-		}
-	},
-	render: function() {
-		return (<Input type="text" label="What zip code is your bar in?" placeholder="80302" onChange={this.handleChange} ref="zipCodeInput" value={this.state.value} bsStyle={this.validationState()} onBlur={function() {
-			console.log("blurred!");
-		}}/>)
-	},
-	handleChange: function() {
-		this.setState({value: this.refs.zipCodeInput.getValue()})
-		console.log("changing");
 	}
 })
 

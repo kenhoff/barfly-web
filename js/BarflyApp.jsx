@@ -13,7 +13,7 @@ var BarflyApp = React.createClass({
 				<div>
 					<nav className="navbar navbar-default navbar-fixed-top">
 						<div className="container">
-							<BarSelector currentBar={this.state.currentBar} bars={this.state.bars}/>
+							<BarSelector currentBar={this.state.currentBar} bars={this.state.bars} onBarChange={this.handleBarChange}/>
 							<ul className="nav navbar-nav navbar-right">
 								<li className="navbar-text">Hi there,
 									{this.state.profile.given_name}!</li>
@@ -28,6 +28,10 @@ var BarflyApp = React.createClass({
 				<h1>Loading...</h1>
 			)
 		}
+	},
+	handleBarChange: function() {
+		console.log("hallo");
+		this.loadBars()
 	},
 	componentWillMount: function() {
 		$(document).ajaxError(function(event, request, settings) {
@@ -45,6 +49,7 @@ var BarflyApp = React.createClass({
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
 				localStorage.setItem("access_jwt", delegationResult.id_token)
+				console.log("refreshed token");
 				cb()
 			} else {
 				this.signOut()
@@ -76,8 +81,10 @@ var BarflyApp = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				if (data.length != 0){
+				if (data.length != 0) {
+					console.log("updating state");
 					this.setState({bars: data, currentBar: data[0]})
+					console.log(this.state);
 				}
 			}.bind(this)
 		})

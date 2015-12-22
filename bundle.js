@@ -18,22 +18,22 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 						React.createElement("button", {onClick: this.openNewBarModal, className: "btn btn-default"}, "Add a new Bar")
 					), 
 
-					React.createElement(NewBarModal, {showModal: this.state.showModal, onHide: this.closeNewBarModal})
+					React.createElement(NewBarModal, {showModal: this.state.showModal, onHide: this.closeNewBarModal, onBarChange: this.props.onBarChange})
 
 				)
 			)
 		} else {
+			bars = this.props.bars
+			// index of current bar
+			index = bars.indexOf(this.props.currentBar)
+			console.log(index);
+			bars.splice(index, 1)
+			console.log(bars);
 			return (
 				React.createElement("ul", {className: "nav navbar-nav"}, 
 					React.createElement("li", {className: "dropdown"}, 
-						React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}, this.props.currentBar, 
-							React.createElement("span", {className: "caret"})
-						), 
-						React.createElement("ul", {className: "dropdown-menu"}, 
-							React.createElement("li", null, 
-								React.createElement("a", {href: "#"}, "Action")
-							)
-						)
+						React.createElement(BarSelectorDropdownDisplayed, {currentBar: this.props.currentBar}), 
+						React.createElement(BarSelectorDropdownList, {bars: bars})
 					)
 				)
 			)
@@ -48,16 +48,57 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 	}
 })
 
-NewBarModal = React.createClass({displayName: "NewBarModal",
-	isValid: false,
-	// this whole bit is absurd. this needs to get fixed
-	zipCodeInput: null,
-	getInitialState: function() {
-		return {
-			barName: "",
-			zipCode: ""
-		}
+BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropdownDisplayed",
+	getInitialState: function () {
+		return ({
+			barName: "Loading bars..."
+		})
 	},
+	render: function() {
+		return (
+			React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}, this.state.barName, 
+				React.createElement("span", {className: "caret"})
+			)
+		)
+	},
+	componentDidMount: function () {
+		resolveBarName(this.props.currentBar, function (barName) {
+			this.setState({barName: barName})
+		}.bind(this))
+	}
+})
+
+BarSelectorDropdownList = React.createClass({displayName: "BarSelectorDropdownList",
+	render: function() {
+		bars = this.props.bars
+		return (
+			React.createElement("ul", {className: "dropdown-menu"}, 
+				bars.map(function(bar) {
+					return (
+						React.createElement("li", {key: bar}, 
+							React.createElement("a", null, bar)
+						)
+					)
+				})
+			)
+		)
+	}
+})
+
+resolveBarName = function(barID, cb) {
+	console.log("getting name for", barID);
+	$.ajax({
+		url: window.API_URL + "/bars/" + barID,
+		headers: {
+			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+		},
+		success: function(barInfo) {
+			cb(barInfo.barName)
+		}
+	})
+}
+
+NewBarModal = React.createClass({displayName: "NewBarModal",
 	render: function() {
 		return (
 			React.createElement(Modal, {show: this.props.showModal, onHide: this.props.onHide}, 
@@ -67,7 +108,7 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				React.createElement(Modal.Body, null, 
 					React.createElement("form", null, 
 						React.createElement(Input, {type: "text", label: "What's the name of your bar?", placeholder: "Bob's Burgers", ref: "barNameInput"}), 
-						React.createElement(ZipCodeInput, {inputIsValid: this.formIsValid, ref: (ZipCodeInput) => this.zipCodeInput = ZipCodeInput.refs.zipCodeInput})
+						React.createElement(Input, {type: "text", label: "What zip code is your bar in?", placeholder: "80302", ref: "zipCodeInput"})
 					)
 				), 
 				React.createElement(Modal.Footer, null, 
@@ -77,15 +118,16 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 			)
 		)
 	},
-	formIsValid: function(valid) {
-		// this only works for one validation checking element right now~!!!
-		this.isValid = valid
-	},
 	submitBar: function() {
-		if (this.isValid) {
+		re = /^\d{5}$/ig
+		zipCode = this.refs.zipCodeInput.getValue()
+
+		isValid = (zipCode.match(re) && (zipCode.match(re).length == 1))
+
+		if (isValid) {
 			console.log("everything looks good! submitting bar");
 			console.log(this.refs.barNameInput.getValue());
-			console.log(this.zipCodeInput.getValue());
+			console.log(this.refs.zipCodeInput.getValue());
 			$.ajax({
 				url: window.API_URL + "/user/bars",
 				headers: {
@@ -94,42 +136,17 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				method: "POST",
 				data: {
 					barName: this.refs.barNameInput.getValue(),
-					zipCode: this.zipCodeInput.getValue()
+					zipCode: this.refs.zipCodeInput.getValue()
 				},
-				success: function (data) {
+				success: function(data) {
 					console.log(data);
+					this.props.onBarChange()
 					this.props.onHide()
 				}.bind(this)
 			})
 		} else {
 			console.log("uh oh! stuff needs to get checked");
 		}
-	}
-})
-
-ZipCodeInput = React.createClass({displayName: "ZipCodeInput",
-	getInitialState: function() {
-		return {value: ""}
-	},
-	validationState: function() {
-		input = this.state.value
-		re = /^\d{5}$/ig
-		if (input.match(re) && input.match(re).length == 1) {
-			this.props.inputIsValid(true)
-			return 'success'
-		} else {
-			this.props.inputIsValid(false)
-			return 'error'
-		}
-	},
-	render: function() {
-		return (React.createElement(Input, {type: "text", label: "What zip code is your bar in?", placeholder: "80302", onChange: this.handleChange, ref: "zipCodeInput", value: this.state.value, bsStyle: this.validationState(), onBlur: function() {
-			console.log("blurred!");
-		}}))
-	},
-	handleChange: function() {
-		this.setState({value: this.refs.zipCodeInput.getValue()})
-		console.log("changing");
 	}
 })
 
@@ -151,7 +168,7 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 				React.createElement("div", null, 
 					React.createElement("nav", {className: "navbar navbar-default navbar-fixed-top"}, 
 						React.createElement("div", {className: "container"}, 
-							React.createElement(BarSelector, {currentBar: this.state.currentBar, bars: this.state.bars}), 
+							React.createElement(BarSelector, {currentBar: this.state.currentBar, bars: this.state.bars, onBarChange: this.handleBarChange}), 
 							React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
 								React.createElement("li", {className: "navbar-text"}, "Hi there,", 
 									this.state.profile.given_name, "!"), 
@@ -166,6 +183,10 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 				React.createElement("h1", null, "Loading...")
 			)
 		}
+	},
+	handleBarChange: function() {
+		console.log("hallo");
+		this.loadBars()
 	},
 	componentWillMount: function() {
 		$(document).ajaxError(function(event, request, settings) {
@@ -183,6 +204,7 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
 				localStorage.setItem("access_jwt", delegationResult.id_token)
+				console.log("refreshed token");
 				cb()
 			} else {
 				this.signOut()
@@ -214,8 +236,10 @@ var BarflyApp = React.createClass({displayName: "BarflyApp",
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				if (data.length != 0){
+				if (data.length != 0) {
+					console.log("updating state");
 					this.setState({bars: data, currentBar: data[0]})
+					console.log(this.state);
 				}
 			}.bind(this)
 		})
