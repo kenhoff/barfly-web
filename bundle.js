@@ -150,12 +150,13 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 			}.bind(this))
 		}
 	},
-	// componentWillReceiveProps: function (nextProps) {
-	// 	console.log("receive next props");
-	// 	if (nextProps.currentBar >= 0) {
-	// 		this.loadBars();
-	// 	}
-	// }
+	componentWillReceiveProps: function(nextProps) {
+		if (nextProps.currentBar >= 0) {
+			this.loadBars(function(bars) {
+				this.setState({bars: bars})
+			}.bind(this));
+		}
+	}
 })
 
 BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropdownDisplayed",
@@ -163,8 +164,6 @@ BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropd
 		return ({barName: "Loading bars..."})
 	},
 	render: function() {
-		console.log("displayed:", this.props.currentBar);
-		console.log("displayed name:", this.state);
 		return (
 			React.createElement("a", {href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false"}, this.state.barName, 
 				React.createElement("span", {className: "caret"})
@@ -172,18 +171,15 @@ BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropd
 		)
 	},
 	componentDidMount: function() {
-		console.log("displayed mounting");
 		resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	},
-	componentWillReceiveProps: function (nextProps) {
-		console.log("received new props");
+	componentWillReceiveProps: function(nextProps) {
 		resolveBarName(nextProps.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
-	},
-
+	}
 })
 
 BarSelectorDropdownList = React.createClass({displayName: "BarSelectorDropdownList",
@@ -216,6 +212,11 @@ IndividualBarInDropdownList = React.createClass({displayName: "IndividualBarInDr
 	},
 	componentDidMount: function() {
 		resolveBarName(this.props.barID, function(barName) {
+			this.setState({barName: barName})
+		}.bind(this))
+	},
+	componentWillReceiveProps: function(nextProps) {
+		resolveBarName(nextProps.barID, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	}

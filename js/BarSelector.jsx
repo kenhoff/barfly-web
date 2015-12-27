@@ -77,12 +77,13 @@ var BarSelector = React.createClass({
 			}.bind(this))
 		}
 	},
-	// componentWillReceiveProps: function (nextProps) {
-	// 	console.log("receive next props");
-	// 	if (nextProps.currentBar >= 0) {
-	// 		this.loadBars();
-	// 	}
-	// }
+	componentWillReceiveProps: function(nextProps) {
+		if (nextProps.currentBar >= 0) {
+			this.loadBars(function(bars) {
+				this.setState({bars: bars})
+			}.bind(this));
+		}
+	}
 })
 
 BarSelectorDropdownDisplayed = React.createClass({
@@ -90,8 +91,6 @@ BarSelectorDropdownDisplayed = React.createClass({
 		return ({barName: "Loading bars..."})
 	},
 	render: function() {
-		console.log("displayed:", this.props.currentBar);
-		console.log("displayed name:", this.state);
 		return (
 			<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.barName}
 				<span className="caret"></span>
@@ -99,18 +98,15 @@ BarSelectorDropdownDisplayed = React.createClass({
 		)
 	},
 	componentDidMount: function() {
-		console.log("displayed mounting");
 		resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	},
-	componentWillReceiveProps: function (nextProps) {
-		console.log("received new props");
+	componentWillReceiveProps: function(nextProps) {
 		resolveBarName(nextProps.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
-	},
-
+	}
 })
 
 BarSelectorDropdownList = React.createClass({
@@ -143,6 +139,11 @@ IndividualBarInDropdownList = React.createClass({
 	},
 	componentDidMount: function() {
 		resolveBarName(this.props.barID, function(barName) {
+			this.setState({barName: barName})
+		}.bind(this))
+	},
+	componentWillReceiveProps: function(nextProps) {
+		resolveBarName(nextProps.barID, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	}
