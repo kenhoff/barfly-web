@@ -48,10 +48,8 @@ var BarSelector = React.createClass({
 })
 
 BarSelectorDropdownDisplayed = React.createClass({
-	getInitialState: function () {
-		return ({
-			barName: "Loading bars..."
-		})
+	getInitialState: function() {
+		return ({barName: "Loading bars..."})
 	},
 	render: function() {
 		return (
@@ -60,8 +58,8 @@ BarSelectorDropdownDisplayed = React.createClass({
 			</a>
 		)
 	},
-	componentDidMount: function () {
-		resolveBarName(this.props.currentBar, function (barName) {
+	componentDidMount: function() {
+		resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	}
@@ -70,17 +68,32 @@ BarSelectorDropdownDisplayed = React.createClass({
 BarSelectorDropdownList = React.createClass({
 	render: function() {
 		bars = this.props.bars
+		console.log(bars);
 		return (
 			<ul className="dropdown-menu">
 				{bars.map(function(bar) {
-					return (
-						<li key={bar}>
-							<a>{bar}</a>
-						</li>
-					)
+					return (<IndividualBarInDropdownList key={bar} barID={bar}/>)
 				})}
 			</ul>
 		)
+	}
+})
+
+IndividualBarInDropdownList = React.createClass({
+	getInitialState: function() {
+		return {barName: "Loading bar..."}
+	},
+	render: function() {
+		return (
+			<li key={this.props.barID}>
+				<a>{this.props.barID}</a>
+			</li>
+		)
+	},
+	componentDidMount: function() {
+		resolveBarName(this.props.barID, function(barName) {
+			this.setState({barName: barName})
+		}.bind(this))
 	}
 })
 
@@ -92,6 +105,7 @@ resolveBarName = function(barID, cb) {
 			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 		},
 		success: function(barInfo) {
+			console.log(barInfo);
 			cb(barInfo.barName)
 		}
 	})

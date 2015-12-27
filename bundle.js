@@ -49,10 +49,8 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 })
 
 BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropdownDisplayed",
-	getInitialState: function () {
-		return ({
-			barName: "Loading bars..."
-		})
+	getInitialState: function() {
+		return ({barName: "Loading bars..."})
 	},
 	render: function() {
 		return (
@@ -61,8 +59,8 @@ BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropd
 			)
 		)
 	},
-	componentDidMount: function () {
-		resolveBarName(this.props.currentBar, function (barName) {
+	componentDidMount: function() {
+		resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	}
@@ -71,17 +69,32 @@ BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropd
 BarSelectorDropdownList = React.createClass({displayName: "BarSelectorDropdownList",
 	render: function() {
 		bars = this.props.bars
+		console.log(bars);
 		return (
 			React.createElement("ul", {className: "dropdown-menu"}, 
 				bars.map(function(bar) {
-					return (
-						React.createElement("li", {key: bar}, 
-							React.createElement("a", null, bar)
-						)
-					)
+					return (React.createElement(IndividualBarInDropdownList, {key: bar, barID: bar}))
 				})
 			)
 		)
+	}
+})
+
+IndividualBarInDropdownList = React.createClass({displayName: "IndividualBarInDropdownList",
+	getInitialState: function() {
+		return {barName: "Loading bar..."}
+	},
+	render: function() {
+		return (
+			React.createElement("li", {key: this.props.barID}, 
+				React.createElement("a", null, this.props.barID)
+			)
+		)
+	},
+	componentDidMount: function() {
+		resolveBarName(this.props.barID, function(barName) {
+			this.setState({barName: barName})
+		}.bind(this))
 	}
 })
 
@@ -93,6 +106,7 @@ resolveBarName = function(barID, cb) {
 			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 		},
 		success: function(barInfo) {
+			console.log(barInfo);
 			cb(barInfo.barName)
 		}
 	})
