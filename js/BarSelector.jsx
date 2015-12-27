@@ -7,23 +7,34 @@ window.jQuery = window.$ = require('jquery');
 
 var BarSelector = React.createClass({
 	getInitialState: function() {
-		return {showModal: false}
+		return {showModal: false, bars: []}
 	},
 	render: function() {
-		if (!this.props.currentBar) {
+		if (this.props.currentBar == null) {
+			return (
+				<div>
+					<ul className="nav navbar-nav">
+						<li>
+							<a>Loading...</a>
+						</li>
+					</ul>
+				</div>
+			)
+		} else if (this.props.currentBar == -1) {
 			return (
 				<div>
 					<div className="navbar-form navbar-left">
 						<button onClick={this.openNewBarModal} className="btn btn-default">Add a new Bar</button>
 					</div>
-
 					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.onBarChange}/>
-
 				</div>
 			)
 		} else {
-			bars = this.props.bars
+			console.log("rendering for bar", this.props.currentBar);
+			console.log(this.state.bars);
+			bars = this.state.bars
 			// index of current bar
+			console.log(bars);
 			index = bars.indexOf(this.props.currentBar)
 			bars.splice(index, 1)
 			return (
@@ -37,15 +48,41 @@ var BarSelector = React.createClass({
 		}
 	},
 	changeBar: function(barID) {
-		console.log("change to bar", barID);
-		// this.changeBar(barID)
+		this.props.changeBar(barID)
 	},
 	openNewBarModal: function() {
 		this.setState({showModal: true})
 	},
 	closeNewBarModal: function() {
 		this.setState({showModal: false})
-	}
+	},
+	loadBars: function(cb) {
+		console.log("getting bar list");
+		$.ajax({
+			url: window.API_URL + "/user/bars",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(data) {
+				if (data.length != 0) {
+					cb(data)
+				}
+			}
+		})
+	},
+	componentDidMount: function() {
+		if (this.props.currentBar >= 0) {
+			this.loadBars(function(bars) {
+				this.setState({bars: bars})
+			}.bind(this))
+		}
+	},
+	// componentWillReceiveProps: function (nextProps) {
+	// 	console.log("receive next props");
+	// 	if (nextProps.currentBar >= 0) {
+	// 		this.loadBars();
+	// 	}
+	// }
 })
 
 BarSelectorDropdownDisplayed = React.createClass({
@@ -53,6 +90,8 @@ BarSelectorDropdownDisplayed = React.createClass({
 		return ({barName: "Loading bars..."})
 	},
 	render: function() {
+		console.log("displayed:", this.props.currentBar);
+		console.log("displayed name:", this.state);
 		return (
 			<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.barName}
 				<span className="caret"></span>
@@ -60,10 +99,18 @@ BarSelectorDropdownDisplayed = React.createClass({
 		)
 	},
 	componentDidMount: function() {
+		console.log("displayed mounting");
 		resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
-	}
+	},
+	componentWillReceiveProps: function (nextProps) {
+		console.log("received new props");
+		resolveBarName(nextProps.currentBar, function(barName) {
+			this.setState({barName: barName})
+		}.bind(this))
+	},
+
 })
 
 BarSelectorDropdownList = React.createClass({
@@ -102,14 +149,12 @@ IndividualBarInDropdownList = React.createClass({
 })
 
 resolveBarName = function(barID, cb) {
-	console.log("getting name for", barID);
 	$.ajax({
 		url: window.API_URL + "/bars/" + barID,
 		headers: {
 			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 		},
 		success: function(barInfo) {
-			console.log(barInfo);
 			cb(barInfo.barName)
 		}
 	})

@@ -45,7 +45,7 @@ var Main = React.createClass({
 		}.bind(this))
 	},
 	refreshToken: function(cb) {
-		this.props.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
+		this.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
 				localStorage.setItem("access_jwt", delegationResult.id_token)
