@@ -4,14 +4,15 @@ var ReactDOM = require('react-dom');
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
-var BarflyApp = require('./BarflyApp.jsx');
+var App = require('./App.jsx');
+var BarContext = require("./BarContext.jsx")
 
-var BarflyMain = React.createClass({
+var Main = React.createClass({
 	render: function() {
 		if (this.state.idToken) {
 			return (
 				<div>
-					<BarflyApp lock={this.lock} idToken={this.state.idToken}/>
+					<BarContext lock={this.lock} idToken={this.state.idToken}/>
 				</div>
 			);
 		} else {
@@ -33,6 +34,32 @@ var BarflyMain = React.createClass({
 		} else {
 			window.API_URL = "http://localhost:1310"
 		}
+		$(document).ajaxError(function(event, request, settings) {
+			if (request.status == 401) {
+				this.refreshToken(function() {
+					console.log("refreshed token, retrying call...");
+					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
+					$.ajax(settings)
+				})
+			}
+		}.bind(this))
+	},
+	refreshToken: function(cb) {
+		this.props.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
+			if (!err) {
+				// this is correct - store and use the full JWT, not the "access_token" in the authHash
+				localStorage.setItem("access_jwt", delegationResult.id_token)
+				console.log("refreshed token");
+				cb()
+			} else {
+				this.signOut()
+			}
+		}.bind(this))
+	},
+	signOut: function() {
+		localStorage.removeItem("access_jwt")
+		localStorage.removeItem("refresh_token")
+		window.location.href = "/"
 	},
 	getIdToken: function() {
 		var idToken = localStorage.getItem("access_jwt")
@@ -62,4 +89,4 @@ var BarflyMain = React.createClass({
 	}
 })
 
-ReactDOM.render(< BarflyMain />, document.getElementById('content'))
+ReactDOM.render(< Main />, document.getElementById('content'))

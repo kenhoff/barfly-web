@@ -3,7 +3,7 @@ var BarSelector = require('./BarSelector.jsx');
 
 window.jQuery = window.$ = require('jquery');
 
-var BarflyApp = React.createClass({
+var App = React.createClass({
 	getInitialState: function() {
 		return {profile: null, currentBar: null, bars: []}
 	},
@@ -32,29 +32,6 @@ var BarflyApp = React.createClass({
 	handleBarChange: function() {
 		console.log("hallo");
 		this.loadBars()
-	},
-	componentWillMount: function() {
-		$(document).ajaxError(function(event, request, settings) {
-			if (request.status == 401) {
-				this.refreshToken(function() {
-					console.log("refreshed token, retrying call...");
-					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
-					$.ajax(settings)
-				})
-			}
-		}.bind(this))
-	},
-	refreshToken: function(cb) {
-		this.props.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
-			if (!err) {
-				// this is correct - store and use the full JWT, not the "access_token" in the authHash
-				localStorage.setItem("access_jwt", delegationResult.id_token)
-				console.log("refreshed token");
-				cb()
-			} else {
-				this.signOut()
-			}
-		}.bind(this))
 	},
 	signOut: function() {
 		localStorage.removeItem("access_jwt")
@@ -102,4 +79,4 @@ var BarflyApp = React.createClass({
 	}
 })
 
-module.exports = BarflyApp
+module.exports = App
