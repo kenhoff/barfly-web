@@ -26,20 +26,21 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 			bars = this.props.bars
 			// index of current bar
 			index = bars.indexOf(this.props.currentBar)
-			console.log(index);
 			bars.splice(index, 1)
-			console.log(bars);
 			return (
 				React.createElement("ul", {className: "nav navbar-nav"}, 
 					React.createElement("li", {className: "dropdown"}, 
 						React.createElement(BarSelectorDropdownDisplayed, {currentBar: this.props.currentBar}), 
-						React.createElement(BarSelectorDropdownList, {bars: bars})
+						React.createElement(BarSelectorDropdownList, {bars: bars, changeBar: this.changeBar})
 					)
 				)
 			)
 		}
 	},
-	componentWillMount: function() {},
+	changeBar: function(barID) {
+		console.log("change to bar", barID);
+		// this.changeBar(barID)
+	},
 	openNewBarModal: function() {
 		this.setState({showModal: true})
 	},
@@ -69,14 +70,14 @@ BarSelectorDropdownDisplayed = React.createClass({displayName: "BarSelectorDropd
 BarSelectorDropdownList = React.createClass({displayName: "BarSelectorDropdownList",
 	render: function() {
 		bars = this.props.bars
-		console.log(bars);
 		return (
 			React.createElement("ul", {className: "dropdown-menu"}, 
 				bars.map(function(bar) {
-					return (React.createElement(IndividualBarInDropdownList, {key: bar, barID: bar}))
-				})
+					return (React.createElement(IndividualBarInDropdownList, {key: bar, barID: bar, changeBar: this.props.changeBar}))
+				}.bind(this))
 			)
 		)
+		// whoops - needed to bind to this, when using map
 	}
 })
 
@@ -86,10 +87,13 @@ IndividualBarInDropdownList = React.createClass({displayName: "IndividualBarInDr
 	},
 	render: function() {
 		return (
-			React.createElement("li", {key: this.props.barID}, 
-				React.createElement("a", null, this.props.barID)
+			React.createElement("li", {key: this.props.barID, onClick: this.changeBar}, 
+				React.createElement("a", null, this.state.barName)
 			)
 		)
+	},
+	changeBar: function() {
+		this.props.changeBar(this.props.barID)
 	},
 	componentDidMount: function() {
 		resolveBarName(this.props.barID, function(barName) {

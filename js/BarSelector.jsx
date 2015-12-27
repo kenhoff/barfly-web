@@ -25,20 +25,21 @@ var BarSelector = React.createClass({
 			bars = this.props.bars
 			// index of current bar
 			index = bars.indexOf(this.props.currentBar)
-			console.log(index);
 			bars.splice(index, 1)
-			console.log(bars);
 			return (
 				<ul className="nav navbar-nav">
 					<li className="dropdown">
 						<BarSelectorDropdownDisplayed currentBar={this.props.currentBar}/>
-						<BarSelectorDropdownList bars={bars}/>
+						<BarSelectorDropdownList bars={bars} changeBar={this.changeBar}/>
 					</li>
 				</ul>
 			)
 		}
 	},
-	componentWillMount: function() {},
+	changeBar: function(barID) {
+		console.log("change to bar", barID);
+		// this.changeBar(barID)
+	},
 	openNewBarModal: function() {
 		this.setState({showModal: true})
 	},
@@ -68,14 +69,14 @@ BarSelectorDropdownDisplayed = React.createClass({
 BarSelectorDropdownList = React.createClass({
 	render: function() {
 		bars = this.props.bars
-		console.log(bars);
 		return (
 			<ul className="dropdown-menu">
 				{bars.map(function(bar) {
-					return (<IndividualBarInDropdownList key={bar} barID={bar}/>)
-				})}
+					return (<IndividualBarInDropdownList key={bar} barID={bar} changeBar={this.props.changeBar}/>)
+				}.bind(this))}
 			</ul>
 		)
+		// whoops - needed to bind to this, when using map
 	}
 })
 
@@ -85,10 +86,13 @@ IndividualBarInDropdownList = React.createClass({
 	},
 	render: function() {
 		return (
-			<li key={this.props.barID}>
-				<a>{this.props.barID}</a>
+			<li key={this.props.barID} onClick={this.changeBar}>
+				<a>{this.state.barName}</a>
 			</li>
 		)
+	},
+	changeBar: function() {
+		this.props.changeBar(this.props.barID)
 	},
 	componentDidMount: function() {
 		resolveBarName(this.props.barID, function(barName) {
