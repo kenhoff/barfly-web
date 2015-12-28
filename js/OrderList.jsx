@@ -5,13 +5,13 @@ var OrderList = React.createClass({
 		return {orders: []}
 	},
 	render: function() {
-		console.log("rendering orderlist for bar", this.props.bar);
 		return (
 			<div>
 				<h1>Orders</h1>
+				<button onClick={this.newOrder}>New Order</button>
 				{this.state.orders.map(function(order) {
 					return (
-						<h3>order!</h3>
+						<h3 key={order}>Order #{order}</h3>
 					)
 				})}
 			</div>
@@ -19,32 +19,37 @@ var OrderList = React.createClass({
 	},
 	componentDidMount: function() {
 		// make an ajax call to retrieve all orders for this.props.bar
-		if (this.props.bar) {
-			console.log("making a call to get all orders for", this.props.bar);
-			this.loadOrdersForBar(this.props.bar, function(orders) {
-				console.log(orders);
-			})
+		if (this.props.bar > 0) {
+			this.loadOrdersForBar(this.props.bar)
 		}
 	},
 	componentWillReceiveProps: function(newProps) {
-		if (newProps.bar) {
-			console.log("making a call to get all orders for", newProps.bar);
-			this.loadOrdersForBar(newProps.bar, function(orders) {
-				console.log(orders);
-			})
+		if (newProps.bar > 0) {
+			this.loadOrdersForBar(newProps.bar)
 		}
 	},
-	loadOrdersForBar: function(bar, cb) {
+	loadOrdersForBar: function(bar) {
 		$.ajax({
 			url: window.API_URL + "/bars/" + bar + "/orders",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				if (data.length != 0) {
-					cb(data)
-				}
-			}
+				data.reverse()
+				this.setState({orders: data})
+			}.bind(this)
+		})
+	},
+	newOrder: function(cb) {
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.bar + "/orders",
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(data) {
+				this.loadOrdersForBar(this.props.bar)
+			}.bind(this)
 		})
 	}
 });
