@@ -10,9 +10,7 @@ var OrderList = React.createClass({
 				<h1>Orders</h1>
 				<button onClick={this.newOrder}>New Order</button>
 				{this.state.orders.map(function(order) {
-					return (
-						<h3 key={order}>Order #{order}</h3>
-					)
+					return (<OrderCard key={order} order={order}/>)
 				})}
 			</div>
 		);
@@ -52,6 +50,20 @@ var OrderList = React.createClass({
 			}.bind(this)
 		})
 	}
+});
+
+var OrderCard = React.createClass({
+
+	render: function() {
+		return (
+			<div className="panel panel-default">
+				<div className="panel-body">
+					Order #{this.props.order}
+				</div>
+			</div>
+		);
+	}
+
 });
 
 module.exports = OrderList

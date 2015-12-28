@@ -425,9 +425,7 @@ var OrderList = React.createClass({displayName: "OrderList",
 				React.createElement("h1", null, "Orders"), 
 				React.createElement("button", {onClick: this.newOrder}, "New Order"), 
 				this.state.orders.map(function(order) {
-					return (
-						React.createElement("h3", {key: order}, "Order #", order)
-					)
+					return (React.createElement(OrderCard, {key: order, order: order}))
 				})
 			)
 		);
@@ -467,6 +465,20 @@ var OrderList = React.createClass({displayName: "OrderList",
 			}.bind(this)
 		})
 	}
+});
+
+var OrderCard = React.createClass({displayName: "OrderCard",
+
+	render: function() {
+		return (
+			React.createElement("div", {className: "panel panel-default"}, 
+				React.createElement("div", {className: "panel-body"}, 
+					"Order #", this.props.order
+				)
+			)
+		);
+	}
+
 });
 
 module.exports = OrderList
