@@ -99,7 +99,7 @@ var BarSelector = React.createClass({displayName: "BarSelector",
 					React.createElement("div", {className: "navbar-form navbar-left"}, 
 						React.createElement("button", {onClick: this.openNewBarModal, className: "btn btn-default"}, "Add a new Bar")
 					), 
-					React.createElement(NewBarModal, {showModal: this.state.showModal, onHide: this.closeNewBarModal, onBarChange: this.props.onBarChange})
+					React.createElement(NewBarModal, {showModal: this.state.showModal, onHide: this.closeNewBarModal, onBarChange: this.props.changeBar})
 				)
 			)
 		} else {
@@ -276,7 +276,7 @@ NewBarModal = React.createClass({displayName: "NewBarModal",
 				},
 				success: function(data) {
 					console.log(data);
-					this.props.onBarChange()
+					this.props.onBarChange(data.id)
 					this.props.onHide()
 				}.bind(this)
 			})
