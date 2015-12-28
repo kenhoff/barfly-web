@@ -13,7 +13,7 @@ var BarContext = React.createClass({
 		return (
 			<div>
 				<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange}/>
-				<App lock={this.props.lock} idToken={this.props.idToken}/>
+				<App bar={this.state.currentBar}/>
 			</div>
 		);
 	},
