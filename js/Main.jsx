@@ -1,6 +1,14 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
+var Redirect = require('react-router').Redirect;
+
+var createBrowserHistory = require('history/lib/createBrowserHistory');
+
+
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
@@ -116,4 +124,16 @@ var Main = React.createClass({
 	}
 })
 
-ReactDOM.render(< Main />, document.getElementById('content'))
+
+var MainRouter = React.createClass({
+	render: function() {
+		return (
+			<Router history = {createBrowserHistory()}>
+				<Redirect from="/" to="/orders"/>
+				<Route path="/orders" component={Main}/>
+			</Router>
+		);
+	}
+});
+
+ReactDOM.render(< MainRouter />, document.getElementById('content'))

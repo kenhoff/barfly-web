@@ -53,7 +53,6 @@ var OrderList = React.createClass({
 });
 
 var OrderCard = React.createClass({
-
 	render: function() {
 		return (
 			<div className="panel panel-default">
