@@ -5,7 +5,6 @@ window.jQuery = window.$ = require('jquery');
 
 var App = React.createClass({
 	render: function() {
-		console.log("rendering app for bar", this.props.bar);
 		return (<OrderList bar={this.props.bar}/>)
 	}
 })
