@@ -8,7 +8,6 @@ var Redirect = require('react-router').Redirect;
 
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
-
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
@@ -16,6 +15,7 @@ var App = require('./App.jsx');
 var Nav = require('./Nav.jsx');
 
 var Main = React.createClass({
+
 	// if we haven't loaded a bar yet, currentBar == null.
 	// if there isn't a currentBar available (e.g. a user hasn't created a bar yet) then currentBar == -1.
 	getInitialState: function() {
@@ -124,11 +124,10 @@ var Main = React.createClass({
 	}
 })
 
-
 var MainRouter = React.createClass({
 	render: function() {
 		return (
-			<Router history = {createBrowserHistory()}>
+			<Router history={createBrowserHistory()}>
 				<Redirect from="/" to="/orders"/>
 				<Route path="/orders" component={Main}/>
 			</Router>

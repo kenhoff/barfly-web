@@ -236,7 +236,6 @@ var Redirect = require('react-router').Redirect;
 
 var createBrowserHistory = require('history/lib/createBrowserHistory');
 
-
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
@@ -244,6 +243,7 @@ var App = require('./App.jsx');
 var Nav = require('./Nav.jsx');
 
 var Main = React.createClass({displayName: "Main",
+
 	// if we haven't loaded a bar yet, currentBar == null.
 	// if there isn't a currentBar available (e.g. a user hasn't created a bar yet) then currentBar == -1.
 	getInitialState: function() {
@@ -352,7 +352,6 @@ var Main = React.createClass({displayName: "Main",
 	}
 })
 
-
 var MainRouter = React.createClass({displayName: "MainRouter",
 	render: function() {
 		return (
@@ -418,6 +417,9 @@ module.exports = Nav
 },{"./BarSelector.jsx":2,"react":462}],5:[function(require,module,exports){
 var React = require('react');
 
+var Link = require('react-router').Link;
+var History = require('react-router').History;
+
 var OrderList = React.createClass({displayName: "OrderList",
 	getInitialState: function() {
 		return {orders: []}
@@ -471,21 +473,25 @@ var OrderList = React.createClass({displayName: "OrderList",
 });
 
 var OrderCard = React.createClass({displayName: "OrderCard",
+	mixins: [History],
 	render: function() {
 		return (
-			React.createElement("div", {className: "panel panel-default"}, 
+			React.createElement("div", {className: "panel panel-default", onClick: this.navigateToOrder}, 
 				React.createElement("div", {className: "panel-body"}, 
 					"Order #", this.props.order
 				)
 			)
 		);
+	},
+	navigateToOrder: function () {
+		this.history.push("/orders/" + this.props.order)
 	}
 
 });
 
 module.exports = OrderList
 
-},{"react":462}],6:[function(require,module,exports){
+},{"react":462,"react-router":329}],6:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
 },{"core-js/library/fn/object/assign":30}],7:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };

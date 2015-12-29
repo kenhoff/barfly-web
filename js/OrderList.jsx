@@ -1,5 +1,8 @@
 var React = require('react');
 
+var Link = require('react-router').Link;
+var History = require('react-router').History;
+
 var OrderList = React.createClass({
 	getInitialState: function() {
 		return {orders: []}
@@ -53,14 +56,18 @@ var OrderList = React.createClass({
 });
 
 var OrderCard = React.createClass({
+	mixins: [History],
 	render: function() {
 		return (
-			<div className="panel panel-default">
+			<div className="panel panel-default" onClick={this.navigateToOrder}>
 				<div className="panel-body">
 					Order #{this.props.order}
 				</div>
 			</div>
 		);
+	},
+	navigateToOrder: function () {
+		this.history.push("/orders/" + this.props.order)
 	}
 
 });
