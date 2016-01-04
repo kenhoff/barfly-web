@@ -13,6 +13,8 @@ require("bootstrap")
 
 var App = require('./App.jsx');
 var Nav = require('./Nav.jsx');
+var Orders = require('./Orders.jsx');
+var Order = require('./Order.jsx');
 
 var Main = React.createClass({
 
@@ -23,10 +25,14 @@ var Main = React.createClass({
 	},
 	render: function() {
 		if (this.state.idToken) {
+			// oh my god, this is stupid, but let me explain.
+			// react-router forces us to specify the children that we're going to render as part of our route, but neglects to give us a way to pass ""default"" props to these children - in our case, our "default" props is the barID that we're working with.
+			// (the reason we're doing this is so that we have /orders/1234 instead of /bars/1234/orders/1234)
+			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
 					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange}/>
-					<App bar={this.state.currentBar}/>
+					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
 			);
 		} else {
@@ -129,7 +135,12 @@ var MainRouter = React.createClass({
 		return (
 			<Router history={createBrowserHistory()}>
 				<Redirect from="/" to="/orders"/>
-				<Route path="/orders" component={Main}/>
+				<Route component={Main}>
+					<Route component={App}>
+						<Route path="orders" component={Orders}/>
+						<Route path="orders/:orderID" component={Order}></Route>
+					</Route>
+				</Route>
 			</Router>
 		);
 	}

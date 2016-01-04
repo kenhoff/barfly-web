@@ -1,7 +1,10 @@
 var React = require('react');
 var BarSelector = require('./BarSelector.jsx');
 
+var History = require('react-router').History;
+
 var Nav = React.createClass({
+	mixins: [History],
 	getInitialState: function() {
 		return {profile: null, currentBar: null}
 	},
@@ -10,6 +13,7 @@ var Nav = React.createClass({
 			<div>
 				<nav className="navbar navbar-default navbar-fixed-top">
 					<div className="container">
+						<a className = "navbar-brand" onClick = {this.goHome}>barfly</a>
 						<BarSelector currentBar={this.props.currentBar} changeBar={this.props.changeBar}/>
 						<ul className="nav navbar-nav navbar-right">
 							<li className="navbar-text">Hi there!</li>
@@ -41,6 +45,9 @@ var Nav = React.createClass({
 		localStorage.removeItem("access_jwt")
 		localStorage.removeItem("refresh_token")
 		window.location.href = "/"
+	},
+	goHome: function () {
+		this.history.push('/')
 	}
 })
 

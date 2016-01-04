@@ -3,7 +3,7 @@ var React = require('react');
 var Link = require('react-router').Link;
 var History = require('react-router').History;
 
-var OrderList = React.createClass({
+var Orders = React.createClass({
 	getInitialState: function() {
 		return {orders: []}
 	},
@@ -66,10 +66,10 @@ var OrderCard = React.createClass({
 			</div>
 		);
 	},
-	navigateToOrder: function () {
+	navigateToOrder: function() {
 		this.history.push("/orders/" + this.props.order)
 	}
 
 });
 
-module.exports = OrderList
+module.exports = Orders
