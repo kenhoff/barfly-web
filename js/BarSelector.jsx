@@ -165,10 +165,8 @@ NewBarModal = React.createClass({
 					<Modal.Title>Let's add a new bar.</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form>
-						<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref="barNameInput"/>
-						<Input type="text" label="What zip code is your bar in?" placeholder="80302" ref="zipCodeInput"/>
-					</form>
+					<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref="barNameInput"/>
+					<Input type="text" label="What zip code is your bar in?" placeholder="80302" ref="zipCodeInput"/>
 				</Modal.Body>
 				<Modal.Footer>
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
