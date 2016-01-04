@@ -1,18 +1,32 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
+var Redirect = require('react-router').Redirect;
+
+var createBrowserHistory = require('history/lib/createBrowserHistory');
+
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
 var App = require('./App.jsx');
-var BarContext = require("./BarContext.jsx")
+var Nav = require('./Nav.jsx');
 
 var Main = React.createClass({
+
+	// if we haven't loaded a bar yet, currentBar == null.
+	// if there isn't a currentBar available (e.g. a user hasn't created a bar yet) then currentBar == -1.
+	getInitialState: function() {
+		return {currentBar: null}
+	},
 	render: function() {
 		if (this.state.idToken) {
 			return (
 				<div>
-					<BarContext lock={this.lock} idToken={this.state.idToken}/>
+					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange}/>
+					<App bar={this.state.currentBar}/>
 				</div>
 			);
 		} else {
@@ -37,7 +51,6 @@ var Main = React.createClass({
 		$(document).ajaxError(function(event, request, settings) {
 			if (request.status == 401) {
 				this.refreshToken(function() {
-					console.log("refreshed token, retrying call...");
 					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
 					$.ajax(settings)
 				})
@@ -49,7 +62,6 @@ var Main = React.createClass({
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
 				localStorage.setItem("access_jwt", delegationResult.id_token)
-				console.log("refreshed token");
 				cb()
 			} else {
 				this.signOut()
@@ -86,7 +98,41 @@ var Main = React.createClass({
 				scope: "openid offline_access user_id given_name app_metadata"
 			}
 		})
+	},
+	handleBarChange: function(barID) {
+		console.log("context change to", barID)
+		this.setState({currentBar: barID})
+	},
+	componentDidMount: function() {
+		this.getCurrentBar();
+	},
+	getCurrentBar: function() {
+		// just loads the first bar we get back, for now.
+		$.ajax({
+			url: window.API_URL + "/user/bars",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(data) {
+				if (data.length != 0) {
+					this.setState({currentBar: data[0]})
+				} else {
+					this.setState({currentBar: -1})
+				}
+			}.bind(this)
+		})
 	}
 })
 
-ReactDOM.render(< Main />, document.getElementById('content'))
+var MainRouter = React.createClass({
+	render: function() {
+		return (
+			<Router history={createBrowserHistory()}>
+				<Redirect from="/" to="/orders"/>
+				<Route path="/orders" component={Main}/>
+			</Router>
+		);
+	}
+});
+
+ReactDOM.render(< MainRouter />, document.getElementById('content'))

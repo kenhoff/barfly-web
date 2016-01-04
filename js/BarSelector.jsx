@@ -26,15 +26,12 @@ var BarSelector = React.createClass({
 					<div className="navbar-form navbar-left">
 						<button onClick={this.openNewBarModal} className="btn btn-default">Add a new Bar</button>
 					</div>
-					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.onBarChange}/>
+					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.changeBar}/>
 				</div>
 			)
 		} else {
-			console.log("rendering for bar", this.props.currentBar);
-			console.log(this.state.bars);
 			bars = this.state.bars
 			// index of current bar
-			console.log(bars);
 			index = bars.indexOf(this.props.currentBar)
 			bars.splice(index, 1)
 			return (
@@ -57,7 +54,6 @@ var BarSelector = React.createClass({
 		this.setState({showModal: false})
 	},
 	loadBars: function(cb) {
-		console.log("getting bar list");
 		$.ajax({
 			url: window.API_URL + "/user/bars",
 			headers: {
@@ -188,9 +184,6 @@ NewBarModal = React.createClass({
 		isValid = (zipCode.match(re) && (zipCode.match(re).length == 1))
 
 		if (isValid) {
-			console.log("everything looks good! submitting bar");
-			console.log(this.refs.barNameInput.getValue());
-			console.log(this.refs.zipCodeInput.getValue());
 			$.ajax({
 				url: window.API_URL + "/user/bars",
 				headers: {
@@ -202,13 +195,12 @@ NewBarModal = React.createClass({
 					zipCode: this.refs.zipCodeInput.getValue()
 				},
 				success: function(data) {
-					console.log(data);
-					this.props.onBarChange()
+					this.props.onBarChange(data.id)
 					this.props.onHide()
 				}.bind(this)
 			})
 		} else {
-			console.log("uh oh! stuff needs to get checked");
+			// throw error or something
 		}
 	}
 })
