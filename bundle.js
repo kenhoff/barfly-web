@@ -470,7 +470,7 @@ var Order = React.createClass({displayName: "Order",
 		this.setState({showNewProductModal: false})
 	},
 
-	getProductQuantity: function (productID, productSize) {
+	getProductQuantity: function(productID, productSize) {
 		for (product of this.state.orderProducts) {
 			if ((product.productID == productID) && (product.productSize == productSize)) {
 				return product.productQuantity
@@ -490,8 +490,7 @@ var Order = React.createClass({displayName: "Order",
 					// if productQuantity == 0, then remove from orderProducts.splice(i, 1)
 					if (productQuantity == 0) {
 						prevState.orderProducts.splice(i, 1)
-					}
-					else {
+					} else {
 						// update that particular combination of productID and productSize with productQuantity
 						prevState.orderProducts[i] = {
 							productID: productID,
@@ -500,18 +499,34 @@ var Order = React.createClass({displayName: "Order",
 						}
 					}
 
+					// next, send a PATCH to /orders/:orderID with new order state
+					this.patchOrder(prevState.orderProducts)
 					return ({orderProducts: prevState.orderProducts})
 				}
 			}
 			// else, insert that particular combination of productID, productSize and productQuantity into orderProducts
 			newOrderProducts = this.state.orderProducts
 			newOrderProducts.push({productID: productID, productSize: productSize, productQuantity: productQuantity})
+			// next, send a PATCH to /orders/:orderID with new order state
+			this.patchOrder(newOrderProducts)
 			return ({orderProducts: newOrderProducts})
 		})
 
-		// next, send a PATCH to /orders/:orderID with new order state
 		// how fast can we make the round trip? do we just send it and hope state catches up, or do we ensure that the response contains exactly the right information?
 		// keep in mind that we're sending entire state on change, so if anything needs to catch up it'll happen later
+	},
+
+	patchOrder: function(orderProducts) {
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			method: "PATCH",
+			data: {
+				orders: orderProducts
+			},
+			success: function(data) {
+				console.log("successfully updated order");
+			}
+		})
 	},
 
 	// now this function is a real clusterfuck, and desperately needs cleaning up.
