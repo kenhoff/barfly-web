@@ -5,7 +5,7 @@ var Button = require('react-bootstrap').Button;
 
 var ProductCard = React.createClass({
 	getInitialState: function() {
-		return ({productName: "", productSize: ""})
+		return ({productName: "", productSizeName: ""})
 	},
 	render: function() {
 		minusButton = <Button onClick={this.decrement}>-</Button>
@@ -17,7 +17,7 @@ var ProductCard = React.createClass({
 						{this.state.productName}
 					</p>
 					<p>
-						{this.state.productSize}
+						{this.state.productSizeName}
 					</p>
 					<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
 						this.quantityInput = thisComponent
@@ -57,7 +57,7 @@ var ProductCard = React.createClass({
 			url: window.API_URL + "/sizes/" + this.props.productSizeID,
 			method: "GET",
 			success: function(size) {
-				this.setState({productSize: size.sizeName})
+				this.setState({productSizeName: size.sizeName})
 			}.bind(this)
 		})
 	}

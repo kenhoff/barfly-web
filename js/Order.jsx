@@ -7,9 +7,9 @@ var async = require('async');
 
 var Order = React.createClass({
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
-	updateTimeout: function () {
+	updateTimeout: function() {
 		clearTimeout(this.timeout)
-		this.timeout = setTimeout(function () {
+		this.timeout = setTimeout(function() {
 			console.log("updating order");
 			this.patchOrder()
 		}.bind(this), 1000)
@@ -20,7 +20,7 @@ var Order = React.createClass({
 		// listProduct will be several arrays, each with a list of the products in a particular list (like starred products)
 		return {allProducts: [], orderProducts: [], showNewProductModal: false}
 	},
-	componentWillUnmount: function () {
+	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
 	},
 	render: function() {
@@ -28,7 +28,7 @@ var Order = React.createClass({
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
 				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID.toString() + product.productSize.toString()} productID={product.productID} productSizeID={product.productSize} productQuantity={this.getProductQuantity(product.productID, product.productSize)} changeQuantity={this.handleQuantityChange}/>)
+					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?
 					<a onClick={this.showNewProductModal}>Create a new product</a>
@@ -44,9 +44,9 @@ var Order = React.createClass({
 		this.setState({showNewProductModal: false})
 	},
 
-	getProductQuantity: function(productID, productSize) {
+	getProductQuantity: function(productID, productSizeID) {
 		for (product of this.state.orderProducts) {
-			if ((product.productID == productID) && (product.productSize == productSize)) {
+			if ((product.productID == productID) && (product.productSizeID == productSizeID)) {
 				return product.productQuantity
 			}
 		}
@@ -54,35 +54,34 @@ var Order = React.createClass({
 	},
 
 	// yay clusterfuck!
-	// need to switch to using productSizeID, not productSize
-	handleQuantityChange: function(productID, productSize, productQuantity) {
+	handleQuantityChange: function(productID, productSizeID, productQuantity) {
 
 		// updateTimeout handles the order patching
 		this.updateTimeout()
 		// change existing state to reflect new quantity change
 
-		// if combination of productID and productSize exist in orderProducts,
+		// if combination of productID and productSizeID exist in orderProducts,
 		this.setState(function(prevState, currentProps) {
 			for (var i = 0; i < prevState.orderProducts.length; i++) {
-				if (((prevState.orderProducts[i].productID == productID) && (prevState.orderProducts[i].productSize == productSize))) {
+				if (((prevState.orderProducts[i].productID == productID) && (prevState.orderProducts[i].productSizeID == productSizeID))) {
 					// if productQuantity == 0, then remove from orderProducts.splice(i, 1)
 					if (isNaN(productQuantity) || productQuantity <= 0) {
 						prevState.orderProducts.splice(i, 1)
 					} else {
-						// update that particular combination of productID and productSize with productQuantity
+						// update that particular combination of productID and productSizeID with productQuantity
 						prevState.orderProducts[i] = {
 							productID: productID,
-							productSize: productSize,
+							productSizeID: productSizeID,
 							productQuantity: productQuantity
 						}
 					}
 					return ({orderProducts: prevState.orderProducts})
 				}
 			}
-			// else, insert that particular combination of productID, productSize and productQuantity into orderProducts
+			// else, insert that particular combination of productID, productSizeID and productQuantity into orderProducts
 			if (!isNaN(productQuantity)) {
 				newOrderProducts = this.state.orderProducts
-				newOrderProducts.push({productID: productID, productSize: productSize, productQuantity: productQuantity})
+				newOrderProducts.push({productID: productID, productSizeID: productSizeID, productQuantity: productQuantity})
 				// next, send a PATCH to /orders/:orderID with new order state
 				// this.patchOrder(newOrderProducts)
 				return ({orderProducts: newOrderProducts})
@@ -91,6 +90,22 @@ var Order = React.createClass({
 
 		// how fast can we make the round trip? do we just send it and hope state catches up, or do we ensure that the response contains exactly the right information?
 		// keep in mind that we're sending entire state on change, so if anything needs to catch up it'll happen later
+	},
+
+	getOrder: function() {
+		// this.props.params.orderID
+		console.log("getting order for bar", this.props.bar);
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "GET",
+			success: function(data) {
+				this.setState({orderProducts: data["orders"]})
+				console.log("got order", data);
+			}.bind(this)
+		})
 	},
 
 	patchOrder: function(orderProducts) {
@@ -129,16 +144,25 @@ var Order = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getProducts()
+		if (this.props.bar) {
+			this.getOrder()
+		}
+	},
+	componentDidUpdate: function(prevProps) {
+		console.log("updated ", this.props.bar);
+		if (prevProps.bar != this.props.bar) {
+			this.getOrder()
+		}
 	},
 	getSizesForProduct: function(product, callback) {
 		$.ajax({
 			url: window.API_URL + "/products/" + product,
 			method: "GET",
 			success: function(productResult) {
-				async.map(productResult["productSizes"], function(productSize, cb) {
+				async.map(productResult["productSizes"], function(productSizeID, cb) {
 					cb(null, {
 						productID: product,
-						productSize: productSize
+						productSizeID: productSizeID
 					})
 				}, function(err, results) {
 					return callback(null, results)
