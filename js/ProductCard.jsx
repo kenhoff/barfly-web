@@ -3,9 +3,11 @@ var React = require('React');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
+var DistributorField = require('./DistributorField.jsx');
+
 var ProductCard = React.createClass({
 	getInitialState: function() {
-		return ({productName: "", productSizeName: ""})
+		return ({productName: "", productSizeName: "", distributorName: ""})
 	},
 	render: function() {
 		minusButton = <Button onClick={this.decrement}>-</Button>
@@ -14,12 +16,12 @@ var ProductCard = React.createClass({
 			<div className="panel panel-default">
 				<div className="panel-body">
 					<p>
-						{this.state.productName}
+						Product:&nbsp;{this.state.productName}
 					</p>
 					<p>
-						{this.state.productSizeName}
+						Size:&nbsp;{this.state.productSizeName}
 					</p>
-					<p>{this.props.barID}</p>
+					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName}/>
 					<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
 						this.quantityInput = thisComponent
 					}.bind(this)}/>
@@ -58,24 +60,6 @@ var ProductCard = React.createClass({
 			method: "GET",
 			success: function(size) {
 				this.setState({productSizeName: size.sizeName})
-			}.bind(this)
-		})
-		// resolve distributor
-		// well, first resolve bar zip code
-		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.barID,
-			headers :{
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			},
-			method: "GET",
-			success: function (bar) {
-				$.ajax({
-					url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
-					method: "GET",
-					success: function (distributor) {
-						console.log("distributor for", this.props.productID, "in", bar.zipCode, ":", distributor);
-					}.bind(this)
-				})
 			}.bind(this)
 		})
 	}

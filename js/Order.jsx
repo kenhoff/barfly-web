@@ -29,7 +29,7 @@ var Order = React.createClass({
 				{this.state.allProducts.map(function(product) {
 					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar}/>)
 				}.bind(this))}
-				<p>Can't find what you're looking for?
+				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
 				<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
@@ -128,10 +128,14 @@ var Order = React.createClass({
 			method: "GET",
 			success: function(productsWithSizes) {
 				async.map(productsWithSizes, this.getSizesForProduct, function(err, unflattenedProducts) {
-					flattenedProducts = unflattenedProducts.reduce(function(a, b) {
-						return a.concat(b)
-					})
-					this.setState({allProducts: flattenedProducts})
+					if (unflattenedProducts.length == 0) {
+						this.setState({allProducts: []})
+					} else {
+						flattenedProducts = unflattenedProducts.reduce(function(a, b) {
+							return a.concat(b)
+						})
+						this.setState({allProducts: flattenedProducts})
+					}
 				}.bind(this))
 			}.bind(this)
 		})

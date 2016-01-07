@@ -13,6 +13,7 @@ gulp.task('default', function() {
 
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
+	console.log("building...");
 	rimraf("bundle.js", function () {
 		browserify({
 			entries: "./js/Main.jsx",
@@ -23,5 +24,8 @@ gulp.task('build', function() {
 		})
 		.pipe(source("bundle.js"))
 		.pipe(gulp.dest("./"))
+		.on("end", function () {
+			console.log("all done!");
+		})
 	})
 })
