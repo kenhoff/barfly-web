@@ -584,7 +584,6 @@ var Order = React.createClass({displayName: "Order",
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
 		this.timeout = setTimeout(function() {
-			console.log("updating order");
 			this.patchOrder()
 		}.bind(this), 1000)
 	},
@@ -602,7 +601,7 @@ var Order = React.createClass({displayName: "Order",
 			React.createElement("div", null, 
 				React.createElement("h1", null, "Order #", this.props.params.orderID), 
 				this.state.allProducts.map(function(product) {
-					return (React.createElement(ProductCard, {key: product.productID.toString() + product.productSizeID.toString(), productID: product.productID, productSizeID: product.productSizeID, productQuantity: this.getProductQuantity(product.productID, product.productSizeID), changeQuantity: this.handleQuantityChange}))
+					return (React.createElement(ProductCard, {key: product.productID.toString() + product.productSizeID.toString(), productID: product.productID, productSizeID: product.productSizeID, productQuantity: this.getProductQuantity(product.productID, product.productSizeID), changeQuantity: this.handleQuantityChange, barID: this.props.bar}))
 				}.bind(this)), 
 				React.createElement("p", null, "Can't find what you're looking for?", 
 					React.createElement("a", {onClick: this.showNewProductModal}, "Create a new product")
@@ -668,7 +667,6 @@ var Order = React.createClass({displayName: "Order",
 
 	getOrder: function() {
 		// this.props.params.orderID
-		console.log("getting order for bar", this.props.bar);
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -677,7 +675,6 @@ var Order = React.createClass({displayName: "Order",
 			method: "GET",
 			success: function(data) {
 				this.setState({orderProducts: data["orders"]})
-				console.log("got order", data);
 			}.bind(this)
 		})
 	},
@@ -686,7 +683,6 @@ var Order = React.createClass({displayName: "Order",
 		data = {
 			orders: this.state.orderProducts
 		},
-		console.log("patching order:", data);
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -694,9 +690,7 @@ var Order = React.createClass({displayName: "Order",
 			},
 			method: "PATCH",
 			data: data,
-			success: function(data) {
-				console.log("successfully updated order");
-			}
+			success: function(data) {}
 		})
 	},
 
@@ -723,7 +717,6 @@ var Order = React.createClass({displayName: "Order",
 		}
 	},
 	componentDidUpdate: function(prevProps) {
-		console.log("updated ", this.props.bar);
 		if (prevProps.bar != this.props.bar) {
 			this.getOrder()
 		}
@@ -847,6 +840,7 @@ var ProductCard = React.createClass({displayName: "ProductCard",
 					React.createElement("p", null, 
 						this.state.productSizeName
 					), 
+					React.createElement("p", null, this.props.barID), 
 					React.createElement(Input, {buttonBefore: minusButton, buttonAfter: plusButton, placeholder: "0", type: "number", value: this.props.productQuantity, onChange: this.changeQuantity, ref: function(thisComponent) {
 						this.quantityInput = thisComponent
 					}.bind(this)})
@@ -858,8 +852,7 @@ var ProductCard = React.createClass({displayName: "ProductCard",
 	increment: function() {
 		if (this.quantityInput.getValue() == "") {
 			newQuantity = 1
-		}
-		else {
+		} else {
 			newQuantity = parseInt(this.quantityInput.getValue()) + 1
 		}
 		this.props.changeQuantity(this.props.productID, this.props.productSizeID, newQuantity)
@@ -886,6 +879,24 @@ var ProductCard = React.createClass({displayName: "ProductCard",
 			method: "GET",
 			success: function(size) {
 				this.setState({productSizeName: size.sizeName})
+			}.bind(this)
+		})
+		// resolve distributor
+		// well, first resolve bar zip code
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.barID,
+			headers :{
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "GET",
+			success: function (bar) {
+				$.ajax({
+					url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
+					method: "GET",
+					success: function (distributor) {
+						console.log("distributor for", this.props.productID, "in", bar.zipCode, ":", distributor);
+					}.bind(this)
+				})
 			}.bind(this)
 		})
 	}

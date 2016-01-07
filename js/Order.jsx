@@ -10,7 +10,6 @@ var Order = React.createClass({
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
 		this.timeout = setTimeout(function() {
-			console.log("updating order");
 			this.patchOrder()
 		}.bind(this), 1000)
 	},
@@ -28,7 +27,7 @@ var Order = React.createClass({
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
 				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange}/>)
+					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?
 					<a onClick={this.showNewProductModal}>Create a new product</a>
@@ -94,7 +93,6 @@ var Order = React.createClass({
 
 	getOrder: function() {
 		// this.props.params.orderID
-		console.log("getting order for bar", this.props.bar);
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -103,7 +101,6 @@ var Order = React.createClass({
 			method: "GET",
 			success: function(data) {
 				this.setState({orderProducts: data["orders"]})
-				console.log("got order", data);
 			}.bind(this)
 		})
 	},
@@ -112,7 +109,6 @@ var Order = React.createClass({
 		data = {
 			orders: this.state.orderProducts
 		},
-		console.log("patching order:", data);
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -120,9 +116,7 @@ var Order = React.createClass({
 			},
 			method: "PATCH",
 			data: data,
-			success: function(data) {
-				console.log("successfully updated order");
-			}
+			success: function(data) {}
 		})
 	},
 
@@ -149,7 +143,6 @@ var Order = React.createClass({
 		}
 	},
 	componentDidUpdate: function(prevProps) {
-		console.log("updated ", this.props.bar);
 		if (prevProps.bar != this.props.bar) {
 			this.getOrder()
 		}
