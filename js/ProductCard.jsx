@@ -3,9 +3,11 @@ var React = require('React');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
+var DistributorField = require('./DistributorField.jsx');
+
 var ProductCard = React.createClass({
 	getInitialState: function() {
-		return ({productName: "", productSizeName: ""})
+		return ({productName: "", productSizeName: "", distributorName: ""})
 	},
 	render: function() {
 		minusButton = <Button onClick={this.decrement}>-</Button>
@@ -14,11 +16,12 @@ var ProductCard = React.createClass({
 			<div className="panel panel-default">
 				<div className="panel-body">
 					<p>
-						{this.state.productName}
+						Product:&nbsp;{this.state.productName}
 					</p>
 					<p>
-						{this.state.productSizeName}
+						Size:&nbsp;{this.state.productSizeName}
 					</p>
+					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName}/>
 					<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
 						this.quantityInput = thisComponent
 					}.bind(this)}/>
@@ -30,8 +33,7 @@ var ProductCard = React.createClass({
 	increment: function() {
 		if (this.quantityInput.getValue() == "") {
 			newQuantity = 1
-		}
-		else {
+		} else {
 			newQuantity = parseInt(this.quantityInput.getValue()) + 1
 		}
 		this.props.changeQuantity(this.props.productID, this.props.productSizeID, newQuantity)

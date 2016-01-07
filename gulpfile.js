@@ -3,6 +3,8 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var reactify = require('reactify');
 
+var rimraf = require('rimraf');
+
 gulp.task('default', function() {
 	var watcher = gulp.watch("js/*.jsx", ["build"])
 	gulp.start('build')
@@ -11,7 +13,9 @@ gulp.task('default', function() {
 
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
-	browserify({
+	console.log("building...");
+	rimraf("bundle.js", function () {
+		browserify({
 			entries: "./js/Main.jsx",
 			transform: [reactify]
 		}).bundle()
@@ -20,4 +24,8 @@ gulp.task('build', function() {
 		})
 		.pipe(source("bundle.js"))
 		.pipe(gulp.dest("./"))
+		.on("end", function () {
+			console.log("all done!");
+		})
+	})
 })
