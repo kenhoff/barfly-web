@@ -27,7 +27,7 @@ var Order = React.createClass({
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
 				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar}/>)
+					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar} reresolveOrder={this.reresolveOrder}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
@@ -89,6 +89,12 @@ var Order = React.createClass({
 
 		// how fast can we make the round trip? do we just send it and hope state catches up, or do we ensure that the response contains exactly the right information?
 		// keep in mind that we're sending entire state on change, so if anything needs to catch up it'll happen later
+	},
+	reresolveOrder: function() {
+		this.setState({allProducts: [], orderProducts: []})
+		this.getProducts()
+		this.getOrder()
+		// this.forceUpdate()
 	},
 
 	getOrder: function() {

@@ -4,10 +4,11 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
 var DistributorField = require('./DistributorField.jsx');
+var RepField = require('./RepField.jsx');
 
 var ProductCard = React.createClass({
 	getInitialState: function() {
-		return ({productName: "", productSizeName: "", distributorName: ""})
+		return ({productName: "", productSizeName: "", distributorID: null, distributorName: null})
 	},
 	render: function() {
 		minusButton = <Button onClick={this.decrement}>-</Button>
@@ -16,19 +17,23 @@ var ProductCard = React.createClass({
 			<div className="panel panel-default">
 				<div className="panel-body">
 					<p>
-						Product:&nbsp;{this.state.productName}
+						<b>Product:</b>&nbsp;{this.state.productName}
 					</p>
 					<p>
-						Size:&nbsp;{this.state.productSizeName}
+						<b>Size:</b>&nbsp;{this.state.productSizeName}
 					</p>
-					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName}/>
-					<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
+					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
+					<RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder}/>
+					<Input label="Quantity" buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
 						this.quantityInput = thisComponent
 					}.bind(this)}/>
 				</div>
 			</div>
 		)
 		// ,
+	},
+	handleDistributorChange: function(distributorID, distributorName) {
+		this.setState({distributorID: distributorID, distributorName: distributorName})
 	},
 	increment: function() {
 		if (this.quantityInput.getValue() == "") {

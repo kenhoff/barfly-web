@@ -46,8 +46,6 @@ var AddDistributorModal = React.createClass({
 		);
 	},
 	handleDistributorChange: function() {
-		console.log("handling new distributor change...");
-		console.log(this.distributorID.getValue());
 		if (this.distributorID.getValue() == "newDistributor") {
 			this.setState({showNewDistributorInput: true})
 		} else {
@@ -61,7 +59,7 @@ var AddDistributorModal = React.createClass({
 				// now POST to product/zipcode/distributor with new distributorID
 				this.saveDistributor(newDistributorID, function() {
 					this.props.onHide()
-				})
+				}.bind(this))
 			}.bind(this))
 		} else {
 			// now POST to product/zipcode/distributor with new distributorID
@@ -122,4 +120,4 @@ var AddDistributorModal = React.createClass({
 	}
 });
 
-module.export = AddDistributorModal
+module.exports = AddDistributorModal
