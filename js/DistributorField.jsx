@@ -23,7 +23,8 @@ var DistributorField = React.createClass({
 		} else {
 			return (
 				<div>
-					<p><b>Distributor:</b>&nbsp;
+					<p>
+						<b>Distributor:</b>&nbsp;
 						{this.state.distributorName}</p>
 				</div>
 			);
@@ -49,7 +50,9 @@ var DistributorField = React.createClass({
 			},
 			method: "GET",
 			success: function(bar) {
-				this.setState({zipCode: parseInt(bar.zipCode)})
+				this.setState({
+					zipCode: parseInt(bar.zipCode)
+				})
 				// then resolve distributor for that product in that zip code
 				$.ajax({
 					url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
@@ -65,6 +68,7 @@ var DistributorField = React.createClass({
 								method: "GET",
 								success: function(finalDistributor) {
 									this.setState({distributorName: finalDistributor.distributorName})
+									this.props.changeDistributor(parseInt(distributor.distributorID), finalDistributor.distributorName)
 								}.bind(this)
 							})
 						}
