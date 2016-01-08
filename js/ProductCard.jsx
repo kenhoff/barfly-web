@@ -16,13 +16,13 @@ var ProductCard = React.createClass({
 			<div className="panel panel-default">
 				<div className="panel-body">
 					<p>
-						Product:&nbsp;{this.state.productName}
+						<b>Product:</b>&nbsp;{this.state.productName}
 					</p>
 					<p>
-						Size:&nbsp;{this.state.productSizeName}
+						<b>Size:</b>&nbsp;{this.state.productSizeName}
 					</p>
 					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName}/>
-					<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
+					<Input label="Quantity" buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
 						this.quantityInput = thisComponent
 					}.bind(this)}/>
 				</div>

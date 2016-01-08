@@ -3,6 +3,8 @@ var React = require('React');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
+var AddDistributorModal = require('./AddDistributorModal.jsx');
+
 var DistributorField = React.createClass({
 	getInitialState: function() {
 		return ({distributorName: "Finding distributor...", showAddDistributorModal: false, zipCode: null})
@@ -13,24 +15,24 @@ var DistributorField = React.createClass({
 			return (
 				<div>
 					<p>Distributor not found!
-						<a onClick={this.showAddDistributorModal}>Add one?</a>
+						<a onClick={this.openModal}>Add one?</a>
 					</p>
-					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeAddDistributorModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName}/>
+					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName}/>
 				</div>
 			)
 		} else {
 			return (
 				<div>
-					<p>Distributor:&nbsp;
+					<p><b>Distributor:</b>&nbsp;
 						{this.state.distributorName}</p>
 				</div>
 			);
 		}
 	},
-	showAddDistributorModal: function() {
+	openModal: function() {
 		this.setState({showAddDistributorModal: true})
 	},
-	closeAddDistributorModal: function() {
+	closeModal: function() {
 		this.setState({showAddDistributorModal: false})
 		this.resolveDistributor()
 	},
@@ -47,7 +49,7 @@ var DistributorField = React.createClass({
 			},
 			method: "GET",
 			success: function(bar) {
-				this.setState({zipCode: bar.zipCode})
+				this.setState({zipCode: parseInt(bar.zipCode)})
 				// then resolve distributor for that product in that zip code
 				$.ajax({
 					url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
@@ -55,10 +57,8 @@ var DistributorField = React.createClass({
 					success: function(distributor) {
 						// console.log(distributor);
 						if (Object.keys(distributor).length == 0) {
-							// console.log("no distributor found for", this.props.productID, "in", bar.zipCode);
 							this.setState({distributorName: -1})
 						} else {
-							// console.log("distributor for", this.props.productID, "in", bar.zipCode, ":", distributor);
 							// finally, resolve distributor name
 							$.ajax({
 								url: window.API_URL + "/distributors/" + distributor.distributorID,
