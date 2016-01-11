@@ -1,5 +1,7 @@
 var React = require('react');
 
+var NewBarModal = require('./NewBarModal.jsx');
+
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
@@ -156,51 +158,5 @@ resolveBarName = function(barID, cb) {
 		}
 	})
 }
-
-NewBarModal = React.createClass({
-	render: function() {
-		return (
-			<Modal show={this.props.showModal} onHide={this.props.onHide}>
-				<Modal.Header closeButton>
-					<Modal.Title>Let's add a new bar.</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref="barNameInput"/>
-					<Input type="text" label="What zip code is your bar in?" placeholder="80302" ref="zipCodeInput"/>
-				</Modal.Body>
-				<Modal.Footer>
-					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
-					<button className="btn btn-primary" onClick={this.submitBar}>Create</button>
-				</Modal.Footer>
-			</Modal>
-		)
-	},
-	submitBar: function() {
-		re = /^\d{5}$/ig
-		zipCode = this.refs.zipCodeInput.getValue()
-
-		isValid = (zipCode.match(re) && (zipCode.match(re).length == 1))
-
-		if (isValid) {
-			$.ajax({
-				url: window.API_URL + "/user/bars",
-				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-				},
-				method: "POST",
-				data: {
-					barName: this.refs.barNameInput.getValue(),
-					zipCode: this.refs.zipCodeInput.getValue()
-				},
-				success: function(data) {
-					this.props.onBarChange(data.id)
-					this.props.onHide()
-				}.bind(this)
-			})
-		} else {
-			// throw error or something
-		}
-	}
-})
 
 module.exports = BarSelector
