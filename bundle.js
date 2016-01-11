@@ -1023,7 +1023,6 @@ var Order = React.createClass({displayName: "Order",
 	},
 
 	sendOrder: function () {
-
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
