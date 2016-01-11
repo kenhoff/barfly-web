@@ -4,7 +4,7 @@
   "description": "Webserver for Barfly",
   "main": "server.js",
   "scripts": {
-    "test": "jest"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
