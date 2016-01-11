@@ -106,7 +106,6 @@ var Main = React.createClass({
 		})
 	},
 	handleBarChange: function(barID) {
-		console.log("context change to", barID)
 		this.setState({currentBar: barID})
 	},
 	componentDidMount: function() {
