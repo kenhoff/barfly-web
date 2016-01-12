@@ -2,10 +2,12 @@ var React = require('react');
 
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
+var History = require('react-router').History;
 
 var async = require('async');
 
 var Order = React.createClass({
+	mixins: [History],
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
@@ -33,9 +35,31 @@ var Order = React.createClass({
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
 				<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
+				<nav className="navbar navbar-default navbar-fixed-bottom">
+					<div className="container">
+						<div className="navbar-form navbar-right">
+							<button onClick={this.sendOrder} className="btn btn-primary">Send Order</button>
+						</div>
+					</div>
+				</nav>
 			</div>
 		)
 	},
+
+	sendOrder: function () {
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "POST",
+			success: function() {
+				this.history.push("/orders")
+				console.log("successfully sent order!");
+			}.bind(this)
+		})
+	},
+
 	showNewProductModal: function() {
 		this.setState({showNewProductModal: true})
 	},

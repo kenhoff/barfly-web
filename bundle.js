@@ -679,7 +679,6 @@ var Main = React.createClass({displayName: "Main",
 		})
 	},
 	handleBarChange: function(barID) {
-		console.log("context change to", barID)
 		this.setState({currentBar: barID})
 	},
 	componentDidMount: function() {
@@ -979,10 +978,12 @@ var React = require('react');
 
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
+var History = require('react-router').History;
 
 var async = require('async');
 
 var Order = React.createClass({displayName: "Order",
+	mixins: [History],
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
@@ -1009,10 +1010,32 @@ var Order = React.createClass({displayName: "Order",
 				React.createElement("p", null, "Can't find what you're looking for? ", 
 					React.createElement("a", {onClick: this.showNewProductModal}, "Create a new product")
 				), 
-				React.createElement(NewProductModal, {showModal: this.state.showNewProductModal, onHide: this.closeNewProductModal, newProductCreated: this.getProducts})
+				React.createElement(NewProductModal, {showModal: this.state.showNewProductModal, onHide: this.closeNewProductModal, newProductCreated: this.getProducts}), 
+				React.createElement("nav", {className: "navbar navbar-default navbar-fixed-bottom"}, 
+					React.createElement("div", {className: "container"}, 
+						React.createElement("div", {className: "navbar-form navbar-right"}, 
+							React.createElement("button", {onClick: this.sendOrder, className: "btn btn-primary"}, "Send Order")
+						)
+					)
+				)
 			)
 		)
 	},
+
+	sendOrder: function () {
+		$.ajax({
+			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "POST",
+			success: function() {
+				this.history.push("/orders")
+				console.log("successfully sent order!");
+			}.bind(this)
+		})
+	},
+
 	showNewProductModal: function() {
 		this.setState({showNewProductModal: true})
 	},
@@ -1154,7 +1177,7 @@ var Order = React.createClass({displayName: "Order",
 
 module.exports = Order
 
-},{"./NewProductModal.jsx":9,"./ProductCard.jsx":12,"async":170,"react":627}],11:[function(require,module,exports){
+},{"./NewProductModal.jsx":9,"./ProductCard.jsx":12,"async":170,"react":627,"react-router":467}],11:[function(require,module,exports){
 var React = require('react');
 
 var Link = require('react-router').Link;
