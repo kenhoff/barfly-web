@@ -2,6 +2,7 @@ var React = require('react');
 
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
+var OrderNavBottom = require('./OrderNavBottom.jsx');
 var History = require('react-router').History;
 
 var async = require('async');
@@ -19,7 +20,7 @@ var Order = React.createClass({
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// orderProducts is a list of all products currently in the order (quantity > 0)
 		// listProduct will be several arrays, each with a list of the products in a particular list (like starred products)
-		return {allProducts: [], orderProducts: [], showNewProductModal: false}
+		return {allProducts: [], orderProducts: [], showNewProductModal: false, sent: true}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -29,24 +30,18 @@ var Order = React.createClass({
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
 				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar} reresolveOrder={this.reresolveOrder}/>)
+					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
 				<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
-				<nav className="navbar navbar-default navbar-fixed-bottom">
-					<div className="container">
-						<div className="navbar-form navbar-right">
-							<button onClick={this.sendOrder} className="btn btn-primary">Send Order</button>
-						</div>
-					</div>
-				</nav>
+				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder}/>
 			</div>
 		)
 	},
 
-	sendOrder: function () {
+	sendOrder: function() {
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -55,7 +50,6 @@ var Order = React.createClass({
 			method: "POST",
 			success: function() {
 				this.history.push("/orders")
-				console.log("successfully sent order!");
 			}.bind(this)
 		})
 	},
@@ -118,11 +112,9 @@ var Order = React.createClass({
 		this.setState({allProducts: [], orderProducts: []})
 		this.getProducts()
 		this.getOrder()
-		// this.forceUpdate()
 	},
 
 	getOrder: function() {
-		// this.props.params.orderID
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -130,7 +122,11 @@ var Order = React.createClass({
 			},
 			method: "GET",
 			success: function(data) {
-				this.setState({orderProducts: data["orders"]})
+				// handle if sent isn't actually in the order yet
+				this.setState({
+					orderProducts: data.productOrders,
+					sent: (data.sent || false)
+				})
 			}.bind(this)
 		})
 	},
