@@ -15,6 +15,7 @@ var App = require('./App.jsx');
 var Nav = require('./Nav.jsx');
 var Orders = require('./Orders.jsx');
 var Order = require('./Order.jsx');
+var Profile = require('./Profile.jsx');
 
 var Main = React.createClass({
 
@@ -31,7 +32,7 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange}/>
+					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
 					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
 			);
@@ -139,6 +140,7 @@ var MainRouter = React.createClass({
 						<Route path="orders" component={Orders}/>
 						<Route path="orders/:orderID" component={Order}></Route>
 					</Route>
+					<Route component={Profile} path="/profile"></Route>
 				</Route>
 			</Router>
 		);
