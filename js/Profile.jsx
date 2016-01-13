@@ -1,10 +1,15 @@
 var React = require('react');
 
+var ProfilePhoneInput = require('./ProfilePhoneInput.jsx');
+
 var Profile = React.createClass({
 
 	render: function() {
 		return (
-			<h1>Profile</h1>
+			<div>
+				<h1>Profile</h1>
+				<ProfilePhoneInput />
+			</div>
 		);
 	}
 
