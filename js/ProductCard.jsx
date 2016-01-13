@@ -11,8 +11,13 @@ var ProductCard = React.createClass({
 		return ({productName: "", productSizeName: "", distributorID: null, distributorName: null})
 	},
 	render: function() {
-		minusButton = <Button onClick={this.decrement}>-</Button>
-		plusButton = <Button onClick={this.increment}>+</Button>
+		if (this.props.disabled) {
+			minusButton = <div/>
+			plusButton = <div/>
+		} else {
+			minusButton = <Button onClick={this.decrement}>-</Button>
+			plusButton = <Button onClick={this.increment}>+</Button>
+		}
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">

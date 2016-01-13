@@ -1287,8 +1287,13 @@ var ProductCard = React.createClass({displayName: "ProductCard",
 		return ({productName: "", productSizeName: "", distributorID: null, distributorName: null})
 	},
 	render: function() {
-		minusButton = React.createElement(Button, {onClick: this.decrement}, "-")
-		plusButton = React.createElement(Button, {onClick: this.increment}, "+")
+		if (this.props.disabled) {
+			minusButton = React.createElement("div", null)
+			plusButton = React.createElement("div", null)
+		} else {
+			minusButton = React.createElement(Button, {onClick: this.decrement}, "-")
+			plusButton = React.createElement(Button, {onClick: this.increment}, "+")
+		}
 		return (
 			React.createElement("div", {className: "panel panel-default"}, 
 				React.createElement("div", {className: "panel-body"}, 
