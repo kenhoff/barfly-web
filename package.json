@@ -4,7 +4,8 @@
   "description": "Webserver for Barfly",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "postinstall": "gulp build"
   },
   "repository": {
     "type": "git",

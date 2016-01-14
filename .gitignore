@@ -28,3 +28,5 @@ node_modules
 
 # @kenhoff's gitignores
 .DS_Store
+app.js
+bundle.js
