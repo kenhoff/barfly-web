@@ -743,7 +743,7 @@ var Nav = React.createClass({displayName: "Nav",
 			React.createElement("div", null, 
 				React.createElement("nav", {className: "navbar navbar-default navbar-fixed-top"}, 
 					React.createElement("div", {className: "container"}, 
-						React.createElement("a", {className: "navbar-brand", href: "#", onClick: this.goHome}, "barfly"), 
+						React.createElement("a", {className: "navbar-brand", href: "#", onClick: this.goHome}, "BURLOCK"), 
 						React.createElement(BarSelector, {currentBar: this.props.currentBar, changeBar: this.props.changeBar}), 
 						React.createElement(ProfileDropdown, {signOut: this.signOut, lock: this.props.lock})
 					)

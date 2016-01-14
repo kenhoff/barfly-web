@@ -14,7 +14,7 @@ var Nav = React.createClass({
 			<div>
 				<nav className="navbar navbar-default navbar-fixed-top">
 					<div className="container">
-						<a className = "navbar-brand" href = "#" onClick = {this.goHome}>barfly</a>
+						<a className = "navbar-brand" href = "#" onClick = {this.goHome}>BURLOCK</a>
 						<BarSelector currentBar={this.props.currentBar} changeBar={this.props.changeBar}/>
 						<ProfileDropdown signOut={this.signOut} lock={this.props.lock}/>
 					</div>
