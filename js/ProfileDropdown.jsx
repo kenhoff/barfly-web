@@ -1,5 +1,4 @@
 var React = require('react');
-var PropTypes = React.PropTypes;
 
 var Link = require('react-router').Link;
 
