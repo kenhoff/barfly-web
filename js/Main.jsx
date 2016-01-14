@@ -52,6 +52,8 @@ var Main = React.createClass({
 		// whatever, there's got to be a better way to do this
 		if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
 			window.API_URL = "https://api.barflyorders.com"
+		} else if ((window.location.hostname == "burlockorders.com") || (window.location.hostname == "www.burlockorders.com")) {
+			window.API_URL = "https://api.burlockorders.com"
 		} else {
 			window.API_URL = "http://localhost:1310"
 		}

@@ -291,7 +291,7 @@ var RepOption = React.createClass({displayName: "RepOption",
 	},
 	resolveRepName: function(cb) {
 		$.ajax({
-			url: API_URL + "/reps/" + this.props.repID,
+			url: window.API_URL + "/reps/" + this.props.repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)
@@ -625,6 +625,8 @@ var Main = React.createClass({displayName: "Main",
 		// whatever, there's got to be a better way to do this
 		if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
 			window.API_URL = "https://api.barflyorders.com"
+		} else if ((window.location.hostname == "burlockorders.com") || (window.location.hostname == "www.burlockorders.com")) {
+			window.API_URL = "https://api.burlockorders.com"
 		} else {
 			window.API_URL = "http://localhost:1310"
 		}
@@ -1546,7 +1548,7 @@ var RepField = React.createClass({displayName: "RepField",
 	},
 	resolveAccount: function(cb) {
 		$.ajax({
-			url: API_URL + "/accounts",
+			url: window.API_URL + "/accounts",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -1566,7 +1568,7 @@ var RepField = React.createClass({displayName: "RepField",
 	},
 	resolveRepName: function(repID, cb) {
 		$.ajax({
-			url: API_URL + "/reps/" + repID,
+			url: window.API_URL + "/reps/" + repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)

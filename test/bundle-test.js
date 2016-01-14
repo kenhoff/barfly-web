@@ -291,7 +291,7 @@ var RepOption = React.createClass({displayName: "RepOption",
 	},
 	resolveRepName: function(cb) {
 		$.ajax({
-			url: API_URL + "/reps/" + this.props.repID,
+			url: window.API_URL + "/reps/" + this.props.repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)
@@ -566,7 +566,7 @@ var RepField = React.createClass({displayName: "RepField",
 	},
 	resolveAccount: function(cb) {
 		$.ajax({
-			url: API_URL + "/accounts",
+			url: window.API_URL + "/accounts",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -586,7 +586,7 @@ var RepField = React.createClass({displayName: "RepField",
 	},
 	resolveRepName: function(repID, cb) {
 		$.ajax({
-			url: API_URL + "/reps/" + repID,
+			url: window.API_URL + "/reps/" + repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)

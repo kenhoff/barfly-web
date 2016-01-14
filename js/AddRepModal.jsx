@@ -165,7 +165,7 @@ var RepOption = React.createClass({
 	},
 	resolveRepName: function(cb) {
 		$.ajax({
-			url: API_URL + "/reps/" + this.props.repID,
+			url: window.API_URL + "/reps/" + this.props.repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)
