@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "postinstall": "gulp build"
+    "postinstall": "gulp build",
+    "pretest": "gulp build-test"
   },
   "repository": {
     "type": "git",
