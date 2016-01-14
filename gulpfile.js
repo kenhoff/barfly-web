@@ -14,7 +14,7 @@ gulp.task('default', function() {
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
 	console.log("building...");
-	rimraf("bundle.js", function() {
+	rimraf("app.js", function() {
 		browserify({
 				entries: "./js/Main.jsx",
 				transform: [reactify]
@@ -22,7 +22,7 @@ gulp.task('build', function() {
 			.on('error', function(err) {
 				console.log(err.message);
 			})
-			.pipe(source("bundle.js"))
+			.pipe(source("app.js"))
 			.pipe(gulp.dest("./"))
 			.on("end", function() {
 				console.log("all done!");
@@ -37,7 +37,7 @@ gulp.task('test', function() {
 
 gulp.task('build-test', function() {
 	console.log("building test suite...");
-	rimraf("bundle-test.js", function() {
+	rimraf("test.js", function() {
 		browserify({
 				entries: "./test/MainTest.jsx",
 				transform: [reactify]
@@ -45,7 +45,7 @@ gulp.task('build-test', function() {
 			.on('error', function(err) {
 				console.log(err.message);
 			})
-			.pipe(source("bundle-test.js"))
+			.pipe(source("test.js"))
 			.pipe(gulp.dest("./test/"))
 			.on("end", function() {
 				console.log("done building test suite");

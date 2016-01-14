@@ -1,8 +1,8 @@
 var app = require('express')();
 port = process.env.PORT || 1175
 
-app.get("/bundle.js", function (req, res) {
-	res.sendFile(__dirname + "/bundle.js")
+app.get("/app.js", function (req, res) {
+	res.sendFile(__dirname + "/app.js")
 })
 
 
