@@ -117,7 +117,6 @@ BarSelectorDropdownList = React.createClass({
 				}.bind(this))}
 			</ul>
 		)
-		// whoops - needed to bind to this, when using map
 	}
 })
 

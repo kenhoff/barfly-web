@@ -1,7 +1,9 @@
+
 var gulp = require('gulp');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var reactify = require('reactify');
+var envify = require('envify');
 
 var rimraf = require('rimraf');
 
@@ -14,10 +16,13 @@ gulp.task('default', function() {
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
 	console.log("building...");
+	if (process.env.NODE_ENV != "production") {
+		require('dotenv').load()
+	}
 	rimraf("app.js", function() {
 		browserify({
 				entries: "./js/Main.jsx",
-				transform: [reactify]
+				transform: [reactify, envify],
 			}).bundle()
 			// .on('error', function(err) {
 			// 	console.log(err.message);

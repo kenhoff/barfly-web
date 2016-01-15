@@ -46,7 +46,7 @@ var Main = React.createClass({
 		}
 	},
 	componentWillMount: function() {
-		this.lock = new Auth0Lock('JeIT5hdK0PXWuMVE1GSYbDT4Uw2HQpKx', 'barfly.auth0.com');
+		this.lock = new Auth0Lock(process.env.AUTH0_CLIENTID, process.env.AUTH0_DOMAIN);
 		this.setState({idToken: this.getIdToken()})
 
 		// whatever, there's got to be a better way to do this
