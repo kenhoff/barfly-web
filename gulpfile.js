@@ -1,6 +1,3 @@
-if (process.env.NODE_ENV != "production") {
-	require('dotenv').load()
-}
 
 var gulp = require('gulp');
 var browserify = require('browserify');
@@ -19,7 +16,9 @@ gulp.task('default', function() {
 // let's be real, not a whole lot of this "vinyl-source-stream" stuff makes any sense to me.
 gulp.task('build', function() {
 	console.log("building...");
-	console.log("environment:", process.env.NODE_ENV);
+	if (process.env.NODE_ENV != "production") {
+		require('dotenv').load()
+	}
 	rimraf("app.js", function() {
 		browserify({
 				entries: "./js/Main.jsx",
