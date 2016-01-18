@@ -24,9 +24,9 @@ gulp.task('build', function() {
 				entries: "./js/Main.jsx",
 				transform: [reactify, envify],
 			}).bundle()
-			// .on('error', function(err) {
-			// 	console.log(err.message);
-			// })
+			.on('error', function(err) {
+				console.log(err.message);
+			})
 			.pipe(source("app.js"))
 			.pipe(gulp.dest("./"))
 			.on("end", function() {
