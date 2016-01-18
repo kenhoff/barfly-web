@@ -8,7 +8,7 @@ NewBarModal = React.createClass({
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide}>
 				<Modal.Header closeButton>
-					<Modal.Title>Let's add a new bar.</Modal.Title>
+					<Modal.Title>Add a new bar.</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Input type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref={function(thisInput) {
