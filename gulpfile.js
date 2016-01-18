@@ -44,7 +44,7 @@ gulp.task('build-test', function() {
 	console.log("building test suite...");
 	rimraf("test.js", function() {
 		browserify({
-				entries: "./test/MainTest.jsx",
+				entries: "./test/Main.jsx",
 				transform: [reactify]
 			}).bundle()
 			.on('error', function(err) {
