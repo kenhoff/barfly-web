@@ -45,10 +45,29 @@ describe("NewBarModal", function() {
 		done()
 	})
 	it("zip code Input has the value '12345' when '12345' is entered", function (done) {
-		assert(resultValue == "12345")
+		renderedComponent = ReactTestUtils.renderIntoDocument(< NewBarModal showModal = {
+			true
+		} />)
+		// before that, we need to start firing some events at the input element
+		inputComponent =  ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[1].getInputDOMNode()
+		inputComponent.value = "12345"
+		// let's work backwards - first, get the value of the actual input element
+		resultValue = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[1].getValue()
+		assert.equal(resultValue, "12345")
 		done()
 	})
-	it("zip code Input has the value '67890' when '678900' is entered")
+	it.skip("zip code Input has the value '67890' when '678900' is entered", function (done) {
+		renderedComponent = ReactTestUtils.renderIntoDocument(< NewBarModal showModal = {
+			true
+		} />)
+		// before that, we need to start firing some events at the input element
+		inputComponent =  ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[1].getInputDOMNode()
+		inputComponent.value = "678900"
+		// let's work backwards - first, get the value of the actual input element
+		resultValue = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[1].getValue()
+		assert.equal(resultValue, "67890")
+		done()
+	})
 	it("zip code Input has the value '' when 'asdfasdfasdf' is entered")
 	it("zip code Input has the value '12345' when 'a1s2d3f4a5sdf' is entered")
 	it("zip code Input has the value '12345' when ' 1 2 3 4 5 ' is entered")
