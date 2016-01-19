@@ -33,7 +33,7 @@ describe("OrderNavBottom", function() {
 		done()
 
 	})
-	it("when called wtih disabled = true, just renders an empty div", function(done) {
+	it("when called with disabled = true, just renders an empty div", function(done) {
 		shallowRenderer.render(< OrderNavBottom disabled = {
 			true
 		} />)

@@ -24,9 +24,9 @@ gulp.task('build', function() {
 				entries: "./js/Main.jsx",
 				transform: [reactify, envify],
 			}).bundle()
-			// .on('error', function(err) {
-			// 	console.log(err.message);
-			// })
+			.on('error', function(err) {
+				console.log(err.message);
+			})
 			.pipe(source("app.js"))
 			.pipe(gulp.dest("./"))
 			.on("end", function() {
@@ -44,7 +44,7 @@ gulp.task('build-test', function() {
 	console.log("building test suite...");
 	rimraf("test.js", function() {
 		browserify({
-				entries: "./test/MainTest.jsx",
+				entries: "./test/Main.jsx",
 				transform: [reactify]
 			}).bundle()
 			.on('error', function(err) {
