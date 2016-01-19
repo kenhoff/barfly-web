@@ -1,12 +1,11 @@
 var React = require('react');
-
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
 NewBarModal = React.createClass({
 	render: function() {
 		return (
-			<Modal show={this.props.showModal} onHide={this.props.onHide}>
+			<Modal show={this.props.showModal} onHide={this.props.onHide} ref = "NewBarModal">
 				<Modal.Header closeButton>
 					<Modal.Title>Add a new bar.</Modal.Title>
 				</Modal.Header>
