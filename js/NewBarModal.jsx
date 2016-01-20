@@ -54,7 +54,7 @@ NewBarModal = React.createClass({
 		}
 	},
 	submitBar: function() {
-		if ((this.state.barNameInputValue == "") || (this.state.zipCodeInputValue.length != 5)) {
+		if ((this.state.barNameInputValue.trim() == "") || (this.state.zipCodeInputValue.length != 5)) {
 			// handle some kind of err?
 		} else {
 			$.ajax({
