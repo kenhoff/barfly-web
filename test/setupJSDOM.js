@@ -2,6 +2,10 @@ console.log("setting up jsdom...");
 var jsdom = require('jsdom');
 global.document = jsdom.jsdom('<!doctype html><html><body></body></html>');
 global.window = document.defaultView;
+global.window.localStorage = {
+	getItem: function() {},
+	setItem: function() {}
+}
 
 // grabbed from http://jaketrent.com/post/testing-react-with-jsdom/
 
