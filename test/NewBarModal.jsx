@@ -39,11 +39,35 @@ describe("NewBarModal", function() {
 		assert(ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedComponent.refs.NewBarModal._modal, "input").length == 2)
 		done()
 	})
-	it("trims whitespace on either side of the name", function(done) {
-		inputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[0].getInputDOMNode() // get the DOM node
-		inputNode.value = "	    \nKen's	super AWKWARD bar; name	    \n" // give the node a new value
-		ReactTestUtils.Simulate.change(inputNode) // send an onChange event
-		assert.equal(inputNode.value, "Ken's	super AWKWARD bar; name")
+	it("trims whitespace on either side of the name when submitting", function(done) {
+
+		ajaxMock = sinon.mock($)
+		ajaxExpects = ajaxMock.expects("ajax")
+
+		submitSpy = sinon.spy(renderedComponent, "submitBar") // make sure submitBar is at least clicked
+
+
+		// set name to filled, zip to filled
+		barNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[0].getInputDOMNode()
+		barNameInputNode.value = "	    \nKen's	super AWKWARD bar; name	    \n"
+		ReactTestUtils.Simulate.change(barNameInputNode)
+		zipInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[1].getInputDOMNode()
+		zipInputNode.value = "12345"
+		ReactTestUtils.Simulate.change(zipInputNode)
+
+		submitButton = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedComponent.refs.NewBarModal._modal, "button")[2]
+		ReactTestUtils.Simulate.click(submitButton)
+
+		assert(!submitButton.className.includes("disabled"), "button is disabled!")
+		assert(submitSpy.calledOnce, "submit wasn't called once")
+		assert(ajaxExpects.calledWithMatch({url: "http://localhost:1310/user/bars"}), "didn't have right URL")
+		assert(ajaxExpects.calledWithMatch({
+			data: {
+				barName: "Ken's	super AWKWARD bar; name",
+				zipCode: "12345"
+			}
+		}), "didn't have right data")
+		ajaxMock.restore()
 		done()
 	})
 	it("zip code Input has the value '12345' when '12345' is entered", function(done) {
@@ -187,6 +211,7 @@ describe("NewBarModal", function() {
 	it("makes a request to /user/bars with the inputs when 'submit' is clicked", function(done) {
 		ajaxMock = sinon.mock($)
 		ajaxExpects = ajaxMock.expects("ajax")
+		submitSpy = sinon.spy(renderedComponent, "submitBar") // make sure submitBar is at least clicked
 
 		// set name to filled, zip to filled
 		barNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[0].getInputDOMNode()
@@ -208,6 +233,8 @@ describe("NewBarModal", function() {
 				zipCode: "12345"
 			}
 		}), "didn't have right data")
+
+		ajaxMock.restore()
 		done()
 	})
 })

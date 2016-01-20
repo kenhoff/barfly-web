@@ -31,7 +31,7 @@ NewBarModal = React.createClass({
 		)
 	},
 	handleBarNameInputChange: function(event) {
-		newValue = event.target.value.trim()
+		newValue = event.target.value
 		this.setState({
 			barNameInputValue: newValue
 		}, function() {
@@ -64,7 +64,7 @@ NewBarModal = React.createClass({
 				},
 				method: "POST",
 				data: {
-					barName: this.barNameInput.getValue(),
+					barName: this.barNameInput.getValue().trim(),
 					zipCode: this.zipCodeInput.getValue()
 				},
 				success: function(data) {
