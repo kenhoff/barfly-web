@@ -1,10 +1,11 @@
 var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
+var $ = require('jquery');
 
 NewBarModal = React.createClass({
 	getInitialState: function() {
-		return {zipCodeInputValue: "", barNameInputValue: ""};
+		return {zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false};
 	},
 	render: function() {
 		return (
@@ -22,27 +23,40 @@ NewBarModal = React.createClass({
 				</Modal.Body>
 				<Modal.Footer>
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
-					<button className="btn btn-primary" onClick={this.submitBar}>Create</button>
+					<button className={"btn btn-primary " + (this.state.buttonEnabled
+						? ""
+						: "disabled")} onClick={this.submitBar}>Create</button>
 				</Modal.Footer>
 			</Modal>
 		)
 	},
 	handleBarNameInputChange: function(event) {
 		newValue = event.target.value.trim()
-		this.setState({barNameInputValue: newValue})
+		this.setState({
+			barNameInputValue: newValue
+		}, function() {
+			this.updateButtonState()
+		})
 	},
 	handleZipCodeInputChange: function(event) {
 		newValue = event.target.value.replace(/[^0-9]/g, "").slice(0, 5)
-		this.setState({zipCodeInputValue: newValue})
-
+		this.setState({
+			zipCodeInputValue: newValue
+		}, function() {
+			this.updateButtonState()
+		})
+	},
+	updateButtonState: function() {
+		if ((this.state.barNameInputValue == "") || (this.state.zipCodeInputValue.length != 5)) {
+			this.setState({buttonEnabled: false})
+		} else {
+			this.setState({buttonEnabled: true})
+		}
 	},
 	submitBar: function() {
-		re = /^\d{5}$/ig
-		zipCode = this.zipCodeInput.getValue()
-
-		isValid = (zipCode.match(re) && (zipCode.match(re).length == 1))
-
-		if (isValid) {
+		if ((this.state.barNameInputValue == "") || (this.state.zipCodeInputValue.length != 5)) {
+			// handle some kind of err?
+		} else {
 			$.ajax({
 				url: window.API_URL + "/user/bars",
 				headers: {
@@ -58,8 +72,6 @@ NewBarModal = React.createClass({
 					this.props.onHide()
 				}.bind(this)
 			})
-		} else {
-			// throw error or something
 		}
 	}
 })
