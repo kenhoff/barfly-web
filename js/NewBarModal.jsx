@@ -5,13 +5,13 @@ var $ = require('jquery');
 
 NewBarModal = React.createClass({
 	getInitialState: function() {
-		return {zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false};
+		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false});
 	},
 	render: function() {
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="NewBarModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Add a new bar.</Modal.Title>
+					<Modal.Title>Let's add a new bar.</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Input value={this.state.barNameInputValue} type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref={function(thisInput) {
