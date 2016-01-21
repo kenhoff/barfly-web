@@ -1,5 +1,4 @@
 var assert = require('assert');
-
 var NewBarModal = require('../js/NewBarModal.jsx');
 var React = require('react');
 var ReactDOM = require('react-dom');
@@ -7,7 +6,6 @@ var ReactTestUtils = require('react-addons-test-utils');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var $ = require('jquery');
-
 var sinon = require('sinon');
 
 // disclaimer - this is all bullshit. check https://github.com/react-bootstrap/react-bootstrap/blob/master/test/ModalSpec.js to see how to actually test these modals
@@ -17,6 +15,10 @@ describe("NewBarModal", function() {
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
 		window.API_URL = "http://localhost:1310"
+	})
+
+	after(function () {
+		localStorage.getItem.restore()
 	})
 
 	beforeEach(function() {
