@@ -39,7 +39,7 @@ var Main = React.createClass({
 		} else {
 			return (
 				<div>
-					<h1>Welcome to Barfly</h1>
+					<h1>Welcome to Burlock</h1>
 					<a onClick={this.showLock}>Sign in</a>
 				</div>
 			);
