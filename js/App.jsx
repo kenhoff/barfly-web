@@ -6,7 +6,6 @@ window.jQuery = window.$ = require('jquery');
 
 var App = React.createClass({
 	render: function() {
-		console.log(this.props.bar);
 		if (this.props.bar > 0) {
 			return (
 				<div>
