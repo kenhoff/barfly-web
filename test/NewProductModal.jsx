@@ -110,6 +110,7 @@ describe("NewProductModal", function() {
 			productNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewProductModal._modal, Input)[0].getInputDOMNode()
 			productNameInputNode.value = ""
 			ReactTestUtils.Simulate.change(productNameInputNode)
+
 			sizeInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewProductModal._modal, Input)[1].getInputDOMNode()
 			sizeInputNode.value = 1
 			ReactTestUtils.Simulate.change(sizeInputNode)
