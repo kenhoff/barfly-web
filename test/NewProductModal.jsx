@@ -17,6 +17,9 @@ describe("NewProductModal", function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
 		window.API_URL = "http://localhost:1310"
 	})
+	after(function () {
+		localStorage.getItem.restore()
+	})
 
 	beforeEach(function() {
 		sinon.stub($, "ajax").yieldsTo("success", [1, 2, 3])
@@ -110,6 +113,7 @@ describe("NewProductModal", function() {
 			productNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewProductModal._modal, Input)[0].getInputDOMNode()
 			productNameInputNode.value = ""
 			ReactTestUtils.Simulate.change(productNameInputNode)
+
 			sizeInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewProductModal._modal, Input)[1].getInputDOMNode()
 			sizeInputNode.value = 1
 			ReactTestUtils.Simulate.change(sizeInputNode)
