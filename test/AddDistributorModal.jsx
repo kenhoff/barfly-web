@@ -1,6 +1,5 @@
 var sinon = require('sinon');
 var React = require('react');
-var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var $ = require('jquery');
 var assert = require('assert');
@@ -23,6 +22,10 @@ describe("AddDistributorModal", function() {
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
 		window.API_URL = "http://localhost:1310"
+	})
+
+	after(function () {
+		localStorage.getItem.restore()
 	})
 
 	beforeEach(function() {
@@ -226,7 +229,7 @@ describe("AddDistributorModal", function() {
 				done()
 			})
 
-			it("then clicking the 'submit' button causes a POST to /distributors, then a POST to /products/:productID/zipcodes/:zipcode/distributor (with trimmed distributor name)", function(done) {
+			it("then clicking the 'submit' button causes a POST to /distributors, then a POST to /products/:productID/zipcodes/:zipcode/distributor", function(done) {
 				$.ajax.restore()
 				ajaxMock = sinon.mock($)
 				ajaxExpects = ajaxMock.expects("ajax").twice()
