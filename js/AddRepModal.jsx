@@ -1,62 +1,68 @@
 var React = require('react');
-
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
+var $ = require('jquery');
 
 var AddRepModal = React.createClass({
 	getInitialState: function() {
-		return ({showNewRepInput: false, reps: []})
+		return ({
+			showNewRepInput: false,
+			reps: [],
+			repSelectValue: "newRep",
+			buttonEnabled: false,
+			newRepNameValue: "",
+			newRepPhoneValue: ""
+		})
 	},
 	render: function() {
 		return (
-			<Modal show={this.props.showModal} onHide={this.props.onHide}>
+			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
 				<Modal.Header closeButton>
 					<Modal.Title>Looks like we don't have a rep listed for you at&nbsp;
 						{this.props.distributorName}. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Input onChange={this.updateNewRepInput} type="select" label="Rep" ref= {function (thisInput) { this.addRepInput = thisInput }.bind(this)}>
+					<Input value={this.state.repSelectValue} onChange={this.handleRepSelectChange} type="select" label="Rep" ref= {function (thisInput) { this.addRepInput = thisInput }.bind(this)}>
 						{this.state.reps.map(function(rep) {
 							return (<RepOption key={rep.repID} repID={rep.repID}/>)
 						})}
 						<option value="newRep">Add New Rep</option>
 					</Input>
-					<div className={this.state.showNewRepInput
+					<div id="newRepForm" className={this.state.showNewRepInput
 						? "show"
 						: "hidden"}>
-						<Input label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" ref={function(thisInput) {
-							this.newRepName = thisInput
-						}.bind(this)}/>
-						<Input label="Rep Phone #" type="text" placeholder="303-882-6490" ref={function(thisInput) {
-							this.newRepPhone = thisInput
-						}.bind(this)}/>
-						<Input label="Rep Email" type="text" placeholder="bob@awesomedistributor.com" ref={function(thisInput) {
-							this.newRepEmail = thisInput
-						}.bind(this)}/>
+						<Input value={this.state.newRepNameValue} label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" onChange={this.handleRepNameChange}/>
+						<Input value={this.state.newRepPhoneValue} label="Rep Phone #" type="tel" placeholder="3038826490" onChange={this.handleRepPhoneChange}/>
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
-					<button className="btn btn-primary" onClick={this.submitRep}>Add Rep</button>
+					<button className={"btn btn-primary " + (this.state.buttonEnabled
+						? ""
+						: "disabled")} onClick={this.submitRep}>Add Rep</button>
 				</Modal.Footer>
 			</Modal>
 		);
 	},
 	submitRep: function() {
-		// if this.state.showNewRepInput, create the rep, then add it to this distributor
-		// if not, just save it to this distributor
-		if (this.addRepInput.getValue() == "newRep") {
-			this.createRep(function(newRepID) {
-				this.saveRepToDistributor(newRepID, this.props.distributorID, function() {
-					this.createAccount(this.props.barID, newRepID, this.props.distributorID, function() {
-						this.props.onHide()
+		if (this.state.buttonEnabled) {
+			// if this.state.showNewRepInput, create the rep, then add it to this distributor
+			// if not, just save it to this distributor
+			if (this.addRepInput.getValue() == "newRep") {
+				this.createRep(function(newRepID) {
+					this.saveRepToDistributor(newRepID, this.props.distributorID, function() {
+						this.createAccount(this.props.barID, newRepID, this.props.distributorID, function() {
+							this.props.onHide()
+						}.bind(this))
 					}.bind(this))
 				}.bind(this))
-			}.bind(this))
+			} else {
+				this.createAccount(this.props.barID, this.addRepInput.getValue(), this.props.distributorID, function() {
+					this.props.onHide()
+				}.bind(this))
+			}
 		} else {
-			this.createAccount(this.props.barID, this.addRepInput.getValue(), this.props.distributorID, function() {
-				this.props.onHide()
-			}.bind(this))
+			// toast or something
 		}
 	},
 	createRep: function(cb) {
@@ -67,9 +73,8 @@ var AddRepModal = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			data: {
-				repName: this.newRepName.getValue(),
-				repPhone: this.newRepPhone.getValue(),
-				repEmail: this.newRepEmail.getValue()
+				repName: this.state.newRepNameValue.trim(),
+				repPhone: this.state.newRepPhoneValue
 			},
 			success: function(newRep) {
 				cb(newRep.user_id)
@@ -101,9 +106,9 @@ var AddRepModal = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			data: {
-				barID: barID,
-				repID: repID,
-				distributorID: distributorID
+				barID: parseInt(barID),
+				repID: parseInt(repID),
+				distributorID: parseInt(distributorID)
 			},
 			success: function() {
 				if (cb) {
@@ -122,11 +127,42 @@ var AddRepModal = React.createClass({
 			this.getAllRepsForDistributor(nextProps.distributorID)
 		}
 	},
-	updateNewRepInput: function() {
-		if (this.addRepInput.getValue() == "newRep") {
+	handleRepNameChange: function(event) {
+		this.setState({
+			newRepNameValue: event.target.value
+		}, function() {
+			this.updateButtonEnabled()
+		}.bind(this))
+	},
+	handleRepPhoneChange: function(event) {
+		this.setState({
+			newRepPhoneValue: event.target.value.replace(/[^0-9]/g, "").slice(0, 10)
+		}, function() {
+			this.updateButtonEnabled()
+		}.bind(this))
+	},
+	handleRepSelectChange: function(event) {
+		this.setState({
+			repSelectValue: event.target.value
+		}, function() {
+			this.updateNewRepFormShown()
+			this.updateButtonEnabled()
+		}.bind(this))
+	},
+	updateNewRepFormShown: function() {
+		if (this.state.repSelectValue == "newRep") {
 			this.setState({showNewRepInput: true})
 		} else {
 			this.setState({showNewRepInput: false})
+		}
+	},
+	updateButtonEnabled: function() {
+		if (this.state.repSelectValue && (this.state.repSelectValue != "newRep")) {
+			this.setState({buttonEnabled: true})
+		} else if ((this.state.newRepNameValue.trim() != "") && (this.state.newRepPhoneValue.length == 10)) {
+			this.setState({buttonEnabled: true})
+		} else {
+			this.setState({buttonEnabled: false})
 		}
 	},
 	getAllRepsForDistributor: function(distributorID) {
@@ -139,9 +175,10 @@ var AddRepModal = React.createClass({
 			success: function(reps) {
 				this.setState({reps: reps})
 				if (reps.length == 0) {
-					this.setState({showNewRepInput: true})
+					this.setState({showNewRepInput: true, repSelectValue: "newRep", buttonEnabled: false})
+				} else {
+					this.setState({showNewRepInput: false, repSelectValue: reps[0].repID, buttonEnabled: true})
 				}
-				// this.updateNewRepInput()
 			}.bind(this)
 		})
 	}
