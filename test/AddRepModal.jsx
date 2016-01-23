@@ -33,11 +33,11 @@ describe("AddRepModal", function() {
 	beforeEach(function() {
 		sinon.stub($, "ajax").yieldsTo("success", [
 			{
-				repID: 1
+				repID: "asdf1"
 			}, {
-				repID: 2
+				repID: "asdf2"
 			}, {
-				repID: 3
+				repID: "asdf3"
 			}
 		])
 		renderedAddRepModal = renderAddRepModal()
@@ -102,7 +102,7 @@ describe("AddRepModal", function() {
 			$.ajax.restore()
 			sinon.stub($, "ajax").yieldsTo("success", [
 				{
-					repID: 1
+					repID: "asdf1"
 				}
 			])
 			renderedAddRepModal = renderAddRepModal()
@@ -124,7 +124,7 @@ describe("AddRepModal", function() {
 			repSelectInput = inputs[0].getInputDOMNode()
 			newRepNameInput = inputs[1].getInputDOMNode()
 			newRepPhoneInput = inputs[2].getInputDOMNode()
-			assert.equal(repSelectInput.value, 1)
+			assert.equal(repSelectInput.value, "asdf1")
 			assert(!newRepForm.className.includes("show"))
 			done()
 		})
@@ -132,11 +132,11 @@ describe("AddRepModal", function() {
 			$.ajax.restore()
 			sinon.stub($, "ajax").yieldsTo("success", [
 				{
-					repID: 1
+					repID: "asdf1"
 				}, {
-					repID: 2
+					repID: "asdf2"
 				}, {
-					repID: 3
+					repID: "asdf3"
 				}
 			])
 			renderedAddRepModal = renderAddRepModal()
@@ -158,7 +158,7 @@ describe("AddRepModal", function() {
 			repSelectInput = inputs[0].getInputDOMNode()
 			newRepNameInput = inputs[1].getInputDOMNode()
 			newRepPhoneInput = inputs[2].getInputDOMNode()
-			assert.equal(repSelectInput.value, 1)
+			assert.equal(repSelectInput.value, "asdf1")
 			assert(!newRepForm.className.includes("show"))
 			done()
 		})
@@ -180,7 +180,7 @@ describe("AddRepModal", function() {
 			assert(ajaxSpy.calledWithMatch({
 				data: {
 					barID: 200,
-					repID: 1,
+					repID: "asdf1",
 					distributorID: 100
 				}
 			}), "ajax not called with the right data")
@@ -309,7 +309,7 @@ describe("AddRepModal", function() {
 				ajaxMock = sinon.mock($)
 				ajaxExpects = ajaxMock.expects("ajax").thrice()
 
-				ajaxExpects.onFirstCall().yieldsTo("success", {user_id: 1})
+				ajaxExpects.onFirstCall().yieldsTo("success", {user_id: "asdf1"})
 				ajaxExpects.onSecondCall().yieldsTo("success")
 				ajaxExpects.onThirdCall().yieldsTo("success")
 
@@ -322,7 +322,7 @@ describe("AddRepModal", function() {
 						repPhone: "1234567890"
 					}
 				}), "first ajax not called with the right data")
-				assert(ajaxExpects.secondCall.calledWithMatch({url: "http://localhost:1310/reps/1/memberships"}), "second ajax not called with the right url")
+				assert(ajaxExpects.secondCall.calledWithMatch({url: "http://localhost:1310/reps/asdf1/memberships"}), "second ajax not called with the right url")
 				assert(ajaxExpects.secondCall.calledWithMatch({
 					data: {
 						distributorID: 100
@@ -333,7 +333,7 @@ describe("AddRepModal", function() {
 					data: {
 						distributorID: 100,
 						barID: 200,
-						repID: 1
+						repID: "asdf1"
 					}
 				}), "third ajax not called with the right data")
 				done()

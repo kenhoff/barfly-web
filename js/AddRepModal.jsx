@@ -107,7 +107,7 @@ var AddRepModal = React.createClass({
 			},
 			data: {
 				barID: parseInt(barID),
-				repID: parseInt(repID),
+				repID: repID,
 				distributorID: parseInt(distributorID)
 			},
 			success: function() {
