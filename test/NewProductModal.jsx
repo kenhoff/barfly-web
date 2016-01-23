@@ -17,6 +17,9 @@ describe("NewProductModal", function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
 		window.API_URL = "http://localhost:1310"
 	})
+	after(function () {
+		localStorage.getItem.restore()
+	})
 
 	beforeEach(function() {
 		sinon.stub($, "ajax").yieldsTo("success", [1, 2, 3])
