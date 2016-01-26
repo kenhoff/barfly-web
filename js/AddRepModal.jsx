@@ -28,8 +28,8 @@ var AddRepModal = React.createClass({
 					<div id="newRepForm" className={this.state.showNewRepInput
 						? "show"
 						: "hidden"}>
-						<Input value={this.state.newRepNameValue} label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" onChange={this.handleRepNameChange}/>
-						<Input value={this.state.newRepPhoneValue} label="Rep Phone #" type="tel" placeholder="3038826490" onChange={this.handleRepPhoneChange}/>
+						<Input className="newRepInputs" value={this.state.newRepNameValue} label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" onChange={this.handleRepNameChange}/>
+						<Input className="newRepInputs" value={this.state.newRepPhoneValue} label="Rep Phone #" type="tel" placeholder="3038826490" onChange={this.handleRepPhoneChange}/>
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
@@ -54,7 +54,7 @@ var AddRepModal = React.createClass({
 					}.bind(this))
 				}.bind(this))
 			} else {
-				this.createAccount(this.props.barID, this.addRepInput.getValue(), this.props.distributorID, function() {
+				this.createAccount(this.props.barID, this.state.repSelectValue, this.props.distributorID, function() {
 					this.props.onHide()
 				}.bind(this))
 			}
