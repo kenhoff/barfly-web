@@ -14,12 +14,10 @@ var AddDistributorModal = React.createClass({
 					<Modal.Title>Looks like we don't have a distributor listed for&nbsp;{this.props.productName}&nbsp;in&nbsp;{this.props.zipCode}&nbsp;yet. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form>
-						{this.state.distributors.map(function(distributor) {
-							return (<Input key={distributor.id} className="radio-button" name="distributors" type="radio" value={distributor.id} label={distributor.distributorName} onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == distributor.id}/>)
-						}.bind(this))}
-						<Input type="radio" name="distributors" className="radio-button" value="newDistributor" label="Add new distributor" onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == "newDistributor"}/>
-					</form>
+					{this.state.distributors.map(function(distributor) {
+						return (<Input key={distributor.id} name="distributors" type="radio" value={distributor.id} label={distributor.distributorName} onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == distributor.id}/>)
+					}.bind(this))}
+					<Input type="radio" name="distributors" value="newDistributor" label="Add new distributor" onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == "newDistributor"}/>
 					<Input value={this.state.newDistributorNameValue} onChange={this.handleNewDistributorNameChange} className={this.state.showNewDistributorInput
 						? "show"
 						: "hidden"} type="text" placeholder="Bob's Distribution Company"/>

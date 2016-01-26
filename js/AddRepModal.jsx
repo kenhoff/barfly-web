@@ -8,7 +8,7 @@ var AddRepModal = React.createClass({
 		return ({
 			showNewRepInput: false,
 			reps: [],
-			repSelectValue: "newRep",
+			repSelectValue: "",
 			buttonEnabled: false,
 			newRepNameValue: "",
 			newRepPhoneValue: ""
@@ -18,21 +18,18 @@ var AddRepModal = React.createClass({
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Looks like we don't have a rep listed for you at&nbsp;
-						{this.props.distributorName}. Mind helping us out?</Modal.Title>
+					<Modal.Title>Looks like we don't have a rep listed for you at&nbsp;{this.props.distributorName}. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<Input value={this.state.repSelectValue} onChange={this.handleRepSelectChange} type="select" label="Rep" ref= {function (thisInput) { this.addRepInput = thisInput }.bind(this)}>
-						{this.state.reps.map(function(rep) {
-							return (<RepOption key={rep.repID} repID={rep.repID}/>)
-						})}
-						<option value="newRep">Add New Rep</option>
-					</Input>
+					{this.state.reps.map(function(rep) {
+						return (<RepOption key={rep.repID} repID={rep.repID} handleRepSelectChange={this.handleRepSelectChange} checked={this.state.repSelectValue == rep.repID}/>)
+					}.bind(this))}
+					<Input name="reps" label="Add New Rep" onChange={this.handleRepSelectChange} checked={this.state.repSelectValue == "newRep"} value="newRep" type="radio"/>
 					<div id="newRepForm" className={this.state.showNewRepInput
 						? "show"
 						: "hidden"}>
-						<Input value={this.state.newRepNameValue} label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" onChange={this.handleRepNameChange}/>
-						<Input value={this.state.newRepPhoneValue} label="Rep Phone #" type="tel" placeholder="3038826490" onChange={this.handleRepPhoneChange}/>
+						<Input className="newRepInputs" value={this.state.newRepNameValue} label="Rep Name" type="text" placeholder="Bob the Liquor Sales Rep" onChange={this.handleRepNameChange}/>
+						<Input className="newRepInputs" value={this.state.newRepPhoneValue} label="Rep Phone #" type="tel" placeholder="3038826490" onChange={this.handleRepPhoneChange}/>
 					</div>
 				</Modal.Body>
 				<Modal.Footer>
@@ -48,7 +45,7 @@ var AddRepModal = React.createClass({
 		if (this.state.buttonEnabled) {
 			// if this.state.showNewRepInput, create the rep, then add it to this distributor
 			// if not, just save it to this distributor
-			if (this.addRepInput.getValue() == "newRep") {
+			if (this.state.repSelectValue == "newRep") {
 				this.createRep(function(newRepID) {
 					this.saveRepToDistributor(newRepID, this.props.distributorID, function() {
 						this.createAccount(this.props.barID, newRepID, this.props.distributorID, function() {
@@ -57,7 +54,7 @@ var AddRepModal = React.createClass({
 					}.bind(this))
 				}.bind(this))
 			} else {
-				this.createAccount(this.props.barID, this.addRepInput.getValue(), this.props.distributorID, function() {
+				this.createAccount(this.props.barID, this.state.repSelectValue, this.props.distributorID, function() {
 					this.props.onHide()
 				}.bind(this))
 			}
@@ -177,7 +174,7 @@ var AddRepModal = React.createClass({
 				if (reps.length == 0) {
 					this.setState({showNewRepInput: true, repSelectValue: "newRep", buttonEnabled: false})
 				} else {
-					this.setState({showNewRepInput: false, repSelectValue: reps[0].repID, buttonEnabled: true})
+					this.setState({showNewRepInput: false, buttonEnabled: false})
 				}
 			}.bind(this)
 		})
@@ -189,11 +186,7 @@ var RepOption = React.createClass({
 		return {repName: ""};
 	},
 	render: function() {
-		return (
-			<option value={this.props.repID}>
-				{this.state.repName}
-			</option>
-		);
+		return (<Input name="reps" label={this.state.repName} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>)
 	},
 	componentDidMount: function() {
 		this.resolveRepName(function(repName) {
