@@ -9,12 +9,29 @@ var Input = require('react-bootstrap').Input;
 var AddDistributorModal = require('../js/AddDistributorModal.jsx');
 
 renderAddDistributorModal = function() {
-	return ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
+	renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
 		100
 	}
 	showModal = {
 		true
 	} />)
+	buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button")
+
+	// inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input)
+
+	newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
+		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "text")
+	})[0].getInputDOMNode()
+
+	// newDistributorNameInput = ReactTestUtils.findRenderedComponentWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input).getInputDOMNode()
+
+	submitButton = buttons[2]
+
+	radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
+		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "radio")
+	})
+
+	return renderedAddDistributorModal
 }
 
 describe("AddDistributorModal", function() {
@@ -24,7 +41,7 @@ describe("AddDistributorModal", function() {
 		window.API_URL = "http://localhost:1310"
 	})
 
-	after(function () {
+	after(function() {
 		localStorage.getItem.restore()
 	})
 
@@ -42,15 +59,6 @@ describe("AddDistributorModal", function() {
 			}
 		])
 		renderedAddDistributorModal = renderAddDistributorModal()
-
-		inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input)
-
-		buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button")
-
-		submitButton = buttons[2]
-
-		distributorSelectInput = inputs[0].getInputDOMNode()
-		newDistributorNameInput = inputs[1].getInputDOMNode()
 	})
 
 	afterEach(function() {
@@ -68,6 +76,12 @@ describe("AddDistributorModal", function() {
 		assert.equal(title.props.children[3], "12345")
 		done()
 	})
+	it("the distributor select input is a radio button selector, not a dropdown", function(done) {
+		for (radioButton of radioButtons) {
+			assert.equal(radioButton.getInputDOMNode().type, "radio")
+		}
+		done()
+	})
 
 	describe("initial visibility of inputs", function() {
 		describe("if there's no distributors in the system", function() {
@@ -76,18 +90,24 @@ describe("AddDistributorModal", function() {
 				sinon.stub($, "ajax").yieldsTo("success", [])
 				// render with new stub
 				renderedAddDistributorModal = renderAddDistributorModal()
-
-				inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input)
-
-				distributorSelectInput = inputs[0].getInputDOMNode()
-				newDistributorNameInput = inputs[1].getInputDOMNode()
 			})
 
-			it("the distributor select input is set to 'newDistributor', and the 'newDistributorName' input is visible", function(done) {
-				assert.equal(distributorSelectInput.value, "newDistributor")
+			it("the distributor select input only has the 'newDistributor' option", function(done) {
+				assert.equal(radioButtons.length, 1)
+				assert.equal(radioButtons[0].getValue(), "newDistributor")
+				done()
+			})
+
+			it("the distributor select input is set to 'newDistributor'", function(done) {
+				assert(radioButtons[0].getChecked())
+				done()
+			})
+
+			it("the 'newDistributorName' input is visible", function(done) {
 				assert(newDistributorNameInput.className.includes("show"))
 				done()
 			})
+
 		})
 
 		describe("if there's one distributor in the system", function() {
@@ -99,42 +119,72 @@ describe("AddDistributorModal", function() {
 						distributorName: "distributor 1"
 					}
 				])
-				// render with new stub
 				renderedAddDistributorModal = renderAddDistributorModal()
-
-				inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input)
-
-				distributorSelectInput = inputs[0].getInputDOMNode()
-				newDistributorNameInput = inputs[1].getInputDOMNode()
 			})
 
-			it("the distributor select input is set to that distributor, and the 'newDistributorName' input is hidden", function(done) {
-				assert.equal(distributorSelectInput.value, 1)
+			it("the distributor select input is blank", function(done) {
+				for (radioButton of radioButtons) {
+					assert(!radioButton.getChecked())
+				}
+				done()
+			})
+
+			it("the 'newDistributorName' input is hidden", function(done) {
 				assert(newDistributorNameInput.className.includes("hidden"))
 				done()
 			})
 
 			it("changing the distributor select input to 'newDistributor' causes the 'newDistributorName' input to become visible", function(done) {
-				distributorSelectInput.value = "newDistributor"
-				ReactTestUtils.Simulate.change(distributorSelectInput)
+				// find the radio button with the right value
+				for (radioButton of radioButtons) {
+					if (radioButton.getValue() == "newDistributor") {
+						ReactTestUtils.Simulate.change(radioButton.getInputDOMNode())
+					}
+				}
 				assert(newDistributorNameInput.className.includes("show"))
 				done()
 			})
+
+			it("the distributor select input has the first distributor option, and the 'newDistributor' option", function(done) {
+				assert.equal(radioButtons[0].getValue(), 1)
+				assert.equal(radioButtons[1].getValue(), "newDistributor")
+				done()
+			})
+
 		})
 
 		describe("if there's more than one distributor in the system", function() {
-			it("the distributor select input is set to the first distributor, and the 'newDistributorName' input is hidden", function(done) {
-				assert.equal(distributorSelectInput.value, 1)
+			it("the distributor select input is blank", function(done) {
+				for (radioButton of radioButtons) {
+					assert(!radioButton.getChecked())
+				}
+				done()
+			})
+			it("the 'newDistributorName' input is hidden", function(done) {
 				assert(newDistributorNameInput.className.includes("hidden"))
+				done()
+			})
+			it("the distributor select input has all the distributor options, and the 'newDistributor' option", function(done) {
+				assert.equal(radioButtons[0].getValue(), 1)
+				assert.equal(radioButtons[1].getValue(), 2)
+				assert.equal(radioButtons[2].getValue(), 3)
+				assert.equal(radioButtons[3].getValue(), "newDistributor")
 				done()
 			})
 		})
 	})
 
 	describe("if the distributor input is set to a distributor", function() {
+		beforeEach(function() {
+			ReactTestUtils.Simulate.change(radioButtons[0].getInputDOMNode())
+		})
+
 		it("changing the distributor select input to 'newDistributor' causes the 'newDistributorName' input to become visible", function(done) {
-			distributorSelectInput.value = "newDistributor"
-			ReactTestUtils.Simulate.change(distributorSelectInput)
+			for (radioButton of radioButtons) {
+				if (radioButton.getValue() == "newDistributor") {
+					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode())
+				}
+			}
 			assert(newDistributorNameInput.className.includes("show"))
 			done()
 		})
@@ -165,13 +215,15 @@ describe("AddDistributorModal", function() {
 	describe("if the distributor input is set to 'newDistributor'", function() {
 
 		beforeEach(function() {
-			distributorSelectInput.value = "newDistributor"
-			ReactTestUtils.Simulate.change(distributorSelectInput)
+			for (radioButton of radioButtons) {
+				if (radioButton.getValue() == "newDistributor") {
+					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode())
+				}
+			}
 		})
 
 		it("changing the distributor select input to a distributor causes the 'newDistributorName' input to become hidden", function(done) {
-			distributorSelectInput.value = 1
-			ReactTestUtils.Simulate.change(distributorSelectInput)
+			ReactTestUtils.Simulate.change(radioButtons[0].getInputDOMNode())
 			assert(newDistributorNameInput.className.includes("hidden"))
 			done()
 		})
