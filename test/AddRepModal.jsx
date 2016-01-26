@@ -9,7 +9,7 @@ var Input = require('react-bootstrap').Input;
 var AddRepModal = require('../js/AddRepModal.jsx');
 
 renderAddRepModal = function() {
-	return ReactTestUtils.renderIntoDocument(< AddRepModal distributorID = {
+	renderedAddRepModal = ReactTestUtils.renderIntoDocument(< AddRepModal distributorID = {
 		100
 	}
 	distributorName = "distributor 100" barID = {
@@ -21,10 +21,43 @@ renderAddRepModal = function() {
 	onHide = {
 		function() {}
 	} />)
+
+	inputs = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
+
+		if (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().className.includes("newRepInputs")) {
+			return true
+		} else {
+			return false
+		}
+	})
+
+	buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button")
+
+	newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
+		if (component.id == "newRepForm") {
+			return true
+		} else {
+			return false
+		}
+	})[0]
+
+	radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
+		if (ReactTestUtils.isCompositeComponentWithType(component, Input) && (component.getInputDOMNode().type == "radio")) {
+			return true
+		} else {
+			return false
+		}
+	})
+
+	submitButton = buttons[2]
+
+	newRepNameInput = inputs[0]
+	newRepPhoneInput = inputs[1]
+
+	return renderedAddRepModal
 }
 
 describe("AddRepModal", function() {
-
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
 		window.API_URL = "http://localhost:1310"
@@ -41,25 +74,6 @@ describe("AddRepModal", function() {
 			}
 		])
 		renderedAddRepModal = renderAddRepModal()
-
-		inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)
-
-		buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button")
-
-		newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
-			if (component.id == "newRepForm") {
-				return true
-			} else {
-				return false
-			}
-		})[0]
-
-		submitButton = buttons[2]
-
-		repSelectInput = inputs[0].getInputDOMNode()
-		newRepNameInput = inputs[1].getInputDOMNode()
-		newRepPhoneInput = inputs[2].getInputDOMNode()
-
 	})
 
 	afterEach(function() {
@@ -70,35 +84,27 @@ describe("AddRepModal", function() {
 		assert(ReactTestUtils.isCompositeComponentWithType(renderedAddRepModal.refs.AddRepModal, Modal))
 		done()
 	})
+	it("renders radio buttons instead of select dropdown", function(done) {
+		for (radioButton of radioButtons) {
+			assert(radioButton.getInputDOMNode().type == "radio")
+		}
+		for (input of ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)) {
+			assert(input.getInputDOMNode().type != "select")
+		}
+		done()
+
+	})
 	describe("initial rendering", function() {
 		it("if there's no reps in the system, 'add new rep' is selected and new rep inputs are shown", function(done) {
 			$.ajax.restore()
 			sinon.stub($, "ajax").yieldsTo("success", [])
 			renderedAddRepModal = renderAddRepModal()
 
-			inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)
-
-			buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button")
-
-			newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
-				if (component.id == "newRepForm") {
-					return true
-				} else {
-					return false
-				}
-			})[0]
-
-			submitButton = buttons[2]
-
-			repSelectInput = inputs[0].getInputDOMNode()
-			newRepNameInput = inputs[1].getInputDOMNode()
-			newRepPhoneInput = inputs[2].getInputDOMNode()
-
-			assert.equal(repSelectInput.value, "newRep")
+			assert(radioButtons[0].getChecked())
 			assert(newRepForm.className.includes("show"))
 			done()
 		})
-		it("if there's one rep in the system, that rep is selected and new rep inputs are hidden", function(done) {
+		it("if there's one rep in the system, no rep is selected and new rep inputs are hidden", function(done) {
 			$.ajax.restore()
 			sinon.stub($, "ajax").yieldsTo("success", [
 				{
@@ -107,28 +113,13 @@ describe("AddRepModal", function() {
 			])
 			renderedAddRepModal = renderAddRepModal()
 
-			inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)
-
-			buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button")
-
-			newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
-				if (component.id == "newRepForm") {
-					return true
-				} else {
-					return false
-				}
-			})[0]
-
-			submitButton = buttons[2]
-
-			repSelectInput = inputs[0].getInputDOMNode()
-			newRepNameInput = inputs[1].getInputDOMNode()
-			newRepPhoneInput = inputs[2].getInputDOMNode()
-			assert.equal(repSelectInput.value, "asdf1")
+			for (radioButton of radioButtons) {
+				assert(!radioButton.getChecked())
+			}
 			assert(!newRepForm.className.includes("show"))
 			done()
 		})
-		it("if there's multiple reps in the system, the first rep is selected and new rep inputs are hidden", function(done) {
+		it("if there's multiple reps in the system, no rep is selected and new rep inputs are hidden", function(done) {
 			$.ajax.restore()
 			sinon.stub($, "ajax").yieldsTo("success", [
 				{
@@ -141,31 +132,18 @@ describe("AddRepModal", function() {
 			])
 			renderedAddRepModal = renderAddRepModal()
 
-			inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)
-
-			buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button")
-
-			newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
-				if (component.id == "newRepForm") {
-					return true
-				} else {
-					return false
-				}
-			})[0]
-
-			submitButton = buttons[2]
-
-			repSelectInput = inputs[0].getInputDOMNode()
-			newRepNameInput = inputs[1].getInputDOMNode()
-			newRepPhoneInput = inputs[2].getInputDOMNode()
-			assert.equal(repSelectInput.value, "asdf1")
+			for (radioButton of radioButtons) {
+				assert(!radioButton.getChecked())
+			}
 			assert(!newRepForm.className.includes("show"))
 			done()
 		})
 	})
 	describe("existing rep is selected", function() {
+		beforeEach(function() {
+			ReactTestUtils.Simulate.change(radioButtons[0].getInputDOMNode()) // first radio button is fine
+		})
 		it('submit button is enabled', function(done) {
-			assert(repSelectInput && (repSelectInput.value != "newRep"))
 			assert(!submitButton.className.includes("disabled"), "button is disabled!")
 			done()
 		})
@@ -186,19 +164,36 @@ describe("AddRepModal", function() {
 			}), "ajax not called with the right data")
 			done()
 		})
+		it("clicking the 'newRep' radio button causes the rep name and phone inputs to show", function(done) {
+			for (radioButton of radioButtons) {
+				if (radioButton.getValue() == "newRep") {
+					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode())
+				}
+			}
+			assert(newRepForm.className.includes("show"))
+			done()
+		})
 	})
 	describe("'newRep' is selected", function() {
 		beforeEach(function() {
-			repSelectInput.value = "newRep"
-			ReactTestUtils.Simulate.change(repSelectInput)
+			for (radioButton of radioButtons) {
+				if (radioButton.getValue() == "newRep") {
+					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode())
+				}
+			}
+		})
+		it("clicking a rep radio button causes the rep name and phone inputs to hide", function(done) {
+			ReactTestUtils.Simulate.change(radioButtons[0].getInputDOMNode()) // first radio button is fine
+			assert(!newRepForm.className.includes("show"))
+			done()
 		})
 		describe("rep name is empty", function() {
 			beforeEach(function() {
-				newRepNameInput.value = ""
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = ""
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = "1234567890"
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = "1234567890"
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
 			})
 			it("submit button is disabled", function(done) {
 				assert(submitButton.className.includes("disabled"))
@@ -214,11 +209,11 @@ describe("AddRepModal", function() {
 		})
 		describe("rep name is whitespace", function() {
 			beforeEach(function() {
-				newRepNameInput.value = "    	\n"
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = "    	\n"
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = "1234567890"
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = "1234567890"
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
 			})
 			it("submit button is disabled", function(done) {
 				assert(submitButton.className.includes("disabled"))
@@ -234,11 +229,11 @@ describe("AddRepModal", function() {
 		})
 		describe("phone number is empty", function() {
 			beforeEach(function() {
-				newRepNameInput.value = "asdfasdfasdf"
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = "asdfasdfasdf"
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = ""
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = ""
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
 			})
 			it("submit button is disabled", function(done) {
 				assert(submitButton.className.includes("disabled"))
@@ -254,11 +249,11 @@ describe("AddRepModal", function() {
 		})
 		describe("phone number is whitespace", function() {
 			beforeEach(function() {
-				newRepNameInput.value = "asdfasdfasdf"
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = "asdfasdfasdf"
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = "    	\n"
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = "    	\n"
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
 			})
 			it("submit button is disabled", function(done) {
 				assert(submitButton.className.includes("disabled"))
@@ -274,11 +269,11 @@ describe("AddRepModal", function() {
 		})
 		describe("phone number is invalid (missing a number)", function() {
 			beforeEach(function() {
-				newRepNameInput.value = "asdfasdfasdf"
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = "asdfasdfasdf"
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = "123456789"
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = "123456789"
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
 			})
 			it("submit button is disabled", function(done) {
 				assert(submitButton.className.includes("disabled"))
@@ -294,11 +289,12 @@ describe("AddRepModal", function() {
 		})
 		describe("rep name and phone are both filled in and valid", function() {
 			beforeEach(function() {
-				newRepNameInput.value = "asdfasdfasdf"
-				ReactTestUtils.Simulate.change(newRepNameInput)
+				newRepNameInput.getInputDOMNode().value = "asdfasdfasdf"
+				ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
-				newRepPhoneInput.value = "1234567890"
-				ReactTestUtils.Simulate.change(newRepPhoneInput)
+				newRepPhoneInput.getInputDOMNode().value = "1234567890"
+				ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+
 			})
 			it("submit button is enabled", function(done) {
 				assert(!submitButton.className.includes("disabled"))
@@ -340,8 +336,8 @@ describe("AddRepModal", function() {
 			})
 			describe("rep name includes some whitespace", function() {
 				it('trims whitespace, makes a POST to /reps (then some other calls we already tested)', function(done) {
-					newRepNameInput.value = "     	\nasdfasdfasdf    	\n"
-					ReactTestUtils.Simulate.change(newRepNameInput)
+					newRepNameInput.getInputDOMNode().value = "     	\nasdfasdfasdf    	\n"
+					ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode())
 
 					$.ajax.restore()
 					ajaxSpy = sinon.spy($, "ajax")
@@ -361,51 +357,51 @@ describe("AddRepModal", function() {
 	})
 	describe("rep phone input", function() {
 		it("value is '1234567890' when '1234567890' is entered", function(done) {
-			newRepPhoneInput.value = "1234567890"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = "1234567890"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 		it("value is '0987654321' when '0987654321' is entered", function(done) {
-			newRepPhoneInput.value = "0987654321"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "0987654321")
+			newRepPhoneInput.getInputDOMNode().value = "0987654321"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "0987654321")
 			done()
 		})
 		it("value is '1234567890' when 'a1s2d3f4a5s6d7f8a9s0' is entered", function(done) {
-			newRepPhoneInput.value = "a1s2d3f4a5s6d7f8a9s0"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = "a1s2d3f4a5s6d7f8a9s0"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 		it("value is '1234567890' when ' 1 2 3 4 5 6 7 8 9 0 ' is entered", function(done) {
-			newRepPhoneInput.value = " 1 2 3 4 5 6 7 8 9 0 "
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = " 1 2 3 4 5 6 7 8 9 0 "
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 		it("value is '1234567890' when '123456789000000' is entered", function(done) {
-			newRepPhoneInput.value = "123456789000000"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = "123456789000000"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 		it("value is '1234567890' when '-1234567890' is entered", function(done) {
-			newRepPhoneInput.value = "-1234567890"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = "-1234567890"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 		it("value is '' when 'asdfasdfasdf' is entered", function(done) {
-			newRepPhoneInput.value = "asdfasdfasdf"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "")
+			newRepPhoneInput.getInputDOMNode().value = "asdfasdfasdf"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "")
 			done()
 		})
 		it("value is '1234567890' when '1234567890' with whitespace is entered", function(done) {
-			newRepPhoneInput.value = "    	\n1234567890    	\n"
-			ReactTestUtils.Simulate.change(newRepPhoneInput)
-			assert.equal(newRepPhoneInput.value, "1234567890")
+			newRepPhoneInput.getInputDOMNode().value = "    	\n1234567890    	\n"
+			ReactTestUtils.Simulate.change(newRepPhoneInput.getInputDOMNode())
+			assert.equal(newRepPhoneInput.getValue(), "1234567890")
 			done()
 		})
 	})
