@@ -31,3 +31,5 @@ node_modules
 app.js
 test/test.js
 .env
+index.html
+style.css
