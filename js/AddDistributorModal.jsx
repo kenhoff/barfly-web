@@ -8,29 +8,17 @@ var AddDistributorModal = React.createClass({
 		return ({showNewDistributorInput: false, distributors: [], selectedDistributor: "newDistributor", buttonEnabled: false, newDistributorNameValue: ""})
 	},
 	render: function() {
-		// <Input value={this.state.selectedDistributor} type="radio" label="Distributor" onChange={this.handleDistributorChange} ref= {function(thisInput) { this.distributorID = thisInput }.bind(this)}/>
-		// need better copy on the labels in this modal
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddDistributorModal">
 				<Modal.Header closeButton>
 					<Modal.Title>Looks like we don't have a distributor listed for&nbsp;{this.props.productName}&nbsp;in&nbsp;{this.props.zipCode}&nbsp;yet. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					<form onChange={this.handleDistributorChange} value={this.state.selectedDistributor}>
+					<form>
 						{this.state.distributors.map(function(distributor) {
-							return (
-								<div className="radio" key={distributor.id}>
-									<label>
-										<input name="distributors" type="radio" value={distributor.id}/>{distributor.distributorName}
-									</label>
-								</div>
-							)
-						})}
-						<div className="radio">
-							<label>
-								<input type="radio" name="distributors" defaultChecked={this.state.showNewDistributorInput} value="newDistributor"/>Add new distributor
-							</label>
-						</div>
+							return (<Input key={distributor.id} className="radio-button" name="distributors" type="radio" value={distributor.id} label={distributor.distributorName} onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == distributor.id}/>)
+						}.bind(this))}
+						<Input type="radio" name="distributors" className="radio-button" value="newDistributor" label="Add new distributor" onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == "newDistributor"}/>
 					</form>
 					<Input value={this.state.newDistributorNameValue} onChange={this.handleNewDistributorNameChange} className={this.state.showNewDistributorInput
 						? "show"
@@ -46,7 +34,7 @@ var AddDistributorModal = React.createClass({
 		);
 	},
 	handleDistributorChange: function(event) {
-		console.log(event.target.value);
+		// console.log(event.target.getChecked());
 		this.setState({selectedDistributor: event.target.value})
 		if (event.target.value == "newDistributor") {
 			this.setState({showNewDistributorInput: true})
@@ -74,7 +62,6 @@ var AddDistributorModal = React.createClass({
 		if (this.state.buttonEnabled) {
 			if (this.state.selectedDistributor == "newDistributor") {
 				this.createNewDistributor(this.state.newDistributorNameValue, function(newDistributorID) {
-					// console.log("new distributor ID:", newDistributorID);
 					// now POST to product/zipcode/distributor with new distributorID
 					this.saveDistributor(newDistributorID, function() {
 						this.props.onHide()
@@ -82,7 +69,7 @@ var AddDistributorModal = React.createClass({
 				}.bind(this))
 			} else {
 				// now POST to product/zipcode/distributor with new distributorID
-				this.saveDistributor(this.distributorID.getValue(), function() {
+				this.saveDistributor(this.state.selectedDistributor, function() {
 					this.props.onHide()
 				}.bind(this))
 			}
@@ -112,7 +99,7 @@ var AddDistributorModal = React.createClass({
 				if (distributors.length == 0) {
 					this.setState({showNewDistributorInput: true, selectedDistributor: "newDistributor"})
 				} else {
-					this.setState({showNewDistributorInput: false})
+					this.setState({showNewDistributorInput: false, selectedDistributor: distributors[0]})
 				}
 			}.bind(this)
 		})
