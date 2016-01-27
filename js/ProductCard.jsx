@@ -5,55 +5,41 @@ var Button = require('react-bootstrap').Button;
 
 var DistributorField = require('./DistributorField.jsx');
 var RepField = require('./RepField.jsx');
+var QuantityInputWithSizeList = require('./QuantityInputWithSizeList.jsx');
 
 var ProductCard = React.createClass({
 	getInitialState: function() {
-		return ({productName: "", productSizeName: "", distributorID: null, distributorName: null})
+		return ({productName: "", distributorID: null})
 	},
 	render: function() {
-		if (this.props.disabled) {
-			minusButton = <div/>
-			plusButton = <div/>
-		} else {
-			minusButton = <Button onClick={this.decrement}>-</Button>
-			plusButton = <Button onClick={this.increment}>+</Button>
-		}
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">
 					<p>
 						<b>Product:</b>&nbsp;{this.state.productName}
 					</p>
-					<p>
-						<b>Size:</b>&nbsp;{this.state.productSizeName}
-					</p>
 					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
 					<RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder}/>
-					<Input disabled={this.props.disabled} label="Quantity" buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.props.productQuantity} onChange={this.changeQuantity} ref={function(thisComponent) {
-						this.quantityInput = thisComponent
-					}.bind(this)}/>
+					<QuantityInputWithSizeList productSizes={this.state.productSizes} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)}/>
 				</div>
 			</div>
 		)
-		// ,
+	},
+	handleQuantityChange: function(productID, productSizeID, productQuantity) {
+		// for some reason this is necessary - trying to bind directly to this.props.changeQuantity causes React to get cranky :(
+		this.props.changeQuantity(productID, productSizeID, productQuantity)
 	},
 	handleDistributorChange: function(distributorID, distributorName) {
 		this.setState({distributorID: distributorID, distributorName: distributorName})
 	},
-	increment: function() {
-		if (this.quantityInput.getValue() == "") {
-			newQuantity = 1
-		} else {
-			newQuantity = parseInt(this.quantityInput.getValue()) + 1
-		}
-		this.props.changeQuantity(this.props.productID, this.props.productSizeID, newQuantity)
-	},
-	decrement: function() {
-		this.props.changeQuantity(this.props.productID, this.props.productSizeID, parseInt(this.quantityInput.getValue()) - 1)
-	},
-	changeQuantity: function() {
-		// this is gross. gotta find a better way to do this
-		this.props.changeQuantity(this.props.productID, this.props.productSizeID, parseInt(this.quantityInput.getValue()))
+	getSizesForProduct: function() {
+		$.ajax({
+			url: window.API_URL + "/products/" + this.props.productID,
+			method: "GET",
+			success: function(product) {
+				this.setState({productSizes: product.productSizes})
+			}.bind(this)
+		})
 	},
 	componentDidMount: function() {
 		// resolve name
@@ -64,14 +50,7 @@ var ProductCard = React.createClass({
 				this.setState({productName: product.productName})
 			}.bind(this)
 		})
-		// resolve size
-		$.ajax({
-			url: window.API_URL + "/sizes/" + this.props.productSizeID,
-			method: "GET",
-			success: function(size) {
-				this.setState({productSizeName: size.sizeName})
-			}.bind(this)
-		})
+		this.getSizesForProduct()
 	}
 })
 
