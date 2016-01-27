@@ -1,7 +1,7 @@
 var React = require('react');
 $ = require('jquery')
 
-var QuantityInput = React.createClass({
+var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
 		return {sizeName: "", quantity: this.props.quantity};
 	},
@@ -56,4 +56,4 @@ var QuantityInput = React.createClass({
 	}
 });
 
-module.exports = QuantityInput
+module.exports = QuantityInputWithSize

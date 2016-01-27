@@ -6,14 +6,14 @@ Input = require("react-bootstrap").Input
 Button = require("react-bootstrap").Button
 var assert = require('assert');
 
-var QuantityInput = require('../js/QuantityInput.jsx');
+var QuantityInputWithSize = require('../js/QuantityInputWithSize.jsx');
 
-describe("QuantityInput", function() {
-	renderQuantityInput = function(quantity) {
+describe("QuantityInputWithSize", function() {
+	renderQuantityInputWithSize = function(quantity) {
 
 		changeQuantitySpy = sinon.spy()
 
-		renderedQuantityInput = ReactTestUtils.renderIntoDocument(< QuantityInput sizeID = {
+		renderedQuantityInputWithSize = ReactTestUtils.renderIntoDocument(< QuantityInputWithSize sizeID = {
 			10
 		}
 		quantity = {
@@ -23,16 +23,16 @@ describe("QuantityInput", function() {
 			changeQuantitySpy
 		} />)
 
-		inputComponent = ReactTestUtils.findRenderedComponentWithType(renderedQuantityInput, Input)
-		stepperButtons = ReactTestUtils.scryRenderedComponentsWithType(renderedQuantityInput, Button)
-		label = ReactTestUtils.findRenderedDOMComponentWithTag(renderedQuantityInput, "label")
+		inputComponent = ReactTestUtils.findRenderedComponentWithType(renderedQuantityInputWithSize, Input)
+		stepperButtons = ReactTestUtils.scryRenderedComponentsWithType(renderedQuantityInputWithSize, Button)
+		label = ReactTestUtils.findRenderedDOMComponentWithTag(renderedQuantityInputWithSize, "label")
 
-		return renderedQuantityInput
+		return renderedQuantityInputWithSize
 	}
 
 	beforeEach(function() {
 		sinon.stub($, "ajax").yieldsTo("success", {sizeName: "750ml"})
-		renderedQuantityInput = renderQuantityInput(100)
+		renderedQuantityInputWithSize = renderQuantityInputWithSize(100)
 	})
 
 	afterEach(function() {
@@ -53,7 +53,7 @@ describe("QuantityInput", function() {
 	})
 	describe("if a quantity isn't provided", function() {
 		beforeEach(function() {
-			renderedQuantityInput = renderQuantityInput()
+			renderedQuantityInputWithSize = renderQuantityInputWithSize()
 		})
 		it("the input value is empty", function(done) {
 			assert(!inputComponent.getValue())
@@ -62,7 +62,7 @@ describe("QuantityInput", function() {
 	})
 	describe("if the quantity provided is 0", function() {
 		beforeEach(function() {
-			renderedQuantityInput = renderQuantityInput(0)
+			renderedQuantityInputWithSize = renderQuantityInputWithSize(0)
 		})
 		it("the input value is empty", function(done) {
 			assert(!inputComponent.getValue())
@@ -81,7 +81,7 @@ describe("QuantityInput", function() {
 	})
 	describe("if the quantity provided is 1", function() {
 		beforeEach(function() {
-			renderedQuantityInput = renderQuantityInput(1)
+			renderedQuantityInputWithSize = renderQuantityInputWithSize(1)
 		})
 		it("the input value is 1", function(done) {
 			assert.equal(inputComponent.getValue(), 1)
