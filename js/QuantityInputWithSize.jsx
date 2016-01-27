@@ -1,5 +1,7 @@
 var React = require('react');
 $ = require('jquery')
+var Button = require("react-bootstrap").Button
+var Input = require("react-bootstrap").Input
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
@@ -24,6 +26,15 @@ var QuantityInputWithSize = React.createClass({
 		if (this.props.quantity <= 0) {
 			this.setState({quantity: null})
 		}
+	},
+	componentWillReceiveProps: function(nextProps) {
+		// change negative or zero quantities to null
+		if (nextProps.quantity <= 0) {
+			this.setState({quantity: null})
+		} else {
+			this.setState({quantity: nextProps.quantity})
+		}
+
 	},
 	handleInputChange: function(event) {
 		this.changeQuantity(event.target.value.replace(/[^0-9]/g, "").trim())
@@ -52,7 +63,6 @@ var QuantityInputWithSize = React.createClass({
 		} else {
 			this.changeQuantity(parseInt(this.state.quantity) - 1)
 		}
-
 	}
 });
 
