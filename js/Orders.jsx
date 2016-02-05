@@ -8,6 +8,7 @@ var $ = require('jquery');
 var OrderCard = require('./OrderCard.jsx');
 
 var Orders = React.createClass({
+	mixins: [History],
 	getInitialState: function() {
 		return {orders: []}
 	},
@@ -40,7 +41,7 @@ var Orders = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(orders) {
-				orders.sort(function (a, b) {
+				orders.sort(function(a, b) {
 					return b - a
 				})
 				this.setState({orders: orders})
@@ -55,7 +56,7 @@ var Orders = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				this.loadOrdersForBar(this.props.bar)
+				this.history.push("/orders/" + data)
 			}.bind(this)
 		})
 	}
