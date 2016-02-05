@@ -164,9 +164,9 @@ var Order = React.createClass({
 
 						// right here - sort by name (not going to do size for now, because of sizing redesign)
 						flattenedProducts.sort(function(a, b) {
-							if (a.productName > b.productName) {
+							if (a.productName.toLowerCase() > b.productName.toLowerCase()) {
 								return 1
-							} else if (a.productName < b.productName) {
+							} else if (a.productName.toLowerCase() < b.productName.toLowerCase()) {
 								return -1
 							} else {
 								return 0
