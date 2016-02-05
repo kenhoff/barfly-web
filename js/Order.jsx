@@ -4,6 +4,7 @@ var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
 var History = require('react-router').History;
+var $ = require('jquery');
 
 var async = require('async');
 
@@ -161,6 +162,15 @@ var Order = React.createClass({
 			method: "GET",
 			success: function(products) {
 				console.log(products);
+				products.sort(function(a, b) {
+					if (a.productName.toLowerCase() > b.productName.toLowerCase()) {
+						return 1
+					} else if (a.productName.toLowerCase() < b.productName.toLowerCase()) {
+						return -1
+					} else {
+						return 0
+					}
+				})
 				this.setState({allProducts: products})
 			}.bind(this)
 		})
@@ -178,13 +188,14 @@ var Order = React.createClass({
 	},
 	getSizesForProduct: function(product, callback) {
 		$.ajax({
-			url: window.API_URL + "/products/" + product,
+			url: window.API_URL + "/products/" + product.productID,
 			method: "GET",
 			success: function(productResult) {
 				async.map(productResult["productSizes"], function(productSizeID, cb) {
 					cb(null, {
-						productID: product,
-						productSizeID: productSizeID
+						productID: product.productID,
+						productSizeID: productSizeID,
+						productName: product.productName
 					})
 				}, function(err, results) {
 					return callback(null, results)
