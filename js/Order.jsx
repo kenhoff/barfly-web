@@ -29,8 +29,8 @@ var Order = React.createClass({
 		return (
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
-				{this.state.allProducts.map(function(productID) {
-					return (<ProductCard key={productID} productID={productID} barID={this.props.bar} quantities={this.getQuantitiesForProduct(productID)} changeQuantity={this.handleQuantityChange} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
+				{this.state.allProducts.map(function(product) {
+					return (<ProductCard key={product.productID} productID={product.productID} barID={this.props.bar} quantities={this.getQuantitiesForProduct(product.productID)} changeQuantity={this.handleQuantityChange} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
@@ -75,10 +75,6 @@ var Order = React.createClass({
 
 	// yay clusterfuck!
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
-
-		console.log("productID", productID);
-		console.log("productSizeID", productSizeID);
-		console.log("productQuantity", productQuantity);
 
 		// updateTimeout handles the order patching
 		this.updateTimeout()
@@ -129,7 +125,6 @@ var Order = React.createClass({
 			},
 			method: "GET",
 			success: function(data) {
-				console.log(data.productOrders);
 				// handle if sent isn't actually in the order yet
 				this.setState({
 					productOrders: data.productOrders,
@@ -161,7 +156,6 @@ var Order = React.createClass({
 			// (no auth needed)
 			method: "GET",
 			success: function(products) {
-				console.log(products);
 				products.sort(function(a, b) {
 					if (a.productName.toLowerCase() > b.productName.toLowerCase()) {
 						return 1
@@ -185,23 +179,6 @@ var Order = React.createClass({
 		if (prevProps.bar != this.props.bar) {
 			this.getOrder()
 		}
-	},
-	getSizesForProduct: function(product, callback) {
-		$.ajax({
-			url: window.API_URL + "/products/" + product.productID,
-			method: "GET",
-			success: function(productResult) {
-				async.map(productResult["productSizes"], function(productSizeID, cb) {
-					cb(null, {
-						productID: product.productID,
-						productSizeID: productSizeID,
-						productName: product.productName
-					})
-				}, function(err, results) {
-					return callback(null, results)
-				})
-			}
-		})
 	}
 })
 
