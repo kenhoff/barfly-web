@@ -20,7 +20,7 @@ var ProductCard = React.createClass({
 					</p>
 					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
 					<RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder}/>
-					<QuantityInputWithSizeList productSizes={this.state.productSizes} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)}/>
+					<QuantityInputWithSizeList productSizes={this.state.productSizes} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
 				</div>
 			</div>
 		)

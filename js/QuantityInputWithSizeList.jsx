@@ -1,5 +1,4 @@
 var React = require('react');
-var PropTypes = React.PropTypes;
 
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
@@ -14,7 +13,7 @@ var QuantityInputWithSizeList = React.createClass({
 			return (
 				<div>
 					{this.props.productSizes.map(function(sizeID) {
-						return (<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)}/>)
+						return (<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled}/>)
 					}.bind(this))}
 				</div>
 			)

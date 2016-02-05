@@ -2,16 +2,21 @@ var React = require('react');
 $ = require('jquery')
 var Button = require("react-bootstrap").Button
 var Input = require("react-bootstrap").Input
+var FormControls = require("react-bootstrap").FormControls
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
 		return {sizeName: "", quantity: this.props.quantity};
 	},
 	render: function() {
-		minusButton = <Button onClick={this.decrement}>-</Button>
-		plusButton = <Button onClick={this.increment}>+</Button>
+		if (this.props.disabled) {
+			return (<FormControls.Static label={this.state.sizeName} placeholder="0" type="number" value={this.state.quantity}/>)
+		} else {
+			minusButton = <Button onClick={this.decrement}>-</Button>
+			plusButton = <Button onClick={this.increment}>+</Button>
 
-		return (<Input label={this.state.sizeName} buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.state.quantity} onChange={this.handleInputChange}/>)
+			return (<Input label={this.state.sizeName} buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.state.quantity} onChange={this.handleInputChange}/>)
+		}
 	},
 	componentDidMount: function() {
 		// resolve size
