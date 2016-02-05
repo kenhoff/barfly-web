@@ -4,6 +4,7 @@ var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
 var History = require('react-router').History;
+var $ = require('jquery');
 
 var async = require('async');
 
@@ -30,7 +31,7 @@ var Order = React.createClass({
 			<div>
 				<h1>Order #{this.props.params.orderID}</h1>
 				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
+					return (<ProductCard key={product.productID.toString() + product.productSizeID.toString()} productID={product.productID} productSizeID={product.productSizeID} productQuantity={this.getProductQuantity(product.productID, product.productSizeID)} changeQuantity={this.handleQuantityChange} barID={this.props.bar} reresolveOrder={this.reresolveOrder} disabled={this.state.sent} productName={product.productName}/>)
 				}.bind(this))}
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
@@ -160,6 +161,18 @@ var Order = React.createClass({
 						flattenedProducts = unflattenedProducts.reduce(function(a, b) {
 							return a.concat(b)
 						})
+
+						// right here - sort by name (not going to do size for now, because of sizing redesign)
+						flattenedProducts.sort(function(a, b) {
+							if (a.productName > b.productName) {
+								return 1
+							} else if (a.productName < b.productName) {
+								return -1
+							} else {
+								return 0
+							}
+						})
+
 						this.setState({allProducts: flattenedProducts})
 					}
 				}.bind(this))
@@ -179,13 +192,14 @@ var Order = React.createClass({
 	},
 	getSizesForProduct: function(product, callback) {
 		$.ajax({
-			url: window.API_URL + "/products/" + product,
+			url: window.API_URL + "/products/" + product.productID,
 			method: "GET",
 			success: function(productResult) {
 				async.map(productResult["productSizes"], function(productSizeID, cb) {
 					cb(null, {
-						productID: product,
-						productSizeID: productSizeID
+						productID: product.productID,
+						productSizeID: productSizeID,
+						productName: product.productName
 					})
 				}, function(err, results) {
 					return callback(null, results)
