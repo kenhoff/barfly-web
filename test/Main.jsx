@@ -6,3 +6,4 @@ require('./NewBarModal.jsx');
 require('./NewProductModal.jsx');
 require('./AddDistributorModal.jsx');
 require('./AddRepModal.jsx');
+require('./Orders.jsx');
