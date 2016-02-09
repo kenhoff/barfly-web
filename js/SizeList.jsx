@@ -7,7 +7,7 @@ var QuantityInputWithSize = require('./QuantityInputWithSize.jsx');
 
 // passed in a list of sizes, and quantities
 
-var QuantityInputWithSizeList = React.createClass({
+var SizeList = React.createClass({
 	render: function() {
 		if (this.props.productSizes && (this.props.productSizes.length != 0)) {
 			return (
@@ -32,4 +32,4 @@ var QuantityInputWithSizeList = React.createClass({
 	}
 });
 
-module.exports = QuantityInputWithSizeList;
+module.exports = SizeList;
