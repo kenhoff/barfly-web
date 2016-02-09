@@ -14,7 +14,7 @@ var DistributorField = React.createClass({
 		if (this.state.distributorName == -1) {
 			return (
 				<div>
-					<p>Distributor not found!
+					<p>Distributor not found!&nbsp;
 						<a onClick={this.openModal}>Add one?</a>
 					</p>
 					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName}/>
