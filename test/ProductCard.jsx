@@ -16,7 +16,7 @@ describe("ProductCard", function() {
 		renderedProductCard = renderProductCard()
 	})
 
-	it("doesn't render anything if a productID isn't provided", function(done) {})
+	it("doesn't render anything if a productID isn't provided")
 	it("doesn't render anything if a barID isn't provided")
 	describe("if everything is provided", function() {
 		it("renders a panel")
