@@ -20,7 +20,7 @@ var ProductCard = React.createClass({
 					</p>
 					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
 					<RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder}/>
-					<SizeList productSizes={this.state.productSizes} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
+					<SizeList productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
 				</div>
 			</div>
 		)
@@ -32,15 +32,6 @@ var ProductCard = React.createClass({
 	handleDistributorChange: function(distributorID, distributorName) {
 		this.setState({distributorID: distributorID, distributorName: distributorName})
 	},
-	getSizesForProduct: function() {
-		$.ajax({
-			url: window.API_URL + "/products/" + this.props.productID,
-			method: "GET",
-			success: function(product) {
-				this.setState({productSizes: product.productSizes})
-			}.bind(this)
-		})
-	},
 	componentDidMount: function() {
 		// resolve name
 		$.ajax({
@@ -50,7 +41,6 @@ var ProductCard = React.createClass({
 				this.setState({productName: product.productName})
 			}.bind(this)
 		})
-		this.getSizesForProduct()
 	}
 })
 
