@@ -14,7 +14,7 @@ var Nav = React.createClass({
 			<div>
 				<nav className="navbar navbar-default navbar-fixed-top">
 					<div className="container">
-						<a className = "navbar-brand" href = "#" onClick = {this.goHome}>burlock</a>
+						<a className="navbar-brand" id="logo" href="#" onClick={this.goHome}>burlock</a>
 						<BarSelector currentBar={this.props.currentBar} changeBar={this.props.changeBar}/>
 						<ProfileDropdown signOut={this.signOut} lock={this.props.lock}/>
 					</div>
@@ -23,14 +23,13 @@ var Nav = React.createClass({
 		);
 	},
 
-	componentDidMount: function() {
-	},
+	componentDidMount: function() {},
 	signOut: function() {
 		localStorage.removeItem("access_jwt")
 		localStorage.removeItem("refresh_token")
 		window.location.href = "/"
 	},
-	goHome: function () {
+	goHome: function() {
 		this.history.push('/')
 	}
 })
