@@ -66,12 +66,11 @@ var NewSizeForm = React.createClass({
 		containerID = this.refs.containerInput.getValue()
 		packagingID = this.refs.packagingInput.getValue()
 		// first, check to see if size already exists
-		this.checkToSeeIfSizeExists(containerID, packagingID, function(err, sizeID) {
-			if (sizeID) {
+		this.checkToSeeIfSizeExists(containerID, packagingID, function(err, size) {
+			if (size) {
 				// if size exists, save returned size to product
-				this.saveSizeToProduct(sizeID, function(err) {
+				this.saveSizeToProduct(size.id, function(err) {
 					if (err) {
-						console.log(err);
 					} else {
 						// do whatever it is that we do once saving a product
 						this.refs.containerInput.getInputDOMNode().value = "nullContainer"
@@ -85,7 +84,6 @@ var NewSizeForm = React.createClass({
 				this.createNewSize(containerID, packagingID, function(err, sizeID) {
 					this.saveSizeToProduct(sizeID, function(err) {
 						if (err) {
-							console.log(err);
 						} else {
 							// do whatever it is that we do once saving a product
 							this.refs.containerInput.getInputDOMNode().value = "nullContainer"
@@ -107,7 +105,6 @@ var NewSizeForm = React.createClass({
 			},
 			method: "GET",
 			success: function(size) {
-				console.log(size);
 				cb(null, size)
 			}
 		})
@@ -124,7 +121,6 @@ var NewSizeForm = React.createClass({
 				packagingID: packagingID
 			},
 			success: function(sizeID) {
-				console.log(sizeID);
 				if (cb) {
 					cb(null, sizeID)
 				}
@@ -142,7 +138,6 @@ var NewSizeForm = React.createClass({
 				sizeID: parseInt(sizeID)
 			},
 			success: function() {
-				console.log("success!");
 				if (cb) {
 					cb(null)
 				}
