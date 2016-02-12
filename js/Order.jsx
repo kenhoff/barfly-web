@@ -41,8 +41,6 @@ var Order = React.createClass({
 		)
 	},
 
-	// i think these might be the same function
-
 	getQuantitiesForProduct: function(productID) {
 		productQuantities = []
 		for (productOrder of this.state.productOrders) {

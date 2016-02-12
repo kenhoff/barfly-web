@@ -25,8 +25,7 @@ renderOrder = function() {
 describe("Order", function() {
 	beforeEach(function() {
 		ajaxStub = sinon.stub($, "ajax")
-		ajaxStub.onFirstCall().yieldsTo("success", [1, 2, 3, 4])
-		ajaxStub.onSecondCall().yieldsTo("success", [
+		ajaxStub.onFirstCall().yieldsTo("success", [
 			{
 				productID: 3,
 				productName: "Product C"
@@ -38,10 +37,6 @@ describe("Order", function() {
 				productName: "Product A"
 			}
 		])
-		ajaxStub.onThirdCall().yieldsTo("success", {
-			sent: false,
-			productOrders: []
-		})
 		renderedOrder = renderOrder()
 	})
 	afterEach(function() {
