@@ -3,7 +3,12 @@ var React = require('react');
 var Link = require('react-router').Link;
 var History = require('react-router').History;
 
+var $ = require('jquery');
+
+var OrderCard = require('./OrderCard.jsx');
+
 var Orders = React.createClass({
+	mixins: [History],
 	getInitialState: function() {
 		return {orders: []}
 	},
@@ -12,8 +17,8 @@ var Orders = React.createClass({
 			<div>
 				<h1>Orders</h1>
 				<button onClick={this.newOrder}>New Order</button>
-				{this.state.orders.map(function(order) {
-					return (<OrderCard key={order} order={order}/>)
+				{this.state.orders.map(function(orderID) {
+					return (<OrderCard key={orderID} order={orderID}/>)
 				})}
 			</div>
 		);
@@ -35,9 +40,11 @@ var Orders = React.createClass({
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
-			success: function(data) {
-				data.reverse()
-				this.setState({orders: data})
+			success: function(orders) {
+				orders.sort(function(a, b) {
+					return b - a
+				})
+				this.setState({orders: orders})
 			}.bind(this)
 		})
 	},
@@ -49,27 +56,10 @@ var Orders = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				this.loadOrdersForBar(this.props.bar)
+				this.history.push("/orders/" + data)
 			}.bind(this)
 		})
 	}
-});
-
-var OrderCard = React.createClass({
-	mixins: [History],
-	render: function() {
-		return (
-			<div className="panel panel-default" onClick={this.navigateToOrder}>
-				<div className="panel-body">
-					Order #{this.props.order}
-				</div>
-			</div>
-		);
-	},
-	navigateToOrder: function() {
-		this.history.push("/orders/" + this.props.order)
-	}
-
 });
 
 module.exports = Orders

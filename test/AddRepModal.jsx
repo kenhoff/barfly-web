@@ -80,6 +80,10 @@ describe("AddRepModal", function() {
 		$.ajax.restore()
 	})
 
+	after(function() {
+		localStorage.getItem.restore()
+	})
+
 	it("renders a modal", function(done) {
 		assert(ReactTestUtils.isCompositeComponentWithType(renderedAddRepModal.refs.AddRepModal, Modal))
 		done()
