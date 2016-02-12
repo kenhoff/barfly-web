@@ -35,7 +35,7 @@
     "mocha": "^2.3.4",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.6",
-    "react-bootstrap": "^0.28.1",
+    "react-bootstrap": "^0.28.3",
     "react-dom": "^0.14.5",
     "react-router": "^1.0.3",
     "react-shallow-testutils": "^0.7.1",

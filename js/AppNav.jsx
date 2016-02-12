@@ -1,26 +1,38 @@
 var React = require('react');
 var BarSelector = require('./BarSelector.jsx');
 var ProfileDropdown = require('./ProfileDropdown.jsx');
+var Navbar = require('react-bootstrap').Navbar;
+var Nav = require('react-bootstrap').Nav;
+var NavItem = require('react-bootstrap').NavItem;
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var MenuItem = require('react-bootstrap').MenuItem;
 
 var History = require('react-router').History;
 
-var Nav = React.createClass({
+var AppNav = React.createClass({
 	mixins: [History],
 	getInitialState: function() {
 		return {profile: null, currentBar: null}
 	},
 	render: function() {
 		return (
-			<div>
-				<nav className="navbar navbar-default navbar-fixed-top">
-					<div className="container">
-						<a className="navbar-brand" id="logo" href="#" onClick={this.goHome}>burlock</a>
+			<Navbar fixedTop>
+				<Navbar.Header>
+					<Navbar.Brand>
+						<a href="#" id="logo">burlock</a>
+					</Navbar.Brand>
+					<Navbar.Toggle/>
+				</Navbar.Header>
+				<Navbar.Collapse>
+					<Nav>
 						<BarSelector currentBar={this.props.currentBar} changeBar={this.props.changeBar}/>
+					</Nav>
+					<Nav pullRight>
 						<ProfileDropdown signOut={this.signOut} lock={this.props.lock}/>
-					</div>
-				</nav>
-			</div>
-		);
+					</Nav>
+				</Navbar.Collapse>
+			</Navbar>
+		)
 	},
 
 	componentDidMount: function() {},
@@ -34,4 +46,4 @@ var Nav = React.createClass({
 	}
 })
 
-module.exports = Nav
+module.exports = AppNav

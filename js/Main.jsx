@@ -12,7 +12,7 @@ window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
 var App = require('./App.jsx');
-var Nav = require('./Nav.jsx');
+var AppNav = require('./AppNav.jsx');
 var Orders = require('./Orders.jsx');
 var Order = require('./Order.jsx');
 var Profile = require('./Profile.jsx');
@@ -32,7 +32,7 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
+					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
 					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
 			);
