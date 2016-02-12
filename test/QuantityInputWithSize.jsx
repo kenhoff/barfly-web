@@ -31,7 +31,19 @@ describe("QuantityInputWithSize", function() {
 	}
 
 	beforeEach(function() {
-		sinon.stub($, "ajax").yieldsTo("success", {sizeName: "750ml"})
+		ajaxStub = sinon.stub($, "ajax")
+		ajaxStub.onFirstCall().yieldsTo("success", {
+			containerID: 1,
+			packagingID: 2
+		})
+		ajaxStub.onSecondCall().yieldsTo("success", {
+			id: 1,
+			containerName: "750ml"
+		})
+		ajaxStub.onThirdCall().yieldsTo("success", {
+			id: 2,
+			packagingName: "Pack of 6"
+		})
 		renderedQuantityInputWithSize = renderQuantityInputWithSize(100)
 	})
 
@@ -48,7 +60,7 @@ describe("QuantityInputWithSize", function() {
 		done()
 	})
 	it("has a label with the right size name", function(done) {
-		assert.equal(label.children[0].innerHTML, "750ml");
+		assert.equal(label.children[0].innerHTML, "750ml, Pack of 6");
 		done()
 	})
 	describe("if a quantity isn't provided", function() {
