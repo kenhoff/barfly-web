@@ -12,10 +12,11 @@ window.jQuery = window.$ = require('jquery');
 require("bootstrap")
 
 var App = require('./App.jsx');
-var Nav = require('./Nav.jsx');
+var AppNav = require('./AppNav.jsx');
 var Orders = require('./Orders.jsx');
 var Order = require('./Order.jsx');
 var Profile = require('./Profile.jsx');
+var Landing = require('./Landing.jsx');
 
 var Main = React.createClass({
 
@@ -31,16 +32,15 @@ var Main = React.createClass({
 			// (the reason we're doing this is so that we have /orders/1234 instead of /bars/1234/orders/1234)
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
-				<div>
-					<Nav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
+				<div className="container">
+					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
 					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
 			);
 		} else {
 			return (
-				<div>
-					<h1>Welcome to Burlock</h1>
-					<a onClick={this.showLock}>Sign in</a>
+				<div className="landing">
+					<Landing showLock={this.showLock}/>
 				</div>
 			);
 		}
