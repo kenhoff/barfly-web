@@ -17,7 +17,7 @@ gulp.task('build', function() {
 	if (process.env.NODE_ENV != "production") {
 		require('dotenv').load()
 	}
-	rimraf("app.js", function() {
+	rimraf("static/app.js", function() {
 		browserify({
 				entries: "./js/Main.jsx",
 				transform: [reactify, envify],
@@ -26,7 +26,7 @@ gulp.task('build', function() {
 				console.log(err.message);
 			})
 			.pipe(source("app.js"))
-			.pipe(gulp.dest("./"))
+			.pipe(gulp.dest("./static/"))
 			.on("end", function() {
 				console.log("all done!");
 			})
