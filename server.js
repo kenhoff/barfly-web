@@ -1,17 +1,11 @@
-var app = require('express')();
+express = require('express')
+var app = express();
 port = process.env.PORT || 1175
 
-app.get("/app.js", function (req, res) {
-	res.sendFile(__dirname + "/app.js")
-})
-
-
-app.get("/style.css", function (req, res) {
-	res.sendFile(__dirname + "/style.css")
-})
+app.use(express.static(__dirname + '/static'))
 
 app.get("*", function (req, res) {
-	res.sendFile(__dirname + "/index.html")
+	res.sendFile(__dirname + "/static/index.html")
 })
 
 app.listen(port, function () {
