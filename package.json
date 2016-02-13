@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "postinstall": "gulp build && stylus style.styl && jade index.jade",
+    "postinstall": "gulp build && stylus static/style.styl && jade static/index.jade",
     "pretest": "gulp build-test"
   },
   "repository": {
