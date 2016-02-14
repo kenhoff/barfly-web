@@ -64,7 +64,7 @@ var Order = React.createClass({
 			}.bind(this),
 			error: function() {
 				this.setState({sending: false})
-			}
+			}.bind(this)
 		})
 	},
 
