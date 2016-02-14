@@ -8,40 +8,45 @@ var ShallowTestUtils = require('react-shallow-testutils');
 
 var OrderNavBottom = require('../js/OrderNavBottom.jsx');
 
-// console.log("isElement:", ReactTestUtils.isElement(result));
-// console.log("isElementOfType nav:", ReactTestUtils.isElementOfType(result, "nav"));
-// console.log("isDOMComponent:", ReactTestUtils.isDOMComponent(component));
-// console.log("isCompositeComponent:", ReactTestUtils.isCompositeComponent(component));
-// console.log("isCompositeComponentWithType OrderNavBottom:", ReactTestUtils.isCompositeComponentWithType(component, OrderNavBottom));
+renderOrderNavBottom = function(component) {
+	renderedOrderNavBottom = ReactTestUtils.renderIntoDocument(component)
+	return renderedOrderNavBottom
+}
 
 describe("OrderNavBottom", function() {
-	before(function() {
-		shallowRenderer = ReactTestUtils.createRenderer()
-	})
 	it("renders by default, without any props", function(done) {
-		shallowRenderer.render(< OrderNavBottom />)
-		result = shallowRenderer.getRenderOutput()
-		component = ShallowTestUtils.getMountedInstance(shallowRenderer)
-		assert(ReactTestUtils.isElementOfType(result, "nav"))
+		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom />)
+		nav = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "nav")
+		assert(nav)
 		done()
 	})
 	it("when called with disabled = false, renders", function(done) {
-		shallowRenderer.render(< OrderNavBottom />)
-		result = shallowRenderer.getRenderOutput()
-		component = ShallowTestUtils.getMountedInstance(shallowRenderer)
-		assert(ReactTestUtils.isElementOfType(result, "nav"))
+		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
+			false
+		} />)
+		nav = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "nav")
+		assert(nav)
 		done()
-
 	})
 	it("when called with disabled = true, just renders an empty div", function(done) {
-		shallowRenderer.render(< OrderNavBottom disabled = {
+		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
 			true
 		} />)
-		result = shallowRenderer.getRenderOutput()
-		component = ShallowTestUtils.getMountedInstance(shallowRenderer)
-		assert(ReactTestUtils.isElementOfType(result, "div"))
-		assert(!result.props.children);
+		navs = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedOrderNavBottom, "nav")
+		assert.equal(navs.length, 0)
 		done()
 	})
-	it('calls this.props.sendOrder when "Send Order" button is clicked')
+	it('calls this.props.sendOrder when "Send Order" button is clicked', function(done) {
+		sendOrderSpy = sinon.spy()
+		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
+			false
+		}
+		sendOrder = {
+			sendOrderSpy
+		} />)
+		submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
+		ReactTestUtils.Simulate.click(submitButton)
+		assert.equal(sendOrderSpy.callCount, 1)
+		done()
+	})
 })
