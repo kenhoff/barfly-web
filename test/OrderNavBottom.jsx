@@ -36,54 +36,64 @@ describe("OrderNavBottom", function() {
 		assert.equal(navs.length, 0)
 		done()
 	})
-	it('calls this.props.sendOrder when "Send Order" button is clicked', function(done) {
-		sendOrderSpy = sinon.spy()
-		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
-			false
-		}
-		sendOrder = {
-			sendOrderSpy
-		} />)
-		submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
-		ReactTestUtils.Simulate.click(submitButton)
-		assert.equal(sendOrderSpy.callCount, 1)
-		done()
-	})
 	describe("if props.sending = true", function() {
 		beforeEach(function() {
+			sendOrderSpy = sinon.spy()
+
 			renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
 				false
 			}
 			sending = {
 				true
+			}
+			sendOrder = {
+				sendOrderSpy
 			} />)
 			submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
 		})
-		it("button is active", function (done) {
+		afterEach(function () {
+
+		})
+		it("button is active", function(done) {
 			assert(submitButton.className.includes('active'));
 			done()
 		})
-		it("button text is 'Sending order...'", function (done) {
+		it("button text is 'Sending order...'", function(done) {
 			assert.equal(submitButton.innerHTML, "Sending order...")
+			done()
+		})
+		it("clicking on button does nothing", function(done) {
+			ReactTestUtils.Simulate.click(submitButton)
+			assert.equal(sendOrderSpy.callCount, 0)
 			done()
 		})
 	})
 	describe("if props.sending = false", function() {
 		beforeEach(function() {
+			sendOrderSpy = sinon.spy()
+
 			renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
 				false
 			}
 			sending = {
 				false
+			}
+			sendOrder = {
+				sendOrderSpy
 			} />)
 			submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
 		})
-		it("button is not active", function (done) {
+		it("button is not active", function(done) {
 			assert(!submitButton.className.includes('active'));
 			done()
 		})
-		it("button text is 'Send Order'", function (done) {
+		it("button text is 'Send Order'", function(done) {
 			assert.equal(submitButton.innerHTML, "Send Order")
+			done()
+		})
+		it('clicking on button sends order', function(done) {
+			ReactTestUtils.Simulate.click(submitButton)
+			assert.equal(sendOrderSpy.callCount, 1)
 			done()
 		})
 	})
