@@ -9,7 +9,7 @@ var ReactDOM = require('react-dom');
 Orders = require("../js/Orders.jsx")
 var OrderCard = require('../js/OrderCard.jsx');
 
-var History = require('react-router').History;
+var browserHistory = require('react-router').browserHistory;
 
 renderOrders = function() {
 	renderedOrders = ReactTestUtils.renderIntoDocument(< Orders bar = {
@@ -64,10 +64,16 @@ describe("Orders", function() {
 		}
 		done()
 	})
-	// actually have to skip this one right now too. history gets populated by the router - which means that even though we have the history mixin 
-	it.skip("when 'new order' is clicked, navigate into order with new ID", function (done) {
+	it("when 'new order' is clicked, navigate into order with new ID", function(done) {
 		$.ajax.restore()
+
 		sinon.stub($, "ajax").yieldsTo("success", 100)
+		browserHistoryMock = sinon.mock(browserHistory)
+		browserHistoryExpect = browserHistoryMock.expects("push")
+
 		ReactTestUtils.Simulate.click(newOrderButton)
+		assert(browserHistoryExpect.once().withArgs("/orders/100"))
+		browserHistory.push.restore()
+		done()
 	})
 })
