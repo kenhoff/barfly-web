@@ -5,8 +5,7 @@ var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var Link = require('react-router').Link;
 var Redirect = require('react-router').Redirect;
-
-var createBrowserHistory = require('history/lib/createBrowserHistory');
+var browserHistory = require('react-router').browserHistory;
 
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
@@ -137,7 +136,7 @@ var Main = React.createClass({
 var MainRouter = React.createClass({
 	render: function() {
 		return (
-			<Router history={createBrowserHistory()}>
+			<Router history={browserHistory}>
 				<Redirect from="/" to="/orders"/>
 				<Route component={Main}>
 					<Route component={App}>

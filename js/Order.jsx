@@ -3,13 +3,12 @@ var React = require('react');
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
-var History = require('react-router').History;
+var browserHistory = require('react-router').browserHistory;
 var $ = require('jquery');
 
 var async = require('async');
 
 var Order = React.createClass({
-	mixins: [History],
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
@@ -61,7 +60,7 @@ var Order = React.createClass({
 			method: "POST",
 			success: function() {
 				this.setState({sending: false})
-				this.history.push("/orders")
+				browserHistory.push("/orders")
 			}.bind(this),
 			error: function() {
 				this.setState({sending: false})

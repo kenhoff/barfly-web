@@ -1,14 +1,12 @@
 var React = require('react');
 
-var Link = require('react-router').Link;
-var History = require('react-router').History;
+var browserHistory = require('react-router').browserHistory;
 
 var $ = require('jquery');
 
 var OrderCard = require('./OrderCard.jsx');
 
 var Orders = React.createClass({
-	mixins: [History],
 	getInitialState: function() {
 		return {orders: []}
 	},
@@ -56,7 +54,7 @@ var Orders = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				this.history.push("/orders/" + data)
+				browserHistory.push("/orders/" + data)
 			}.bind(this)
 		})
 	}
