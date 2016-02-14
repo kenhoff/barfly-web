@@ -49,4 +49,42 @@ describe("OrderNavBottom", function() {
 		assert.equal(sendOrderSpy.callCount, 1)
 		done()
 	})
+	describe("if props.sending = true", function() {
+		beforeEach(function() {
+			renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
+				false
+			}
+			sending = {
+				true
+			} />)
+			submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
+		})
+		it("button is active", function (done) {
+			assert(submitButton.className.includes('active'));
+			done()
+		})
+		it("button text is 'Sending order...'", function (done) {
+			assert.equal(submitButton.innerHTML, "Sending order...")
+			done()
+		})
+	})
+	describe("if props.sending = false", function() {
+		beforeEach(function() {
+			renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
+				false
+			}
+			sending = {
+				false
+			} />)
+			submitButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrderNavBottom, "button")
+		})
+		it("button is not active", function (done) {
+			assert(!submitButton.className.includes('active'));
+			done()
+		})
+		it("button text is 'Send Order'", function (done) {
+			assert.equal(submitButton.innerHTML, "Send Order")
+			done()
+		})
+	})
 })

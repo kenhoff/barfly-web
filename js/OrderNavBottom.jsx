@@ -7,7 +7,11 @@ var OrderNavBottom = React.createClass({
 				<nav className="navbar navbar-default navbar-fixed-bottom">
 					<div className="container">
 						<div className="navbar-form navbar-right">
-							<button onClick={this.props.sendOrder} className="btn btn-primary">Send Order</button>
+							<button onClick={this.props.sendOrder} className={"btn btn-primary " + (this.props.sending
+								? "active"
+								: "")}>{this.props.sending
+									? "Sending order..."
+									: "Send Order"}</button>
 						</div>
 					</div>
 				</nav>

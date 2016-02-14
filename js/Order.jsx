@@ -36,7 +36,7 @@ var Order = React.createClass({
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
 				<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
-				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder}/>
+				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
 			</div>
 		)
 	},
@@ -52,6 +52,7 @@ var Order = React.createClass({
 	},
 
 	sendOrder: function() {
+		this.setState({sending: true});
 		$.ajax({
 			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -59,8 +60,12 @@ var Order = React.createClass({
 			},
 			method: "POST",
 			success: function() {
+				this.setState({sending: false})
 				this.history.push("/orders")
-			}.bind(this)
+			}.bind(this),
+			error: function() {
+				this.setState({sending: false})
+			}
 		})
 	},
 
