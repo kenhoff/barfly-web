@@ -53,7 +53,7 @@ var Order = React.createClass({
 	sendOrder: function() {
 		this.setState({sending: true});
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -121,7 +121,7 @@ var Order = React.createClass({
 
 	getOrder: function() {
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -141,7 +141,7 @@ var Order = React.createClass({
 			orders: this.state.productOrders
 		},
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -154,7 +154,7 @@ var Order = React.createClass({
 	// now this function is a real clusterfuck, and desperately needs cleaning up.
 	getProducts: function() {
 		$.ajax({
-			url: window.API_URL + "/products",
+			url: process.env.BURLOCK_API_URL + "/products",
 			// (no auth needed)
 			method: "GET",
 			success: function(products) {

@@ -34,7 +34,7 @@ var Orders = React.createClass({
 	},
 	loadOrdersForBar: function(bar) {
 		$.ajax({
-			url: window.API_URL + "/bars/" + bar + "/orders",
+			url: process.env.BURLOCK_API_URL + "/bars/" + bar + "/orders",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -48,7 +48,7 @@ var Orders = React.createClass({
 	},
 	newOrder: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.bar + "/orders",
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders",
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")

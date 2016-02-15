@@ -73,7 +73,7 @@ var RepField = React.createClass({
 	},
 	resolveAccount: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/accounts",
+			url: process.env.BURLOCK_API_URL + "/accounts",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -93,7 +93,7 @@ var RepField = React.createClass({
 	},
 	resolveRepName: function(repID, cb) {
 		$.ajax({
-			url: window.API_URL + "/reps/" + repID,
+			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)
