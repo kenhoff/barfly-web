@@ -36,7 +36,7 @@ var QuantityInputWithSize = React.createClass({
 	},
 	getContainerAndPackagingID: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/sizes/" + this.props.sizeID,
+			url: process.env.BURLOCK_API_URL + "/sizes/" + this.props.sizeID,
 			method: "GET",
 			success: function(size) {
 				cb(null, size)
@@ -45,7 +45,7 @@ var QuantityInputWithSize = React.createClass({
 	},
 	getContainerName: function(containerID, cb) {
 		$.ajax({
-			url: window.API_URL + "/containers/" + containerID,
+			url: process.env.BURLOCK_API_URL + "/containers/" + containerID,
 			method: "GET",
 			success: function(container) {
 				cb(null, container.containerName)
@@ -54,7 +54,7 @@ var QuantityInputWithSize = React.createClass({
 	},
 	getPackagingName: function(packagingID, cb) {
 		$.ajax({
-			url: window.API_URL + "/packaging/" + packagingID,
+			url: process.env.BURLOCK_API_URL + "/packaging/" + packagingID,
 			method: "GET",
 			success: function(packaging) {
 				cb(null, packaging.packagingName)

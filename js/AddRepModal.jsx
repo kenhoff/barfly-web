@@ -64,7 +64,7 @@ var AddRepModal = React.createClass({
 	},
 	createRep: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/reps",
+			url: process.env.BURLOCK_API_URL + "/reps",
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
@@ -80,7 +80,7 @@ var AddRepModal = React.createClass({
 	},
 	saveRepToDistributor: function(repID, distributorID, cb) {
 		$.ajax({
-			url: window.API_URL + "/reps/" + repID + "/memberships",
+			url: process.env.BURLOCK_API_URL + "/reps/" + repID + "/memberships",
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
@@ -97,7 +97,7 @@ var AddRepModal = React.createClass({
 	},
 	createAccount: function(barID, repID, distributorID, cb) {
 		$.ajax({
-			url: window.API_URL + "/accounts",
+			url: process.env.BURLOCK_API_URL + "/accounts",
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
@@ -164,7 +164,7 @@ var AddRepModal = React.createClass({
 	},
 	getAllRepsForDistributor: function(distributorID) {
 		$.ajax({
-			url: window.API_URL + "/reps",
+			url: process.env.BURLOCK_API_URL + "/reps",
 			method: "GET",
 			data: {
 				distributorID: distributorID
@@ -195,7 +195,7 @@ var RepOption = React.createClass({
 	},
 	resolveRepName: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/reps/" + this.props.repID,
+			url: process.env.BURLOCK_API_URL + "/reps/" + this.props.repID,
 			method: "GET",
 			success: function(rep) {
 				cb(rep.name)

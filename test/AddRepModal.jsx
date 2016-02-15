@@ -60,7 +60,6 @@ renderAddRepModal = function() {
 describe("AddRepModal", function() {
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
-		window.API_URL = "http://localhost:1310"
 	})
 
 	beforeEach(function() {
@@ -158,7 +157,9 @@ describe("AddRepModal", function() {
 			ReactTestUtils.Simulate.click(submitButton)
 
 			assert(ajaxSpy.calledOnce, "ajax not called exactly once")
-			assert(ajaxSpy.calledWithMatch({url: "http://localhost:1310/accounts"}), "ajax not called with the right url")
+			assert(ajaxSpy.calledWithMatch({
+				url: process.env.BURLOCK_API_URL + "/accounts"
+			}), "ajax not called with the right url")
 			assert(ajaxSpy.calledWithMatch({
 				data: {
 					barID: 200,
@@ -315,20 +316,26 @@ describe("AddRepModal", function() {
 
 				ReactTestUtils.Simulate.click(submitButton)
 
-				assert(ajaxExpects.firstCall.calledWithMatch({url: "http://localhost:1310/reps"}), "first ajax not called with the right url")
+				assert(ajaxExpects.firstCall.calledWithMatch({
+					url: process.env.BURLOCK_API_URL + "/reps"
+				}), "first ajax not called with the right url")
 				assert(ajaxExpects.firstCall.calledWithMatch({
 					data: {
 						repName: "asdfasdfasdf",
 						repPhone: "1234567890"
 					}
 				}), "first ajax not called with the right data")
-				assert(ajaxExpects.secondCall.calledWithMatch({url: "http://localhost:1310/reps/asdf1/memberships"}), "second ajax not called with the right url")
+				assert(ajaxExpects.secondCall.calledWithMatch({
+					url: process.env.BURLOCK_API_URL + "/reps/asdf1/memberships"
+				}), "second ajax not called with the right url")
 				assert(ajaxExpects.secondCall.calledWithMatch({
 					data: {
 						distributorID: 100
 					}
 				}), "second ajax not called with the right data")
-				assert(ajaxExpects.thirdCall.calledWithMatch({url: "http://localhost:1310/accounts"}), "third ajax not called with the right url")
+				assert(ajaxExpects.thirdCall.calledWithMatch({
+					url: process.env.BURLOCK_API_URL + "/accounts"
+				}), "third ajax not called with the right url")
 				assert(ajaxExpects.thirdCall.calledWithMatch({
 					data: {
 						distributorID: 100,

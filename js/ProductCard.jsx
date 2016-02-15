@@ -35,7 +35,7 @@ var ProductCard = React.createClass({
 	componentDidMount: function() {
 		// resolve name
 		$.ajax({
-			url: window.API_URL + "/products/" + this.props.productID,
+			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID,
 			method: "GET",
 			success: function(product) {
 				this.setState({productName: product.productName})

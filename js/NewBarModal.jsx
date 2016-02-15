@@ -58,7 +58,7 @@ NewBarModal = React.createClass({
 			// handle some kind of err?
 		} else {
 			$.ajax({
-				url: window.API_URL + "/user/bars",
+				url: process.env.BURLOCK_API_URL + "/user/bars",
 				headers: {
 					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 				},

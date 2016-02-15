@@ -21,7 +21,7 @@ var ProfilePhoneInput = React.createClass({
 	},
 	handleSave: function() {
 		$.ajax({
-			url: window.API_URL + "/user",
+			url: process.env.BURLOCK_API_URL + "/user",
 			method: "PATCH",
 			data: {
 				phone: this.state.value
@@ -36,7 +36,7 @@ var ProfilePhoneInput = React.createClass({
 	},
 	getPhoneNumber: function () {
 		$.ajax({
-			url: window.API_URL + "/user",
+			url: process.env.BURLOCK_API_URL + "/user",
 			method: "GET",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")

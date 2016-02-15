@@ -40,10 +40,13 @@ gulp.task('test', function() {
 
 gulp.task('build-test', function() {
 	console.log("building test suite...");
+	if (process.env.NODE_ENV != "production") {
+		require('dotenv').load()
+	}
 	rimraf("test.js", function() {
 		browserify({
 				entries: "./test/Main.jsx",
-				transform: [reactify]
+				transform: [reactify, envify]
 			}).bundle()
 			.on('error', function(err) {
 				console.log(err.message);
