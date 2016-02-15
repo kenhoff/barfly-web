@@ -56,14 +56,12 @@ var BarSelector = React.createClass({
 		this.setState({showModal: false})
 	},
 	loadBars: function(cb) {
-		console.log(process.env.BURLOCK_API_URL + "/user/bars");
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/user/bars",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				console.log(data);
 				if (data.length != 0) {
 					cb(data)
 				}
