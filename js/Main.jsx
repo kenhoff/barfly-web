@@ -5,8 +5,7 @@ var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var Link = require('react-router').Link;
 var Redirect = require('react-router').Redirect;
-
-var createBrowserHistory = require('history/lib/createBrowserHistory');
+var browserHistory = require('react-router').browserHistory;
 
 window.jQuery = window.$ = require('jquery');
 require("bootstrap")
@@ -48,17 +47,6 @@ var Main = React.createClass({
 	componentWillMount: function() {
 		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
 		this.setState({idToken: this.getIdToken()})
-
-		// whatever, there's got to be a better way to do this
-		if ((window.location.hostname == "barflyorders.com") || (window.location.hostname == "www.barflyorders.com")) {
-			// redirect to burlockorders.com
-			window.location.assign("https://burlockorders.com")
-			window.API_URL = "https://api.barflyorders.com"
-		} else if ((window.location.hostname == "burlockorders.com") || (window.location.hostname == "www.burlockorders.com")) {
-			window.API_URL = "https://api.burlockorders.com"
-		} else {
-			window.API_URL = "http://localhost:1310"
-		}
 		$(document).ajaxError(function(event, request, settings) {
 			if (request.status == 401) {
 				this.refreshToken(function() {
@@ -107,7 +95,8 @@ var Main = React.createClass({
 		this.lock.show({
 			authParams: {
 				scope: "openid offline_access user_id given_name app_metadata"
-			}
+			},
+			connections: ['facebook']
 		})
 	},
 	handleBarChange: function(barID) {
@@ -119,7 +108,7 @@ var Main = React.createClass({
 	getCurrentBar: function() {
 		// just loads the first bar we get back, for now.
 		$.ajax({
-			url: window.API_URL + "/user/bars",
+			url: process.env.BURLOCK_API_URL + "/user/bars",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -137,7 +126,7 @@ var Main = React.createClass({
 var MainRouter = React.createClass({
 	render: function() {
 		return (
-			<Router history={createBrowserHistory()}>
+			<Router history={browserHistory}>
 				<Redirect from="/" to="/orders"/>
 				<Route component={Main}>
 					<Route component={App}>

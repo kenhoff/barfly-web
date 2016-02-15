@@ -1,14 +1,12 @@
 var React = require('react');
 
-var Link = require('react-router').Link;
-var History = require('react-router').History;
+var browserHistory = require('react-router').browserHistory;
 
 var $ = require('jquery');
 
 var OrderCard = require('./OrderCard.jsx');
 
 var Orders = React.createClass({
-	mixins: [History],
 	getInitialState: function() {
 		return {orders: []}
 	},
@@ -36,7 +34,7 @@ var Orders = React.createClass({
 	},
 	loadOrdersForBar: function(bar) {
 		$.ajax({
-			url: window.API_URL + "/bars/" + bar + "/orders",
+			url: process.env.BURLOCK_API_URL + "/bars/" + bar + "/orders",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -50,13 +48,13 @@ var Orders = React.createClass({
 	},
 	newOrder: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.bar + "/orders",
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders",
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(data) {
-				this.history.push("/orders/" + data)
+				browserHistory.push("/orders/" + data)
 			}.bind(this)
 		})
 	}

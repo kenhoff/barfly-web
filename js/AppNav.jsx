@@ -7,10 +7,9 @@ var NavItem = require('react-bootstrap').NavItem;
 var NavDropdown = require('react-bootstrap').NavDropdown;
 var MenuItem = require('react-bootstrap').MenuItem;
 
-var History = require('react-router').History;
+var browserHistory = require('react-router').browserHistory;
 
 var AppNav = React.createClass({
-	mixins: [History],
 	getInitialState: function() {
 		return {profile: null, currentBar: null}
 	},
@@ -19,7 +18,7 @@ var AppNav = React.createClass({
 			<Navbar fixedTop>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="#" onClick = {this.goHome} className="logo">burlock</a>
+						<a href="#" onClick={this.goHome} className="logo">burlock</a>
 					</Navbar.Brand>
 					<Navbar.Toggle/>
 				</Navbar.Header>
@@ -42,7 +41,7 @@ var AppNav = React.createClass({
 		window.location.href = "/"
 	},
 	goHome: function() {
-		this.history.push('/')
+		browserHistory.push('/')
 	}
 })
 

@@ -75,7 +75,7 @@ var AddDistributorModal = React.createClass({
 	},
 	saveDistributor: function(distributorID, cb) {
 		$.ajax({
-			url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + this.props.zipCode + "/distributor",
+			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID + "/zipcodes/" + this.props.zipCode + "/distributor",
 			method: "POST",
 			data: {
 				distributorID: parseInt(distributorID)
@@ -90,7 +90,7 @@ var AddDistributorModal = React.createClass({
 	},
 	getDistributors: function() {
 		$.ajax({
-			url: window.API_URL + "/distributors",
+			url: process.env.BURLOCK_API_URL + "/distributors",
 			method: "GET",
 			success: function(distributors) {
 				this.setState({distributors: distributors})
@@ -107,7 +107,7 @@ var AddDistributorModal = React.createClass({
 			distributorName: distributorName
 		}
 		$.ajax({
-			url: window.API_URL + "/distributors",
+			url: process.env.BURLOCK_API_URL + "/distributors",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},

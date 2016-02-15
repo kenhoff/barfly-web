@@ -49,7 +49,7 @@ var NewProductModal = React.createClass({
 	},
 	sendNewProduct: function(name, cb) {
 		$.ajax({
-			url: window.API_URL + "/products",
+			url: process.env.BURLOCK_API_URL + "/products",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},

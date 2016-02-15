@@ -6,6 +6,8 @@ var $ = require('jquery');
 var sinon = require('sinon');
 var ReactDOM = require('react-dom')
 
+var browserHistory = require('react-router').browserHistory;
+
 Order = require("../js/Order.jsx")
 ProductCard = require("../js/ProductCard.jsx")
 
@@ -56,4 +58,37 @@ describe("Order", function() {
 		assert.equal(productCards[2].props.productID, 3)
 		done()
 	})
+	it("on sendOrder, if 200, navigates to /orders", function(done) {
+		$.ajax.restore()
+
+		ajaxStub = sinon.stub($, "ajax")
+		ajaxStub.yieldsTo("success")
+
+		browserHistoryMock = sinon.mock(browserHistory)
+		browserHistoryExpect = browserHistoryMock.expects("push")
+
+		renderedOrder.sendOrder()
+
+		assert(browserHistoryExpect.calledWith("/orders"));
+		assert(browserHistoryExpect.calledOnce);
+		browserHistory.push.restore()
+		done()
+	})
+	it("on sendOrder, if error, does not navigate to /orders", function(done) {
+		$.ajax.restore()
+
+		ajaxStub = sinon.stub($, "ajax")
+		ajaxStub.yieldsTo("error")
+
+		browserHistoryMock = sinon.mock(browserHistory)
+		browserHistoryExpect = browserHistoryMock.expects("push")
+
+		renderedOrder.sendOrder()
+
+		assert.equal(browserHistoryExpect.callCount, 0)
+
+		browserHistory.push.restore()
+		done()
+	})
+
 })

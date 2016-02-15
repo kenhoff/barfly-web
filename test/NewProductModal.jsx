@@ -25,7 +25,6 @@ describe("NewProductModal", function() {
 
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
-		window.API_URL = "http://localhost:1310"
 	})
 	after(function() {
 		localStorage.getItem.restore()
@@ -56,7 +55,9 @@ describe("NewProductModal", function() {
 			ReactTestUtils.Simulate.click(submitButton)
 
 			assert(ajaxExpects.calledOnce, "ajax wasn't called once")
-			assert(ajaxExpects.calledWithMatch({url: "http://localhost:1310/products"}), "didn't have right URL")
+			assert(ajaxExpects.calledWithMatch({
+				url: process.env.BURLOCK_API_URL + "/products"
+			}), "didn't have right URL")
 			assert(ajaxExpects.calledWithMatch({
 				data: {
 					productName: "asdfasdfasdf"
@@ -125,7 +126,9 @@ describe("NewProductModal", function() {
 			ReactTestUtils.Simulate.click(submitButton)
 
 			assert(ajaxSpy.calledOnce)
-			assert(ajaxSpy.calledWithMatch({url: "http://localhost:1310/products"}), "incorrect URL")
+			assert(ajaxSpy.calledWithMatch({
+				url: process.env.BURLOCK_API_URL + "/products"
+			}), "incorrect URL")
 			assert(ajaxSpy.calledWithMatch({
 				data: {
 					productName: "asdfasdfasdf"

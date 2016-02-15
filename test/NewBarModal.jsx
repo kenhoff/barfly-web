@@ -14,10 +14,9 @@ describe("NewBarModal", function() {
 
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
-		window.API_URL = "http://localhost:1310"
 	})
 
-	after(function () {
+	after(function() {
 		localStorage.getItem.restore()
 	})
 
@@ -48,7 +47,6 @@ describe("NewBarModal", function() {
 
 		submitSpy = sinon.spy(renderedComponent, "submitBar") // make sure submitBar is at least clicked
 
-
 		// set name to filled, zip to filled
 		barNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedComponent.refs.NewBarModal._modal, Input)[0].getInputDOMNode()
 		barNameInputNode.value = "	    \nKen's	super AWKWARD bar; name	    \n"
@@ -62,7 +60,9 @@ describe("NewBarModal", function() {
 
 		assert(!submitButton.className.includes("disabled"), "button is disabled!")
 		assert(submitSpy.calledOnce, "submit wasn't called once")
-		assert(ajaxExpects.calledWithMatch({url: "http://localhost:1310/user/bars"}), "didn't have right URL")
+		assert(ajaxExpects.calledWithMatch({
+			url: process.env.BURLOCK_API_URL + "/user/bars"
+		}), "didn't have right URL")
 		assert(ajaxExpects.calledWithMatch({
 			data: {
 				barName: "Ken's	super AWKWARD bar; name",
@@ -228,7 +228,9 @@ describe("NewBarModal", function() {
 
 		assert(!submitButton.className.includes("disabled"), "button is disabled!")
 		assert(submitSpy.calledOnce, "submit wasn't called once")
-		assert(ajaxExpects.calledWithMatch({url: "http://localhost:1310/user/bars"}), "didn't have right URL")
+		assert(ajaxExpects.calledWithMatch({
+			url: process.env.BURLOCK_API_URL + "/user/bars"
+		}), "didn't have right URL")
 		assert(ajaxExpects.calledWithMatch({
 			data: {
 				barName: "asdfasdfasdf",
