@@ -44,7 +44,7 @@ var DistributorField = React.createClass({
 		// resolve distributor
 		// well, first resolve bar zip code
 		$.ajax({
-			url: window.API_URL + "/bars/" + this.props.barID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.barID,
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -55,7 +55,7 @@ var DistributorField = React.createClass({
 				})
 				// then resolve distributor for that product in that zip code
 				$.ajax({
-					url: window.API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
+					url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
 					method: "GET",
 					success: function(distributor) {
 						// console.log(distributor);
@@ -64,7 +64,7 @@ var DistributorField = React.createClass({
 						} else {
 							// finally, resolve distributor name
 							$.ajax({
-								url: window.API_URL + "/distributors/" + distributor.distributorID,
+								url: process.env.BURLOCK_API_URL + "/distributors/" + distributor.distributorID,
 								method: "GET",
 								success: function(finalDistributor) {
 									this.setState({distributorName: finalDistributor.distributorName})

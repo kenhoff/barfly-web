@@ -98,7 +98,7 @@ var NewSizeForm = React.createClass({
 	},
 	checkToSeeIfSizeExists: function(containerID, packagingID, cb) {
 		$.ajax({
-			url: window.API_URL + "/sizes",
+			url: process.env.BURLOCK_API_URL + "/sizes",
 			data: {
 				containerID: containerID,
 				packagingID: packagingID
@@ -111,7 +111,7 @@ var NewSizeForm = React.createClass({
 	},
 	createNewSize: function(containerID, packagingID, cb) {
 		$.ajax({
-			url: window.API_URL + "/sizes",
+			url: process.env.BURLOCK_API_URL + "/sizes",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -129,7 +129,7 @@ var NewSizeForm = React.createClass({
 	},
 	saveSizeToProduct: function(sizeID, cb) {
 		$.ajax({
-			url: window.API_URL + "/products/" + this.props.productID + "/sizes",
+			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID + "/sizes",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -146,7 +146,7 @@ var NewSizeForm = React.createClass({
 	},
 	getContainers: function() {
 		$.ajax({
-			url: window.API_URL + "/containers",
+			url: process.env.BURLOCK_API_URL + "/containers",
 			method: "GET",
 			success: function(containers) {
 				containers.sort(function(a, b) {
@@ -164,7 +164,7 @@ var NewSizeForm = React.createClass({
 	},
 	getPackaging: function() {
 		$.ajax({
-			url: window.API_URL + "/packaging",
+			url: process.env.BURLOCK_API_URL + "/packaging",
 			method: "GET",
 			success: function(packaging) {
 				packaging.sort(function(a, b) {

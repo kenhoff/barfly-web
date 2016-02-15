@@ -38,7 +38,6 @@ describe("AddDistributorModal", function() {
 
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
-		window.API_URL = "http://localhost:1310"
 	})
 
 	after(function() {
@@ -202,7 +201,9 @@ describe("AddDistributorModal", function() {
 			ReactTestUtils.Simulate.click(submitButton)
 
 			assert(ajaxSpy.calledOnce, "ajax not called only once")
-			assert(ajaxSpy.calledWithMatch({url: "http://localhost:1310/products/100/zipcodes/12345/distributor"}), "not called with the right URL")
+			assert(ajaxSpy.calledWithMatch({
+				url: process.env.BURLOCK_API_URL + "/products/100/zipcodes/12345/distributor"
+			}), "not called with the right URL")
 			assert(ajaxSpy.calledWithMatch({
 				data: {
 					distributorID: 1
@@ -292,7 +293,9 @@ describe("AddDistributorModal", function() {
 				})
 				ReactTestUtils.Simulate.click(submitButton)
 
-				assert(ajaxExpects.firstCall.calledWithMatch({url: "http://localhost:1310/distributors"}), "incorrect URL on the first call")
+				assert(ajaxExpects.firstCall.calledWithMatch({
+					url: process.env.BURLOCK_API_URL + "/distributors"
+				}), "incorrect URL on the first call")
 
 				assert(ajaxExpects.firstCall.calledWithMatch({
 					data: {
@@ -300,7 +303,9 @@ describe("AddDistributorModal", function() {
 					}
 				}), "first call not called with the right data")
 
-				assert(ajaxExpects.secondCall.calledWithMatch({url: "http://localhost:1310/products/100/zipcodes/12345/distributor"}), "incorrect URL on the second call")
+				assert(ajaxExpects.secondCall.calledWithMatch({
+					url: process.env.BURLOCK_API_URL + "/products/100/zipcodes/12345/distributor"
+				}), "incorrect URL on the second call")
 
 				assert(ajaxExpects.secondCall.calledWithMatch({
 					data: {

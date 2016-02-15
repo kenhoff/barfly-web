@@ -57,7 +57,7 @@ var BarSelector = React.createClass({
 	},
 	loadBars: function(cb) {
 		$.ajax({
-			url: window.API_URL + "/user/bars",
+			url: process.env.BURLOCK_API_URL + "/user/bars",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -148,7 +148,7 @@ IndividualBarInDropdownList = React.createClass({
 
 resolveBarName = function(barID, cb) {
 	$.ajax({
-		url: window.API_URL + "/bars/" + barID,
+		url: process.env.BURLOCK_API_URL + "/bars/" + barID,
 		headers: {
 			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 		},
