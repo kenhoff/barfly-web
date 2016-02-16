@@ -42,6 +42,7 @@ var RepField = React.createClass({
 			if (account) {
 				this.resolveRepName(account.repID, function(repName) {
 					this.setState({repID: account.repID, repName: repName})
+					this.props.changeRep(account.repID, repName)
 					this.props.reresolveOrder()
 				}.bind(this))
 			}
@@ -54,6 +55,7 @@ var RepField = React.createClass({
 			this.resolveAccount(function(account) {
 				if (account) {
 					this.resolveRepName(account.repID, function(repName) {
+						this.props.changeRep(account.repID, repName)
 						this.setState({repID: account.repID, repName: repName})
 					}.bind(this))
 				}
