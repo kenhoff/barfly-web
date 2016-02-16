@@ -9,23 +9,17 @@ var ProductCard = require('../js/ProductCard.jsx');
 
 var DistributorField = React.createClass({
 	render: function() {
-		return (
-			<div />
-		);
+		return (<div/>);
 	}
 });
 var RepField = React.createClass({
 	render: function() {
-		return (
-			<div />
-		);
+		return (<div/>);
 	}
 });
 var SizeList = React.createClass({
 	render: function() {
-		return (
-			<div />
-		);
+		return (<div/>);
 	}
 });
 
@@ -35,9 +29,29 @@ ProductCard.__set__("SizeList", SizeList)
 
 renderProductCard = function(jsx) {
 	renderedProductCard = ReactTestUtils.renderIntoDocument(jsx)
-	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedProductCard, "p")[0]
-	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(renderedProductCard, DistributorField)
+	getComponents(renderedProductCard)
 	return renderedProductCard
+}
+
+getComponents = function (mainComponent) {
+	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(mainComponent, "p")[0]
+	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(mainComponent, DistributorField)
+	repFieldComponent = function() {
+		repFields = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, RepField)
+		if (repFields.length >= 1) {
+			return repFields[0]
+		} else {
+			return null
+		}
+	}()
+	sizeListComponent = function() {
+		sizeLists = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, SizeList)
+		if (sizeLists.length >= 1) {
+			return sizeLists[0]
+		} else {
+			return null
+		}
+	}()
 }
 
 describe("ProductCard", function() {
@@ -79,20 +93,53 @@ describe("ProductCard", function() {
 		})
 	})
 	describe("distributor/rep availability", function() {
-		describe("if there's no distributor found", function() {
-			it("displays 'no distributor found'")
-			it("does not display a rep field")
-			it("does not display a size list")
+		it("renders a distributor field by default", function(done) {
+			assert(distributorFieldComponent)
+			done()
 		})
-		describe("if there is a distributor", function() {
-			it("displays the distributor name")
-			describe("if there's no rep", function() {
-				it("displays 'no rep found'")
-				it("does not display a size list")
+		describe("if a distributor is not found", function() {
+			beforeEach(function () {
+				renderedProductCard.handleDistributorChange(null, null)
+				getComponents(renderedProductCard)
 			})
-			describe("if there is a rep", function() {
-				it("displays the rep name")
-				it("displays a size list")
+			it("does not display a rep field", function(done) {
+				assert(!repFieldComponent)
+				done()
+			})
+			it("does not display a size list", function(done) {
+				assert(!sizeListComponent)
+				done()
+			})
+		})
+		describe("if a distributor is found", function() {
+			beforeEach(function () {
+				renderedProductCard.handleDistributorChange(100, "Distributor Y")
+				getComponents(renderedProductCard)
+
+			})
+			it("renders a rep field by default", function(done) {
+				assert(repFieldComponent)
+				done()
+			})
+			describe("if a rep is not found", function() {
+				beforeEach(function () {
+					renderedProductCard.handleRepChange(null, null)
+					getComponents(renderedProductCard)
+				})
+				it("does not render a size list", function(done) {
+					assert(!sizeListComponent)
+					done()
+				})
+			})
+			describe("if a rep is found", function() {
+				beforeEach(function () {
+					renderedProductCard.handleRepChange(200, "Rep Z")
+					getComponents(renderedProductCard)
+				})
+				it("renders a size list", function(done) {
+					assert(sizeListComponent)
+					done()
+				})
 			})
 		})
 	})
