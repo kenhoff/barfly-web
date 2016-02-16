@@ -7,9 +7,36 @@ var ReactTestUtils = require('react-addons-test-utils');
 
 var ProductCard = require('../js/ProductCard.jsx');
 
+var DistributorField = React.createClass({
+	render: function() {
+		return (
+			<div />
+		);
+	}
+});
+var RepField = React.createClass({
+	render: function() {
+		return (
+			<div />
+		);
+	}
+});
+var SizeList = React.createClass({
+	render: function() {
+		return (
+			<div />
+		);
+	}
+});
+
+ProductCard.__set__("DistributorField", DistributorField)
+ProductCard.__set__("RepField", RepField)
+ProductCard.__set__("SizeList", SizeList)
+
 renderProductCard = function(jsx) {
 	renderedProductCard = ReactTestUtils.renderIntoDocument(jsx)
 	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedProductCard, "p")[0]
+	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(renderedProductCard, DistributorField)
 	return renderedProductCard
 }
 
@@ -41,7 +68,6 @@ describe("ProductCard", function() {
 	it.skip("throws an error if a barID is provided, but a productID isn't provided")
 	it.skip("does not throw an error if a productID and barID are provided")
 
-
 	describe("if everything is provided", function() {
 		it("renders a panel", function(done) {
 			assert(ReactTestUtils.findRenderedDOMComponentWithClass(renderedProductCard, "panel"))
@@ -53,7 +79,7 @@ describe("ProductCard", function() {
 		})
 	})
 	describe("distributor/rep availability", function() {
-		describe("if there's no disributor found", function() {
+		describe("if there's no distributor found", function() {
 			it("displays 'no distributor found'")
 			it("does not display a rep field")
 			it("does not display a size list")
