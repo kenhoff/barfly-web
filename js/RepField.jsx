@@ -4,12 +4,12 @@ var AddRepModal = require('./AddRepModal.jsx');
 
 var RepField = React.createClass({
 	getInitialState: function() {
-		return ({repName: "Finding rep...", repID: null, addNewRepModalOpen: false})
+		return ({repName: "Finding rep...", repID: null, addNewRepModalOpen: false, resolving: true})
 	},
 	render: function() {
-		if (!this.props.distributorID) {
+		if (this.state.resolving) {
 			return (
-				<div></div>
+				<p>Looking up your rep at&nbsp;{this.props.distributorName}...</p>
 			)
 		} else {
 			if (this.state.repID) {
@@ -24,10 +24,10 @@ var RepField = React.createClass({
 				return (
 					<div>
 						<p>
-							<b>Rep:</b>&nbsp;No Rep found!&nbsp;
-							<a onClick={this.openModal}>Add one now</a>
-							<AddRepModal showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
+							<button className="btn btn-default" onClick={this.openModal}>Add my rep at&nbsp;
+								{this.props.distributorName}</button>
 						</p>
+						<AddRepModal showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 					</div>
 				);
 			}
@@ -49,27 +49,39 @@ var RepField = React.createClass({
 		}.bind(this))
 	},
 	componentDidMount: function() {
-		// if this.props.distributorID == null, then don't display anything yet.
-		// if this.props.distributorID != null, then attempt to resolve the account.
-		if (this.props.distributorID) {
-			this.resolveAccount(function(account) {
-				if (account) {
-					this.resolveRepName(account.repID, function(repName) {
-						this.props.changeRep(account.repID, repName)
-						this.setState({repID: account.repID, repName: repName})
-					}.bind(this))
-				}
-			}.bind(this))
-		}
+		this.setState({
+			resolving: true
+		}, function() {
+			// if this.props.distributorID == null, then don't display anything yet.
+			// if this.props.distributorID != null, then attempt to resolve the account.
+			if (this.props.distributorID) {
+				this.resolveAccount(function(account) {
+					if (account) {
+						this.resolveRepName(account.repID, function(repName) {
+							this.props.changeRep(account.repID, repName)
+							this.setState({repID: account.repID, repName: repName, resolving: false})
+						}.bind(this))
+					} else {
+						this.setState({repID: null, repName: null, resolving: false})
+					}
+				}.bind(this))
+			}
+		}.bind(this))
 	},
 	componentDidUpdate: function(prevProps) {
 		if (prevProps.distributorID != this.props.distributorID) {
-			this.resolveAccount(function(account) {
-				if (account) {
-					this.resolveRepName(account.repID, function(repName) {
-						this.setState({repID: account.repID, repName: repName})
-					}.bind(this))
-				}
+			this.setState({
+				resolving: true
+			}, function() {
+				this.resolveAccount(function(account) {
+					if (account) {
+						this.resolveRepName(account.repID, function(repName) {
+							this.setState({repID: account.repID, repName: repName, resolving: false})
+						}.bind(this))
+					} else {
+						this.setState({repID: null, repName: null, resolving: false})
+					}
+				}.bind(this))
 			}.bind(this))
 		}
 	},

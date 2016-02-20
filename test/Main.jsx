@@ -10,3 +10,4 @@ require("./OrderNavBottom.jsx")
 require('./Orders.jsx');
 require("./ProductCard.jsx")
 require('./QuantityInputWithSize.jsx')
+require('./RepField.jsx')
