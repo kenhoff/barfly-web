@@ -23,6 +23,8 @@ var SizeList = React.createClass({
 	}
 });
 
+// rewireify set stuff
+
 ProductCard.__set__("DistributorField", DistributorField)
 ProductCard.__set__("RepField", RepField)
 ProductCard.__set__("SizeList", SizeList)
