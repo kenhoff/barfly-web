@@ -61,12 +61,10 @@ var DistributorField = React.createClass({
 					url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
 					method: "GET",
 					success: function(distributor) {
-						// console.log(distributor);
 						if (Object.keys(distributor).length == 0) {
 							this.setState({distributorName: -1, resolving: false})
 							this.props.changeDistributor(null, null)
 						} else {
-							// finally, resolve distributor name
 							$.ajax({
 								url: process.env.BURLOCK_API_URL + "/distributors/" + distributor.distributorID,
 								method: "GET",
