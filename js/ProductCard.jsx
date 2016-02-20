@@ -8,8 +8,12 @@ var RepField = require('./RepField.jsx');
 var SizeList = require('./SizeList.jsx');
 
 var ProductCard = React.createClass({
+	propTypes: {
+		productID: React.PropTypes.number.isRequired,
+		barID: React.PropTypes.number.isRequired,
+	},
 	getInitialState: function() {
-		return ({productName: "", distributorID: null})
+		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null})
 	},
 	render: function() {
 		return (
@@ -19,8 +23,12 @@ var ProductCard = React.createClass({
 						<b>Product:</b>&nbsp;{this.state.productName}
 					</p>
 					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
-					<RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder}/>
-					<SizeList productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
+					{this.state.distributorID
+						? <RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder} changeRep={this.handleRepChange}/>
+						: null}
+					{(this.state.distributorID && this.state.repID)
+						? <SizeList productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
+						: null}
 				</div>
 			</div>
 		)
@@ -31,6 +39,9 @@ var ProductCard = React.createClass({
 	},
 	handleDistributorChange: function(distributorID, distributorName) {
 		this.setState({distributorID: distributorID, distributorName: distributorName})
+	},
+	handleRepChange: function(repID, repName) {
+		this.setState({repID: repID, repName: repName})
 	},
 	componentDidMount: function() {
 		// resolve name

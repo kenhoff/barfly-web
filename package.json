@@ -41,6 +41,7 @@
     "react-shallow-testutils": "^0.7.1",
     "reactify": "^1.1.1",
     "request": "^2.67.0",
+    "rewireify": "^0.2.5",
     "rimraf": "^2.5.0",
     "sinon": "^1.17.2",
     "stylus": "^0.53.0",
