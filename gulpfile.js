@@ -3,6 +3,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var reactify = require('reactify');
 var envify = require('envify');
+var rewireify = require('rewireify');
 
 var rimraf = require('rimraf');
 
@@ -46,7 +47,7 @@ gulp.task('build-test', function() {
 	rimraf("test.js", function() {
 		browserify({
 				entries: "./test/Main.jsx",
-				transform: [reactify, envify]
+				transform: [reactify, envify, rewireify]
 			}).bundle()
 			.on('error', function(err) {
 				console.log(err.message);
