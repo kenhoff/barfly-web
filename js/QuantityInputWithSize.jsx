@@ -16,6 +16,8 @@ var QuantityInputWithSize = React.createClass({
 	render: function() {
 		if (this.props.inStarredProductsList && !this.props.starred) {
 			return (<div/>)
+		} else if (this.props.inOrderList && (!this.props.quantity || (this.props.quantity <= 0))) {
+			return (<div/>)
 		} else if (this.props.disabled) {
 			return (<FormControls.Static label={this.state.containerName + ", " + this.state.packagingName} placeholder="0" type="number" value={this.state.quantity}/>)
 		} else {
