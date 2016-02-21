@@ -2,7 +2,7 @@ var React = require('react');
 
 var PageHeader = require('react-bootstrap').PageHeader;
 
-var AllProductsList = require('./AllProductsList.jsx');
+var ProductList = require('./ProductList.jsx');
 
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
@@ -43,8 +43,8 @@ var Order = React.createClass({
 		return (
 			<div>
 				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
-				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
-				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false}/>
+				<ProductList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
+				<ProductList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false}/>
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>

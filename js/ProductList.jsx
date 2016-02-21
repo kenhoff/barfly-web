@@ -3,7 +3,7 @@ var PropTypes = React.PropTypes;
 
 var ProductCard = require('./ProductCard.jsx');
 
-var AllProductsList = React.createClass({
+var ProductList = React.createClass({
 
 	render: function() {
 		return (
@@ -26,4 +26,4 @@ var AllProductsList = React.createClass({
 	}
 });
 
-module.exports = AllProductsList;
+module.exports = ProductList;
