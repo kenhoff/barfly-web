@@ -6,9 +6,9 @@ var Profile = React.createClass({
 
 	render: function() {
 		return (
-			<div>
+			<div className="app">
 				<h1>Profile</h1>
-				<ProfilePhoneInput />
+				<ProfilePhoneInput/>
 			</div>
 		);
 	}

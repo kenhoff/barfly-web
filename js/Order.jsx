@@ -1,5 +1,9 @@
 var React = require('react');
 
+var PageHeader = require('react-bootstrap').PageHeader;
+
+var AllProductsList = require('./AllProductsList.jsx');
+
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
@@ -19,7 +23,18 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {allProducts: [], productOrders: [], showNewProductModal: false, sent: true}
+		return {
+			allProducts: [],
+			productOrders: [],
+			starred: [
+				{
+					productID: 1,
+					sizeID: 2
+				}
+			],
+			showNewProductModal: false,
+			sent: true
+		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -27,10 +42,9 @@ var Order = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<h1>Order #{this.props.params.orderID}</h1>
-				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID} productID={product.productID} barID={this.props.bar} quantities={this.getQuantitiesForProduct(product.productID)} changeQuantity={this.handleQuantityChange} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
-				}.bind(this))}
+				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
+				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
+				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false}/>
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
@@ -38,6 +52,68 @@ var Order = React.createClass({
 				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
 			</div>
 		)
+	},
+
+	handleStarredChange: function(starredChange) {
+		if (starredChange.newStarredValue == true) {
+			// make API call to create new starred value
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "POST",
+				data: {
+					sizeID: starredChange.sizeID,
+					productID: starredChange.productID
+				},
+				success: function(stars) {
+					starred = this.state.starred
+					starred.push({sizeID: starredChange.sizeID, productID: starredChange.productID})
+					this.setState({starred: starred});
+				}.bind(this)
+			})
+			// just push the value onto state.starred
+		} else {
+			// make API call to remove starred value
+
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "DELETE",
+				data: {
+					sizeID: starredChange.sizeID,
+					productID: starredChange.productID
+				},
+				success: function(stars) {
+					// find star in state.starred with the right sizeID and productID
+					starred = this.state.starred
+					for (star of starred) {
+						if ((star.sizeID == starredChange.sizeID) && (star.productID == starredChange.productID)) {
+							starred.splice(starred.indexOf(star), 1)
+							this.setState({starred: starred})
+						}
+					}
+				}.bind(this)
+			})
+
+		}
+
+		// make API call to add/remove stars
+	},
+	getInitialStars: function() {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "GET",
+			success: function(stars) {
+				this.setState({starred: stars})
+			}.bind(this)
+		})
 	},
 
 	getQuantitiesForProduct: function(productID) {
@@ -173,6 +249,7 @@ var Order = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getProducts()
+		this.getInitialStars()
 		if (this.props.bar) {
 			this.getOrder()
 		}

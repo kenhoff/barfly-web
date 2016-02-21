@@ -10,28 +10,33 @@ var SizeList = require('./SizeList.jsx');
 var ProductCard = React.createClass({
 	propTypes: {
 		productID: React.PropTypes.number.isRequired,
-		barID: React.PropTypes.number.isRequired,
+		barID: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
 		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null})
 	},
 	render: function() {
-		return (
-			<div className="panel panel-default">
-				<div className="panel-body">
-					<p>
-						<b>Product:</b>&nbsp;{this.state.productName}
-					</p>
-					<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
-					{this.state.distributorID
-						? <RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder} changeRep={this.handleRepChange}/>
-						: null}
-					{(this.state.distributorID && this.state.repID)
-						? <SizeList productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
-						: null}
+		// console.log(this.props.productID, this.props.starredSizes);
+		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
+			return (<div/>)
+		} else {
+			return (
+				<div className="panel panel-default">
+					<div className="panel-body">
+						<p>
+							<b>Product:</b>&nbsp;{this.state.productName}
+						</p>
+						<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
+						{this.state.distributorID
+							? <RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder} changeRep={this.handleRepChange}/>
+							: null}
+						{(this.state.distributorID && this.state.repID)
+							? <SizeList inStarredProductsList={this.props.inStarredProductsList} starredSizes={this.props.starredSizes} productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
+							: null}
+					</div>
 				</div>
-			</div>
-		)
+			)
+		}
 	},
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
 		// for some reason this is necessary - trying to bind directly to this.props.changeQuantity causes React to get cranky :(
@@ -52,6 +57,10 @@ var ProductCard = React.createClass({
 				this.setState({productName: product.productName})
 			}.bind(this)
 		})
+	},
+	handleStarredChange: function(starredChange) {
+		starredChange.productID = this.props.productID
+		this.props.changeStarred(starredChange)
 	}
 })
 
