@@ -19,6 +19,8 @@ var ProductCard = React.createClass({
 		// console.log(this.props.productID, this.props.starredSizes);
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
 			return (<div/>)
+		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
+			return (<div/>)
 		} else {
 			return (
 				<div className="panel panel-default">

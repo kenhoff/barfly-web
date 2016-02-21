@@ -16,7 +16,7 @@ var ProductList = React.createClass({
 						return (starred.productID == product.productID)
 					}).map(function(starred) {
 						return (starred.sizeID)
-					})} inStarredProductsList={this.props.isStarredList} changeStarred={this.handleStarredChange}/>)
+					})} inStarredProductsList={this.props.isStarredList} inOrderList={this.props.isOrderList} changeStarred={this.handleStarredChange}/>)
 				}.bind(this))}
 			</div>
 		);
