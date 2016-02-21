@@ -23,18 +23,7 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {
-			allProducts: [],
-			productOrders: [],
-			starred: [
-				{
-					productID: 1,
-					sizeID: 2
-				}
-			],
-			showNewProductModal: false,
-			sent: true
-		}
+		return {allProducts: [], productOrders: [], starred: [], showNewProductModal: false, sent: true}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
