@@ -24,7 +24,7 @@ describe("QuantityInputWithSize", function() {
 		} />)
 
 		inputComponent = ReactTestUtils.findRenderedComponentWithType(renderedQuantityInputWithSize, Input)
-		stepperButtons = ReactTestUtils.scryRenderedComponentsWithType(renderedQuantityInputWithSize, Button)
+		buttons = ReactTestUtils.scryRenderedComponentsWithType(renderedQuantityInputWithSize, Button)
 		label = ReactTestUtils.findRenderedDOMComponentWithTag(renderedQuantityInputWithSize, "label")
 
 		return renderedQuantityInputWithSize
@@ -55,12 +55,12 @@ describe("QuantityInputWithSize", function() {
 		assert(ReactTestUtils.isCompositeComponentWithType(inputComponent, Input))
 		done()
 	})
-	it("renders an input with two button addons", function(done) {
-		assert.equal(stepperButtons.length, 2)
+	it("renders an input with a star button and two button addons", function(done) {
+		assert.equal(buttons.length, 3)
 		done()
 	})
 	it("has a label with the right size name", function(done) {
-		assert.equal(label.children[0].innerHTML, "750ml, Pack of 6");
+		assert.equal(label.innerHTML, "750ml, Pack of 6");
 		done()
 	})
 	describe("if a quantity isn't provided", function() {
@@ -81,12 +81,12 @@ describe("QuantityInputWithSize", function() {
 			done()
 		})
 		it("clicking the '-' stepper doesn't do anything", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[0]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[1]))
 			assert.equal(changeQuantitySpy.callCount, 0)
 			done()
 		})
 		it("clicking the '+' stepper calls changeQuantity with quantity: 1", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[1]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[2]))
 			assert(changeQuantitySpy.calledWith(1), "changeQuantity not called with correct args")
 			done()
 		})
@@ -100,12 +100,12 @@ describe("QuantityInputWithSize", function() {
 			done()
 		})
 		it("clicking the '-' stepper calls changeQuantity with 0", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[0]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[1]))
 			assert(changeQuantitySpy.calledWith(0), "changeQuantity not called with correct args")
 			done()
 		})
 		it("clicking the '+' stepper calls changeQuantity with quantity: 2", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[1]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[2]))
 			assert(changeQuantitySpy.calledWith(2), "changeQuantity not called with correct args")
 			done()
 		})
@@ -116,12 +116,12 @@ describe("QuantityInputWithSize", function() {
 			done()
 		})
 		it("clicking the '-' stepper calls changeQuantity with quantity: 99", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[0]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[1]))
 			assert(changeQuantitySpy.calledWith(99), "changeQuantity not called with correct args")
 			done()
 		})
 		it("clicking the '+' stepper calls changeQuantity with quantity: 101", function(done) {
-			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(stepperButtons[1]))
+			ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(buttons[2]))
 			assert(changeQuantitySpy.calledWith(101), "changeQuantity not called with correct args")
 			done()
 		})
