@@ -1,5 +1,9 @@
 var React = require('react');
 
+var PageHeader = require('react-bootstrap').PageHeader;
+
+var AllProductsList = require('./AllProductsList.jsx');
+
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
@@ -27,10 +31,8 @@ var Order = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<h1>Order #{this.props.params.orderID}</h1>
-				{this.state.allProducts.map(function(product) {
-					return (<ProductCard key={product.productID} productID={product.productID} barID={this.props.bar} quantities={this.getQuantitiesForProduct(product.productID)} changeQuantity={this.handleQuantityChange} reresolveOrder={this.reresolveOrder} disabled={this.state.sent}/>)
-				}.bind(this))}
+				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
+				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange = {this.handleQuantityChange}/>
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>

@@ -24,8 +24,8 @@ var SizeList = React.createClass({
 				<ListGroup>
 					{this.state.productSizes.map(function(sizeID) {
 						return (
-							<ListGroupItem>
-								<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled}/>
+							<ListGroupItem key={sizeID}>
+								<QuantityInputWithSize sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled}/>
 							</ListGroupItem>
 						)
 					}.bind(this))}
