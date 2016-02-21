@@ -54,8 +54,22 @@ var Order = React.createClass({
 	},
 
 	handleStarredChange: function(starredChange) {
-		console.log(starredChange);
-		// add/remove stars from this.state
+		if (starredChange.newStarredValue == true) {
+			// just push the value onto state.starred
+			starred = this.state.starred
+			starred.push({sizeID: starredChange.sizeID, productID: starredChange.productID})
+			this.setState({starred: starred});
+		} else {
+			// find star in state.starred with the right sizeID and productID
+			starred = this.state.starred
+			for (star of starred) {
+				if ((star.sizeID == starredChange.sizeID) && (star.productID == starredChange.productID)) {
+					starred.splice(starred.indexOf(star), 1)
+					this.setState({starred: starred})
+				}
+			}
+		}
+
 		// make API call to add/remove stars
 	},
 
