@@ -25,7 +25,7 @@ var SizeList = React.createClass({
 					{this.state.productSizes.map(function(sizeID) {
 						return (
 							<ListGroupItem key={sizeID}>
-								<QuantityInputWithSize sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled}/>
+								<QuantityInputWithSize sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled} starred={this.getStarred(sizeID)} changeStarred={this.handleStarredChange}/>
 							</ListGroupItem>
 						)
 					}.bind(this))}
@@ -36,6 +36,14 @@ var SizeList = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getSizesForProduct()
+	},
+	getStarred: function(sizeID) {
+		for (starredSize of this.props.starredSizes) {
+			if (starredSize == sizeID) {
+				return true
+			}
+		}
+		return false
 	},
 	getQuantityForSizeID: function(sizeID) {
 		for (quantity of this.props.quantities) {
@@ -56,6 +64,9 @@ var SizeList = React.createClass({
 				}
 			}.bind(this)
 		})
+	},
+	handleStarredChange: function(starChange) {
+		this.props.changeStarred(starChange)
 	}
 });
 

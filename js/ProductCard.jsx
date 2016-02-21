@@ -10,12 +10,13 @@ var SizeList = require('./SizeList.jsx');
 var ProductCard = React.createClass({
 	propTypes: {
 		productID: React.PropTypes.number.isRequired,
-		barID: React.PropTypes.number.isRequired,
+		barID: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
 		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null})
 	},
 	render: function() {
+		// console.log(this.props.productID, this.props.starredSizes);
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">
@@ -27,7 +28,7 @@ var ProductCard = React.createClass({
 						? <RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder} changeRep={this.handleRepChange}/>
 						: null}
 					{(this.state.distributorID && this.state.repID)
-						? <SizeList productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled}/>
+						? <SizeList inStarredProductsList={this.props.inStarredProductsList} starredSizes={this.props.starredSizes} productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
 						: null}
 				</div>
 			</div>
@@ -52,6 +53,10 @@ var ProductCard = React.createClass({
 				this.setState({productName: product.productName})
 			}.bind(this)
 		})
+	},
+	handleStarredChange: function(starredChange) {
+		starredChange.productID = this.props.productID
+		this.props.changeStarred(starredChange)
 	}
 })
 

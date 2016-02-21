@@ -28,7 +28,7 @@ var QuantityInputWithSize = React.createClass({
 							<label>{this.state.containerName + ", " + this.state.packagingName}</label>
 						</Col>
 						<Col sm={1} xs={6} smPush={3}>
-							<Button className="pull-right">
+							<Button onClick={this.changeStarred} className="pull-right" active={this.props.starred}>
 								<Glyphicon glyph="star"/>
 							</Button>
 						</Col>
@@ -119,6 +119,12 @@ var QuantityInputWithSize = React.createClass({
 		} else {
 			this.changeQuantity(parseInt(this.state.quantity) - 1)
 		}
+	},
+	changeStarred: function() {
+		this.props.changeStarred({
+			newStarredValue: !this.props.starred,
+			sizeID: this.props.sizeID
+		})
 	}
 });
 

@@ -23,7 +23,18 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {allProducts: [], productOrders: [], showNewProductModal: false, sent: true}
+		return {
+			allProducts: [],
+			productOrders: [],
+			starred: [
+				{
+					productID: 1,
+					sizeID: 2
+				}
+			],
+			showNewProductModal: false,
+			sent: true
+		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -32,7 +43,7 @@ var Order = React.createClass({
 		return (
 			<div>
 				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
-				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange = {this.handleQuantityChange}/>
+				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange}/>
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
@@ -40,6 +51,12 @@ var Order = React.createClass({
 				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
 			</div>
 		)
+	},
+
+	handleStarredChange: function(starredChange) {
+		console.log(starredChange);
+		// add/remove stars from this.state
+		// make API call to add/remove stars
 	},
 
 	getQuantitiesForProduct: function(productID) {
