@@ -4,7 +4,6 @@ var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var ButtonInput = require('react-bootstrap').ButtonInput;
 var ListGroup = require('react-bootstrap').ListGroup;
-var ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 var QuantityInputWithSize = require('./QuantityInputWithSize.jsx');
 var NewSizeForm = require('./NewSizeForm.jsx');
@@ -23,11 +22,7 @@ var SizeList = React.createClass({
 			<div>
 				<ListGroup>
 					{this.state.productSizes.map(function(sizeID) {
-						return (
-							<ListGroupItem key={sizeID}>
-								<QuantityInputWithSize sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled} starred={this.getStarred(sizeID)} changeStarred={this.handleStarredChange}/>
-							</ListGroupItem>
-						)
+						return (<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled} starred={this.getStarred(sizeID)} changeStarred={this.handleStarredChange} inStarredProductsList={this.props.inStarredProductsList}/>)
 					}.bind(this))}
 				</ListGroup>
 				<NewSizeForm productID={this.props.productID} refreshSizes={this.getSizesForProduct}/>

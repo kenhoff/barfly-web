@@ -7,13 +7,16 @@ var Input = require("react-bootstrap").Input
 var FormControls = require("react-bootstrap").FormControls
 var Row = require("react-bootstrap").Row
 var Col = require("react-bootstrap").Col
+var ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
 		return ({sizeName: "", quantity: this.props.quantity, containerName: "", packagingName: ""})
 	},
 	render: function() {
-		if (this.props.disabled) {
+		if (this.props.inStarredProductsList && !this.props.starred) {
+			return (<div/>)
+		} else if (this.props.disabled) {
 			return (<FormControls.Static label={this.state.containerName + ", " + this.state.packagingName} placeholder="0" type="number" value={this.state.quantity}/>)
 		} else {
 			minusButton = <Button onClick={this.decrement}>-</Button>
@@ -22,7 +25,7 @@ var QuantityInputWithSize = React.createClass({
 			starButton = <span className="glyphicon glyphicon-star"/>
 
 			return (
-				<div>
+				<ListGroupItem>
 					<Row>
 						<Col sm={8} xs={6} smPush={3}>
 							<label>{this.state.containerName + ", " + this.state.packagingName}</label>
@@ -36,7 +39,7 @@ var QuantityInputWithSize = React.createClass({
 							<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.state.quantity} onChange={this.handleInputChange}/>
 						</Col>
 					</Row>
-				</div>
+				</ListGroupItem>
 			)
 		}
 	},
