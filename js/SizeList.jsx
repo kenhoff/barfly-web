@@ -22,10 +22,10 @@ var SizeList = React.createClass({
 			<div>
 				<ListGroup>
 					{this.state.productSizes.map(function(sizeID) {
-						return (<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled} starred={this.getStarred(sizeID)} changeStarred={this.handleStarredChange} inStarredProductsList={this.props.inStarredProductsList}/>)
+						return (<QuantityInputWithSize key={sizeID} sizeID={sizeID} quantity={this.getQuantityForSizeID(sizeID)} changeQuantity={this.props.changeQuantity.bind(this, sizeID)} disabled={this.props.disabled} starred={this.getStarred(sizeID)} changeStarred={this.handleStarredChange} inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList}/>)
 					}.bind(this))}
 				</ListGroup>
-				{this.props.inStarredProductsList
+				{(this.props.inStarredProductsList || this.props.inOrderList)
 					? null
 					: <NewSizeForm productID={this.props.productID} refreshSizes={this.getSizesForProduct}/>}
 			</div>

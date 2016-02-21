@@ -2,7 +2,7 @@ var React = require('react');
 
 var PageHeader = require('react-bootstrap').PageHeader;
 
-var AllProductsList = require('./AllProductsList.jsx');
+var ProductList = require('./ProductList.jsx');
 
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
@@ -23,18 +23,7 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {
-			allProducts: [],
-			productOrders: [],
-			starred: [
-				{
-					productID: 1,
-					sizeID: 2
-				}
-			],
-			showNewProductModal: false,
-			sent: true
-		}
+		return {allProducts: [], productOrders: [], starred: [], showNewProductModal: false, sent: true}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -43,8 +32,9 @@ var Order = React.createClass({
 		return (
 			<div>
 				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
-				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
-				<AllProductsList allProducts={this.state.allProducts} getQuantitiesForProduct={this.getQuantitiesForProduct} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false}/>
+				<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
+				<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
+				<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false}/>
 				<p>Can't find what you're looking for?&nbsp;
 					<a onClick={this.showNewProductModal}>Create a new product</a>
 				</p>
@@ -115,17 +105,6 @@ var Order = React.createClass({
 			}.bind(this)
 		})
 	},
-
-	getQuantitiesForProduct: function(productID) {
-		productQuantities = []
-		for (productOrder of this.state.productOrders) {
-			if (productOrder.productID == productID) {
-				productQuantities.push({productQuantity: productOrder.productQuantity, productSizeID: productOrder.productSizeID})
-			}
-		}
-		return productQuantities
-	},
-
 	sendOrder: function() {
 		this.setState({sending: true});
 		$.ajax({
