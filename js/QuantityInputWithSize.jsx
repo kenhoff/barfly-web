@@ -1,21 +1,46 @@
 var React = require('react');
 $ = require('jquery')
 var Button = require("react-bootstrap").Button
+var Glyphicon = require("react-bootstrap").Glyphicon
+var ButtonInput = require("react-bootstrap").ButtonInput
 var Input = require("react-bootstrap").Input
 var FormControls = require("react-bootstrap").FormControls
+var Row = require("react-bootstrap").Row
+var Col = require("react-bootstrap").Col
+var ListGroupItem = require('react-bootstrap').ListGroupItem;
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
 		return ({sizeName: "", quantity: this.props.quantity, containerName: "", packagingName: ""})
 	},
 	render: function() {
-		if (this.props.disabled) {
+		if (this.props.inStarredProductsList && !this.props.starred) {
+			return (<div/>)
+		} else if (this.props.disabled) {
 			return (<FormControls.Static label={this.state.containerName + ", " + this.state.packagingName} placeholder="0" type="number" value={this.state.quantity}/>)
 		} else {
 			minusButton = <Button onClick={this.decrement}>-</Button>
 			plusButton = <Button onClick={this.increment}>+</Button>
 
-			return (<Input label={this.state.containerName + ", " + this.state.packagingName} buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.state.quantity} onChange={this.handleInputChange}/>)
+			starButton = <span className="glyphicon glyphicon-star"/>
+
+			return (
+				<ListGroupItem>
+					<Row>
+						<Col sm={8} xs={6} smPush={3}>
+							<label>{this.state.containerName + ", " + this.state.packagingName}</label>
+						</Col>
+						<Col sm={1} xs={6} smPush={3}>
+							<Button onClick={this.changeStarred} className="pull-right" active={this.props.starred}>
+								<Glyphicon glyph="star"/>
+							</Button>
+						</Col>
+						<Col sm={3} xs={12} smPull={9}>
+							<Input buttonBefore={minusButton} buttonAfter={plusButton} placeholder="0" type="number" value={this.state.quantity} onChange={this.handleInputChange}/>
+						</Col>
+					</Row>
+				</ListGroupItem>
+			)
 		}
 	},
 	componentDidMount: function() {
@@ -97,6 +122,12 @@ var QuantityInputWithSize = React.createClass({
 		} else {
 			this.changeQuantity(parseInt(this.state.quantity) - 1)
 		}
+	},
+	changeStarred: function() {
+		this.props.changeStarred({
+			newStarredValue: !this.props.starred,
+			sizeID: this.props.sizeID
+		})
 	}
 });
 
