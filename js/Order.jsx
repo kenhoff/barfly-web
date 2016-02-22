@@ -24,7 +24,14 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {allProducts: [], productOrders: [], starred: [], showNewProductModal: false, sent: true}
+		return {
+			allProducts: [],
+			productOrders: [],
+			starred: [],
+			showNewProductModal: false,
+			sent: true,
+			searchNavFixed: false
+		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -33,10 +40,10 @@ var Order = React.createClass({
 		return (
 			<div>
 				<Waypoint onEnter={function() {
-					console.log("entered");
-				}} onLeave={function() {
-					console.log("left");
-				}}/>
+					this.setState({searchNavFixed: false})
+				}.bind(this)} onLeave={function() {
+					this.setState({searchNavFixed: true})
+				}.bind(this)}/>
 				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
 				<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
 				<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
