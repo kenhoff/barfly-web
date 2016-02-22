@@ -1,16 +1,15 @@
 var React = require('react');
-
 var PageHeader = require('react-bootstrap').PageHeader;
+var browserHistory = require('react-router').browserHistory;
+var Waypoint = require('react-waypoint');
+var $ = require('jquery');
+var async = require('async');
 
 var ProductList = require('./ProductList.jsx');
-
 var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
-var browserHistory = require('react-router').browserHistory;
-var $ = require('jquery');
-
-var async = require('async');
+var SearchNav = require('./SearchNav.jsx');
 
 var Order = React.createClass({
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
@@ -23,7 +22,15 @@ var Order = React.createClass({
 	getInitialState: function() {
 		// allProducts is a list of all products that we carry, with each product having a different size.
 		// productOrders is a list of all products currently in the order (quantity > 0)
-		return {allProducts: [], productOrders: [], starred: [], showNewProductModal: false, sent: true}
+		return {
+			allProducts: [],
+			productOrders: [],
+			starred: [],
+			showNewProductModal: false,
+			search: "",
+			sent: true,
+			searchNavFixed: false
+		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
@@ -31,13 +38,26 @@ var Order = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
-				<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
-				<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
-				<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false}/>
-				<p>Can't find what you're looking for?&nbsp;
-					<a onClick={this.showNewProductModal}>Create a new product</a>
-				</p>
+				<Waypoint onEnter={function() {
+					this.setState({searchNavFixed: false})
+				}.bind(this)} onLeave={function() {
+					this.setState({searchNavFixed: true})
+				}.bind(this)}/>
+				<div className={this.state.searchNavFixed
+					? "emptyNavSpacing"
+					: null}></div>
+				<SearchNav fixedTop={this.state.searchNavFixed} value={this.state.search} updateSearch={function(event) {
+					this.setState({search: event.target.value})
+				}.bind(this)}/>
+				<div className="container">
+					<PageHeader>Order #{this.props.params.orderID}</PageHeader>
+					<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
+					<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
+					<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false} search={this.state.search}/>
+					<p>Can't find what you're looking for?&nbsp;
+						<a onClick={this.showNewProductModal}>Create a new product</a>
+					</p>
+				</div>
 				<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
 				<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
 			</div>
