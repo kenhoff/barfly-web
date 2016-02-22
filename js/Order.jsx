@@ -8,6 +8,7 @@ var ProductCard = require('./ProductCard.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNavBottom = require('./OrderNavBottom.jsx');
 var browserHistory = require('react-router').browserHistory;
+var Waypoint = require('react-waypoint');
 var $ = require('jquery');
 
 var async = require('async');
@@ -31,6 +32,11 @@ var Order = React.createClass({
 	render: function() {
 		return (
 			<div>
+				<Waypoint onEnter={function() {
+					console.log("entered");
+				}} onLeave={function() {
+					console.log("left");
+				}}/>
 				<PageHeader>Order #{this.props.params.orderID}</PageHeader>
 				<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
 				<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>
