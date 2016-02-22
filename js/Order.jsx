@@ -27,6 +27,7 @@ var Order = React.createClass({
 			productOrders: [],
 			starred: [],
 			showNewProductModal: false,
+			search: "",
 			sent: true,
 			searchNavFixed: false
 		}
@@ -45,7 +46,9 @@ var Order = React.createClass({
 				<div className={this.state.searchNavFixed
 					? "emptyNavSpacing"
 					: null}></div>
-				<SearchNav fixedTop={this.state.searchNavFixed}></SearchNav>
+				<SearchNav fixedTop={this.state.searchNavFixed} value={this.state.search} updateSearch={function(event) {
+					this.setState({search: event.target.value})
+				}.bind(this)}/>
 				<div className="container">
 					<PageHeader>Order #{this.props.params.orderID}</PageHeader>
 					<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder}/>

@@ -10,11 +10,11 @@ var SearchNav = React.createClass({
 		return (
 			<Navbar fixedTop={this.props.fixedTop}>
 				<Navbar.Form>
-					<Input type="text" placeholder="Search"/>
+					<Input type="text" placeholder="Search" value={this.props.value} onChange={this.props.updateSearch}/>
 				</Navbar.Form>
 			</Navbar>
 		);
-	}
+	},
 
 });
 
