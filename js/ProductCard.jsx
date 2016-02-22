@@ -21,6 +21,8 @@ var ProductCard = React.createClass({
 			return (<div/>)
 		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
 			return (<div/>)
+		} else if (!this.state.productName.toLowerCase().includes(this.props.searchText.toLowerCase())) {
+			return (<div/>)
 		} else {
 			return (
 				<div className="panel panel-default">
