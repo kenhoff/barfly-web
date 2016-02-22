@@ -31,7 +31,7 @@ var Main = React.createClass({
 			// (the reason we're doing this is so that we have /orders/1234 instead of /bars/1234/orders/1234)
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
-				<div className="container">
+				<div>
 					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
 					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>

@@ -14,7 +14,7 @@ var ProductList = React.createClass({
 						return (starred.productID == product.productID)
 					}).map(function(starred) {
 						return (starred.sizeID)
-					})} inStarredProductsList={this.props.isStarredList} inOrderList={this.props.isOrderList} changeStarred={this.handleStarredChange}/>)
+					})} inStarredProductsList={this.props.isStarredList} inOrderList={this.props.isOrderList} changeStarred={this.handleStarredChange} searchText={this.props.search}/>)
 				}.bind(this))}
 				{(this.props.isOrderList && this.props.productOrders.length == 0)
 					? "You don't have any products in your order yet! Order some products below to get started."

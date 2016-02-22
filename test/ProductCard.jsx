@@ -35,7 +35,7 @@ renderProductCard = function(jsx) {
 	return renderedProductCard
 }
 
-getComponents = function (mainComponent) {
+getComponents = function(mainComponent) {
 	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(mainComponent, "p")[0]
 	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(mainComponent, DistributorField)
 	repFieldComponent = function() {
@@ -68,7 +68,8 @@ describe("ProductCard", function() {
 		}
 		productID = {
 			2
-		} />)
+		}
+		searchText = "" />)
 	})
 	afterEach(function() {
 		$.ajax.restore()
@@ -100,7 +101,7 @@ describe("ProductCard", function() {
 			done()
 		})
 		describe("if a distributor is not found", function() {
-			beforeEach(function () {
+			beforeEach(function() {
 				renderedProductCard.handleDistributorChange(null, null)
 				getComponents(renderedProductCard)
 			})
@@ -114,7 +115,7 @@ describe("ProductCard", function() {
 			})
 		})
 		describe("if a distributor is found", function() {
-			beforeEach(function () {
+			beforeEach(function() {
 				renderedProductCard.handleDistributorChange(100, "Distributor Y")
 				getComponents(renderedProductCard)
 
@@ -124,7 +125,7 @@ describe("ProductCard", function() {
 				done()
 			})
 			describe("if a rep is not found", function() {
-				beforeEach(function () {
+				beforeEach(function() {
 					renderedProductCard.handleRepChange(null, null)
 					getComponents(renderedProductCard)
 				})
@@ -134,7 +135,7 @@ describe("ProductCard", function() {
 				})
 			})
 			describe("if a rep is found", function() {
-				beforeEach(function () {
+				beforeEach(function() {
 					renderedProductCard.handleRepChange(200, "Rep Z")
 					getComponents(renderedProductCard)
 				})
