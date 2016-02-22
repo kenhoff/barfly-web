@@ -8,7 +8,7 @@ var App = React.createClass({
 	render: function() {
 		if (this.props.bar > 0) {
 			return (
-				<div className="app">
+				<div className="app container">
 					{React.cloneElement(this.props.children, {bar: this.props.bar})}
 				</div>
 			)

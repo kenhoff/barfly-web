@@ -15,7 +15,7 @@ var AppNav = React.createClass({
 	},
 	render: function() {
 		return (
-			<Navbar fixedTop>
+			<Navbar staticTop>
 				<Navbar.Header>
 					<Navbar.Brand>
 						<a href="#" onClick={this.goHome} className="logo">burlock</a>
