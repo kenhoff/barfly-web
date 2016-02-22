@@ -42,6 +42,9 @@ var Order = React.createClass({
 				}.bind(this)} onLeave={function() {
 					this.setState({searchNavFixed: true})
 				}.bind(this)}/>
+				<div className={this.state.searchNavFixed
+					? "emptyNavSpacing"
+					: null}></div>
 				<SearchNav fixedTop={this.state.searchNavFixed}></SearchNav>
 				<div className="container">
 					<PageHeader>Order #{this.props.params.orderID}</PageHeader>
