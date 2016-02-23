@@ -1,7 +1,11 @@
 # burlock-web
 The part that serves the pages
 
+## Building
 
-font: <link href='https://fonts.googleapis.com/css?family=Raleway:800' rel='stylesheet' type='text/css'>
+Build everything: `nodemon --exec 'npm i' -e jsx,jade,styl`
 
-https://www.google.com/fonts/specimen/Raleway - font weight 800
+
+Build only app.js: `nodemon --exec 'npm run-script build' -e jsx`
+Build and run tests: `nodemon --exec 'npm test -- --bail' -e jsx`
+Run server: `nodemon --exec 'npm start' --watch server.js`
