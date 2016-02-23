@@ -1,5 +1,7 @@
 var React = require('react');
 
+var $ = require('jquery');
+
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 

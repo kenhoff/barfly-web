@@ -2,6 +2,8 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 
+var $ = require('jquery');
+
 var ProfilePhoneInput = React.createClass({
 	getInitialState: function() {
 		return {value: "", hasBeenChanged: false};
@@ -34,7 +36,7 @@ var ProfilePhoneInput = React.createClass({
 			}.bind(this)
 		})
 	},
-	getPhoneNumber: function () {
+	getPhoneNumber: function() {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/user",
 			method: "GET",
@@ -48,7 +50,7 @@ var ProfilePhoneInput = React.createClass({
 	},
 	componentDidMount: function() {
 		this.getPhoneNumber()
-	},
+	}
 });
 
 module.exports = ProfilePhoneInput;
