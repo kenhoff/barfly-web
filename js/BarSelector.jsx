@@ -4,8 +4,7 @@ var NewBarModal = require('./NewBarModal.jsx');
 
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
-
-window.jQuery = window.$ = require('jquery');
+var $ = require('jquery');
 
 var BarSelector = React.createClass({
 	getInitialState: function() {

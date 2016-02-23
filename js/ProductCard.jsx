@@ -7,6 +7,8 @@ var DistributorField = require('./DistributorField.jsx');
 var RepField = require('./RepField.jsx');
 var SizeList = require('./SizeList.jsx');
 
+var $ = require('jquery');
+
 var ProductCard = React.createClass({
 	propTypes: {
 		productID: React.PropTypes.number.isRequired,
