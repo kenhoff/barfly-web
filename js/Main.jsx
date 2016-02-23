@@ -7,7 +7,7 @@ var Link = require('react-router').Link;
 var Redirect = require('react-router').Redirect;
 var browserHistory = require('react-router').browserHistory;
 
-window.jQuery = window.$ = require('jquery');
+var $ = jQuery = require('jquery'); // for bootstrap
 require("bootstrap")
 
 var App = require('./App.jsx');

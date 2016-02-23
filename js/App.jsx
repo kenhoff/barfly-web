@@ -2,8 +2,6 @@ var React = require('react');
 
 var Orders = require('./Orders.jsx');
 
-window.jQuery = window.$ = require('jquery');
-
 var App = React.createClass({
 	render: function() {
 		if (this.props.bar > 0) {
