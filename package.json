@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha",
-    "postinstall": "gulp build && stylus static/style.styl && jade static/index.jade",
-    "pretest": "gulp build-test"
+    "postinstall": "npm run-script build ; stylus static/style.styl ; jade static/index.jade",
+    "pretest": "gulp build-test",
+    "build": "rm ./static/app.js; browserify ./js/Main.jsx -t reactify -t localenvify -o ./static/app.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "jade": "^1.11.0",
     "jquery": "^2.1.4",
     "jsdom": "^7.2.2",
+    "localenvify": "^1.0.1",
     "mocha": "^2.3.4",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.6",
