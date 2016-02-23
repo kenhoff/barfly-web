@@ -32,14 +32,22 @@ var ProductCard = React.createClass({
 			return (
 				<Panel>
 					<Row>
-						<Col xs={12}>
+						<Col xs={12} sm={4}>
 							<p>
 								<b>Product:</b>&nbsp;{this.state.productName}
 							</p>
+						</Col>
+						<Col xs={12} sm={4}>
 							<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
+						</Col>
+						<Col xs={12} sm={4}>
 							{this.state.distributorID
 								? <RepField barID={this.props.barID} distributorID={this.state.distributorID} distributorName={this.state.distributorName} reresolveOrder={this.props.reresolveOrder} changeRep={this.handleRepChange}/>
 								: null}
+						</Col>
+					</Row>
+					<Row>
+						<Col xs={12}>
 							{(this.state.distributorID && this.state.repID)
 								? <SizeList inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList} starredSizes={this.props.starredSizes} productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
 								: null}
