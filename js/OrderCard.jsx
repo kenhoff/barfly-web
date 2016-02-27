@@ -8,7 +8,6 @@ var browserHistory = require('react-router').browserHistory;
 
 var OrderCard = React.createClass({
 	render: function() {
-		console.log(this.props.order);
 		if ("sent" in this.props.order) {
 			if (this.props.order.sent) {
 				if ("sentAt" in this.props.order) {
