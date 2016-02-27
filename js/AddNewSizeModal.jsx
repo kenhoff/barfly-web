@@ -3,6 +3,9 @@ var PropTypes = React.PropTypes;
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
+var ContainerSelect = require('./ContainerSelect.jsx');
+var PackagingSelect = require('./PackagingSelect.jsx');
+
 var AddNewSizeModal = React.createClass({
 
 	render: function() {
@@ -13,8 +16,8 @@ var AddNewSizeModal = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					<form>
-						<Input type="select" label="Container" ref="containerInput"></Input>
-						<Input type="select" label="Packaging" ref="packagingInput"></Input>
+						<ContainerSelect/>
+						<PackagingSelect/>
 					</form>
 				</Modal.Body>
 				<Modal.Footer>
