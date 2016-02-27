@@ -27,7 +27,7 @@ var NewSizeForm = React.createClass({
 					: "show"}>Add new size for&nbsp;{this.props.productName}</Button>
 				<AddNewSizeModal showModal={this.state.showAddNewSizeModal} onHide={function() {
 					this.setState({showAddNewSizeModal: false})
-				}.bind(this)}></AddNewSizeModal>
+				}.bind(this)} productName={this.props.productName}></AddNewSizeModal>
 			</div>
 		);
 	},

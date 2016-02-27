@@ -8,7 +8,7 @@ var AddNewSizeModal = React.createClass({
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddNewSizeModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Add new size</Modal.Title>
+					<Modal.Title>Looks like we don't have all the sizes for&nbsp;{this.props.productName}&nbsp;yet. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body></Modal.Body>
 				<Modal.Footer>
