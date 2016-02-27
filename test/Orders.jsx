@@ -22,17 +22,40 @@ renderOrders = function() {
 describe("Orders", function() {
 	beforeEach(function() {
 		sinon.stub($, "ajax").yieldsTo("success", [
-			2,
-			3,
-			8,
-			1,
-			9,
-			10,
-			4,
-			5,
-			6,
-			7,
-			0
+			{
+				id: 2,
+				sent: true
+			}, {
+				id: 3,
+				sent: true
+			}, {
+				id: 8,
+				sent: true
+			}, {
+				id: 1,
+				sent: true
+			}, {
+				id: 9,
+				sent: true
+			}, {
+				id: 10,
+				sent: true
+			}, {
+				id: 4,
+				sent: true
+			}, {
+				id: 5,
+				sent: true
+			}, {
+				id: 6,
+				sent: true
+			}, {
+				id: 7,
+				sent: true
+			}, {
+				id: 0,
+				sent: true
+			}
 		])
 		renderedOrders = renderOrders()
 	})
