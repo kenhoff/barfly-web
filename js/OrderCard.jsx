@@ -9,14 +9,17 @@ var browserHistory = require('react-router').browserHistory;
 var OrderCard = React.createClass({
 	render: function() {
 		if (("sent" in this.props.order) && this.props.order.sent) {
-			displayTime = moment(this.props.order.sentAt).tz(timezone).format('llll')
+			displayTime = "Sent: " + moment(this.props.order.sentAt).tz(timezone).format('llll')
 		} else {
-			displayTime = ""
+			displayTime = "Unsent"
 		}
 		return (
 			<div className="panel panel-default" onClick={this.navigateToOrder}>
 				<div className="panel-body">
-					Order #{this.props.order.id} {displayTime}
+					Order #{this.props.order.id}
+					<div className="pull-right">
+						{displayTime}
+					</div>
 				</div>
 			</div>
 		);
