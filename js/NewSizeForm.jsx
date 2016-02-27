@@ -3,13 +3,14 @@ var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
 var ButtonInput = require('react-bootstrap').ButtonInput;
+var AddNewSizeModal = require('./AddNewSizeModal.jsx');
 
 var $ = require('jquery');
 
 var NewSizeForm = React.createClass({
 	getInitialState: function() {
 		state = {
-			showNewSizeForm: false,
+			showAddNewSizeModal: false,
 			containers: [],
 			packaging: [],
 			newSizeButtonEnabled: false
@@ -20,34 +21,39 @@ var NewSizeForm = React.createClass({
 		return (
 			<div>
 				<Button bsStyle="link" bsSize="xsmall" onClick={function() {
-					this.setState({showNewSizeForm: true})
+					this.setState({showAddNewSizeModal: true})
 				}.bind(this)} className={this.state.showNewSizeForm
 					? "hidden"
 					: "show"}>Add new size for&nbsp;{this.props.productName}</Button>
-				<form className={this.state.showNewSizeForm
-					? "show"
-					: "hidden"} onSubmit={this.handleNewSizeSubmit} onChange={this.handleNewSizeChange}>
-					<Input type="select" label="Container" ref="containerInput">
-						<option key={null} value="nullContainer">Please select a container</option>
-						{this.state.containers.map(function(container) {
-							return (
-								<option key={container.id} value={container.id}>{container.containerName}</option>
-							)
-						})}
-					</Input>
-					<Input type="select" label="Packaging" ref="packagingInput">
-						<option key={null} value="nullPackaging">Please select a packaging</option>
-						{this.state.packaging.map(function(packaging) {
-							return (
-								<option key={packaging.id} value={packaging.id}>{packaging.packagingName}</option>
-							)
-						})}
-					</Input>
-					<ButtonInput type="submit" value="Add New Size" disabled={!this.state.newSizeButtonEnabled}/>
-				</form>
+				<AddNewSizeModal showModal={this.state.showAddNewSizeModal} onHide={function() {
+					this.setState({showAddNewSizeModal: false})
+				}.bind(this)}></AddNewSizeModal>
 			</div>
 		);
 	},
+
+	// <form className={this.state.showNewSizeForm
+	// 	? "show"
+	// 	: "hidden"} onSubmit={this.handleNewSizeSubmit} onChange={this.handleNewSizeChange}>
+	// 	<Input type="select" label="Container" ref="containerInput">
+	// 		<option key={null} value="nullContainer">Please select a container</option>
+	// 		{this.state.containers.map(function(container) {
+	// 			return (
+	// 				<option key={container.id} value={container.id}>{container.containerName}</option>
+	// 			)
+	// 		})}
+	// 	</Input>
+	// 	<Input type="select" label="Packaging" ref="packagingInput">
+	// 		<option key={null} value="nullPackaging">Please select a packaging</option>
+	// 		{this.state.packaging.map(function(packaging) {
+	// 			return (
+	// 				<option key={packaging.id} value={packaging.id}>{packaging.packagingName}</option>
+	// 			)
+	// 		})}
+	// 	</Input>
+	// 	<ButtonInput type="submit" value="Add New Size" disabled={!this.state.newSizeButtonEnabled}/>
+	// </form>
+
 	componentDidMount: function() {
 		this.getContainers()
 		this.getPackaging()
