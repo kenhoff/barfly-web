@@ -15,8 +15,8 @@ var Orders = React.createClass({
 			<div className="container">
 				<h1>Orders</h1>
 				<button onClick={this.newOrder}>New Order</button>
-				{this.state.orders.map(function(orderID) {
-					return (<OrderCard key={orderID} order={orderID}/>)
+				{this.state.orders.map(function(order) {
+					return (<OrderCard key={order.id} order={order}/>)
 				})}
 			</div>
 		);
@@ -40,7 +40,7 @@ var Orders = React.createClass({
 			},
 			success: function(orders) {
 				orders.sort(function(a, b) {
-					return b - a
+					return b.id - a.id
 				})
 				this.setState({orders: orders})
 			}.bind(this)
