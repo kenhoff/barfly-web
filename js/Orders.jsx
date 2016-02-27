@@ -16,7 +16,7 @@ var Orders = React.createClass({
 				<h1>Orders</h1>
 				<button onClick={this.newOrder}>New Order</button>
 				{this.state.orders.map(function(order) {
-					return (<OrderCard key={order.id} order={order.id}/>)
+					return (<OrderCard key={order.id} order={order}/>)
 				})}
 			</div>
 		);

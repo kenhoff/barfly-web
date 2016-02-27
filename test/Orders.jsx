@@ -83,7 +83,7 @@ describe("Orders", function() {
 			0
 		]
 		for (var i = 0; i < orderCards.length; i++) {
-			assert.equal(orderCards[i].props.order, correctOrderCards[i])
+			assert.equal(orderCards[i].props.order.id, correctOrderCards[i])
 		}
 		done()
 	})
