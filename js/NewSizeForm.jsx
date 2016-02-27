@@ -19,11 +19,11 @@ var NewSizeForm = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<Button onClick={function() {
+				<Button bsStyle="link" bsSize="xsmall" onClick={function() {
 					this.setState({showNewSizeForm: true})
 				}.bind(this)} className={this.state.showNewSizeForm
 					? "hidden"
-					: "show"}>Add new size</Button>
+					: "show"}>Add new size for&nbsp;{this.props.productName}</Button>
 				<form className={this.state.showNewSizeForm
 					? "show"
 					: "hidden"} onSubmit={this.handleNewSizeSubmit} onChange={this.handleNewSizeChange}>
@@ -70,8 +70,7 @@ var NewSizeForm = React.createClass({
 			if (size) {
 				// if size exists, save returned size to product
 				this.saveSizeToProduct(size.id, function(err) {
-					if (err) {
-					} else {
+					if (err) {} else {
 						// do whatever it is that we do once saving a product
 						this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 						this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"
@@ -83,8 +82,7 @@ var NewSizeForm = React.createClass({
 				// if not, create new size (and save new size to product)
 				this.createNewSize(containerID, packagingID, function(err, sizeID) {
 					this.saveSizeToProduct(sizeID, function(err) {
-						if (err) {
-						} else {
+						if (err) {} else {
 							// do whatever it is that we do once saving a product
 							this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 							this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"

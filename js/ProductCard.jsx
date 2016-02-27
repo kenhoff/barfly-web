@@ -49,7 +49,7 @@ var ProductCard = React.createClass({
 					<Row>
 						<Col xs={12}>
 							{(this.state.distributorID && this.state.repID)
-								? <SizeList inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList} starredSizes={this.props.starredSizes} productID={this.props.productID} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
+								? <SizeList inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList} starredSizes={this.props.starredSizes} productID={this.props.productID} productName={this.state.productName} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
 								: null}
 						</Col>
 					</Row>
