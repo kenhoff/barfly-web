@@ -1,12 +1,12 @@
-var React = require('react');
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
+var React = require('react')
+var Input = require('react-bootstrap').Input
+var Button = require('react-bootstrap').Button
 
-var $ = require('jquery');
+var $ = require('jquery')
 
 var ProfilePhoneInput = React.createClass({
 	getInitialState: function() {
-		return {value: "", hasBeenChanged: false};
+		return {value: "", hasBeenChanged: false}
 	},
 	render: function() {
 		return (
@@ -31,7 +31,7 @@ var ProfilePhoneInput = React.createClass({
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
-			success: function(response) {
+			success: function() {
 				this.setState({hasBeenChanged: false})
 			}.bind(this)
 		})
@@ -51,6 +51,6 @@ var ProfilePhoneInput = React.createClass({
 	componentDidMount: function() {
 		this.getPhoneNumber()
 	}
-});
+})
 
-module.exports = ProfilePhoneInput;
+module.exports = ProfilePhoneInput

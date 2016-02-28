@@ -1,10 +1,10 @@
-var React = require('react');
+var React = require('react')
 
-var Link = require('react-router').Link;
+var Link = require('react-router').Link
 
 var ProfileDropdown = React.createClass({
 	getInitialState: function() {
-		return {};
+		return {}
 	},
 	render: function() {
 		if (this.state.profile) {
@@ -47,6 +47,6 @@ var ProfileDropdown = React.createClass({
 			}
 		}.bind(this))
 	}
-});
+})
 
 module.exports = ProfileDropdown

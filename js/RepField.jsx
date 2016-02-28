@@ -1,7 +1,7 @@
-var React = require('react');
-var $ = require('jquery');
+var React = require('react')
+var $ = require('jquery')
 
-var AddRepModal = require('./AddRepModal.jsx');
+var AddRepModal = require('./AddRepModal.jsx')
 
 var RepField = React.createClass({
 	getInitialState: function() {
@@ -30,7 +30,7 @@ var RepField = React.createClass({
 						</p>
 						<AddRepModal showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 					</div>
-				);
+				)
 			}
 		}
 	},
@@ -116,6 +116,6 @@ var RepField = React.createClass({
 		})
 	}
 
-});
+})
 
 module.exports = RepField

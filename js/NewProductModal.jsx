@@ -1,12 +1,12 @@
-var React = require('react');
-var $ = require('jquery');
+var React = require('react')
+var $ = require('jquery')
 
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
+var Modal = require('react-bootstrap').Modal
+var Input = require('react-bootstrap').Input
 
 var NewProductModal = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			buttonEnabled: false
 		}
 		return (state)
@@ -37,7 +37,7 @@ var NewProductModal = React.createClass({
 		}
 	},
 	submitProduct: function() {
-		productName = this.refs.productNameInput.getValue().trim()
+		var productName = this.refs.productNameInput.getValue().trim()
 		if (this.state.buttonEnabled) {
 			this.sendNewProduct(productName, function() {
 				this.props.newProductCreated()
@@ -57,7 +57,7 @@ var NewProductModal = React.createClass({
 			data: {
 				productName: name
 			},
-			success: function(data) {
+			success: function() {
 				if (cb) {
 					cb()
 				}

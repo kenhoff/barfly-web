@@ -5,6 +5,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 
+var $ = require('jquery');
+
 var ProductCard = require('../js/ProductCard.jsx');
 
 var DistributorField = React.createClass({

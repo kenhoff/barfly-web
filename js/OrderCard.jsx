@@ -1,17 +1,25 @@
-var React = require('react');
-var moment = require('moment-timezone');
-var jstz = require('jstimezonedetect');
+var React = require('react')
+var moment = require('moment-timezone')
+var jstz = require('jstimezonedetect')
 
-timezone = jstz.determine().name()
-
-var browserHistory = require('react-router').browserHistory;
+var browserHistory = require('react-router').browserHistory
 
 var OrderCard = React.createClass({
 	render: function() {
-		if (("sent" in this.props.order) && this.props.order.sent) {
-			displayTime = "Sent: " + moment(this.props.order.sentAt).tz(timezone).format('llll')
+		var displayTime
+		var timezone = jstz.determine().name()
+		if ("sent" in this.props.order) {
+			if (this.props.order.sent) {
+				if ("sentAt" in this.props.order) {
+					displayTime = "Sent: " + moment(this.props.order.sentAt).tz(timezone).format('llll')
+				} else {
+					displayTime = "Sent"
+				}
+			} else {
+				displayTime = "Unsent"
+			}
 		} else {
-			displayTime = "Unsent"
+			displayTime = ""
 		}
 		return (
 			<div className="panel panel-default" onClick={this.navigateToOrder}>
@@ -22,11 +30,11 @@ var OrderCard = React.createClass({
 					</div>
 				</div>
 			</div>
-		);
+		)
 	},
 	navigateToOrder: function() {
 		browserHistory.push("/orders/" + this.props.order.id)
 	}
-});
+})
 
 module.exports = OrderCard

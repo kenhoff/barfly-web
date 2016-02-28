@@ -1,7 +1,6 @@
-var React = require('react');
-var PropTypes = React.PropTypes;
+var React = require('react')
 
-var ProductCard = require('./ProductCard.jsx');
+var ProductCard = require('./ProductCard.jsx')
 
 var ProductList = React.createClass({
 
@@ -23,20 +22,20 @@ var ProductList = React.createClass({
 					? "You don't have any starred products yet! Hit the star next to some products below to get started."
 					: null}
 			</div>
-		);
+		)
 	},
 	handleStarredChange: function(starredChange) {
 		this.props.changeStarred(starredChange)
 	},
 	getQuantitiesForProduct: function(productID) {
-		productQuantities = []
-		for (productOrder of this.props.productOrders) {
+		var productQuantities = []
+		for (var productOrder of this.props.productOrders) {
 			if (productOrder.productID == productID) {
 				productQuantities.push({productQuantity: productOrder.productQuantity, productSizeID: productOrder.productSizeID})
 			}
 		}
 		return productQuantities
 	}
-});
+})
 
-module.exports = ProductList;
+module.exports = ProductList
