@@ -1,10 +1,8 @@
-var React = require('react');
+var React = require('react')
+var $ = require('jquery')
 
-var NewBarModal = require('./NewBarModal.jsx');
+var NewBarModal = require('./NewBarModal.jsx')
 
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
-var $ = require('jquery');
 
 var BarSelector = React.createClass({
 	getInitialState: function() {
@@ -78,7 +76,7 @@ var BarSelector = React.createClass({
 		if (nextProps.currentBar >= 0) {
 			this.loadBars(function(bars) {
 				this.setState({bars: bars})
-			}.bind(this));
+			}.bind(this))
 		}
 	}
 })

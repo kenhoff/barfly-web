@@ -1,10 +1,10 @@
-var React = require('react');
+var React = require('react')
 
-var browserHistory = require('react-router').browserHistory;
+var browserHistory = require('react-router').browserHistory
 
-var $ = require('jquery');
+var $ = require('jquery')
 
-var OrderCard = require('./OrderCard.jsx');
+var OrderCard = require('./OrderCard.jsx')
 
 var Orders = React.createClass({
 	getInitialState: function() {
@@ -19,7 +19,7 @@ var Orders = React.createClass({
 					return (<OrderCard key={order.id} order={order}/>)
 				})}
 			</div>
-		);
+		)
 	},
 	componentDidMount: function() {
 		// make an ajax call to retrieve all orders for this.props.bar
@@ -46,7 +46,7 @@ var Orders = React.createClass({
 			}.bind(this)
 		})
 	},
-	newOrder: function(cb) {
+	newOrder: function() {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders",
 			method: "POST",
@@ -58,6 +58,6 @@ var Orders = React.createClass({
 			}.bind(this)
 		})
 	}
-});
+})
 
 module.exports = Orders

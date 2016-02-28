@@ -1,6 +1,3 @@
-// this is used for ESLint to ignore process.env
-/*global process*/
-
 var React = require("react")
 var PageHeader = require("react-bootstrap").PageHeader
 var browserHistory = require("react-router").browserHistory

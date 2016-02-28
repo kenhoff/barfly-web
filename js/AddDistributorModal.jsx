@@ -1,7 +1,7 @@
-var React = require('react');
-var $ = require('jquery');
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
+var React = require('react')
+var $ = require('jquery')
+var Modal = require('react-bootstrap').Modal
+var Input = require('react-bootstrap').Input
 
 var AddDistributorModal = React.createClass({
 	getInitialState: function() {
@@ -29,10 +29,10 @@ var AddDistributorModal = React.createClass({
 						: "disabled")} onClick={this.submitDistributor}>Add Distributor</button>
 				</Modal.Footer>
 			</Modal>
-		);
+		)
 	},
 	handleDistributorChange: function(event) {
-		// console.log(event.target.getChecked());
+		// console.log(event.target.getChecked())
 		this.setState({selectedDistributor: event.target.value})
 		if (event.target.value == "newDistributor") {
 			this.setState({showNewDistributorInput: true})
@@ -52,7 +52,7 @@ var AddDistributorModal = React.createClass({
 			if (this.state.newDistributorNameValue.trim() != "") {
 				this.setState({buttonEnabled: true})
 			} else {
-				this.setState({buttonEnabled: false});
+				this.setState({buttonEnabled: false})
 			}
 		}.bind(this))
 	},
@@ -83,7 +83,7 @@ var AddDistributorModal = React.createClass({
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
-			success: function(response) {
+			success: function() {
 				cb()
 			}
 		})
@@ -103,7 +103,7 @@ var AddDistributorModal = React.createClass({
 		})
 	},
 	createNewDistributor: function(distributorName, cb) {
-		data = {
+		var data = {
 			distributorName: distributorName
 		}
 		$.ajax({
@@ -121,6 +121,6 @@ var AddDistributorModal = React.createClass({
 	componentDidMount: function() {
 		this.getDistributors()
 	}
-});
+})
 
 module.exports = AddDistributorModal

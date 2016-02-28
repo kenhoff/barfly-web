@@ -1,6 +1,6 @@
-var React = require('react');
+var React = require('react')
 
-var ProfilePhoneInput = require('./ProfilePhoneInput.jsx');
+var ProfilePhoneInput = require('./ProfilePhoneInput.jsx')
 
 var Profile = React.createClass({
 
@@ -10,9 +10,9 @@ var Profile = React.createClass({
 				<h1>Profile</h1>
 				<ProfilePhoneInput/>
 			</div>
-		);
+		)
 	}
 
-});
+})
 
 module.exports = Profile

@@ -1,14 +1,11 @@
-var React = require('react');
+var React = require('react')
 
-var $ = require('jquery');
+var $ = require('jquery')
 
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
-var ButtonInput = require('react-bootstrap').ButtonInput;
-var ListGroup = require('react-bootstrap').ListGroup;
+var ListGroup = require('react-bootstrap').ListGroup
 
-var QuantityInputWithSize = require('./QuantityInputWithSize.jsx');
-var NewSizeForm = require('./NewSizeForm.jsx');
+var QuantityInputWithSize = require('./QuantityInputWithSize.jsx')
+var NewSizeForm = require('./NewSizeForm.jsx')
 
 // passed in a list of sizes, and quantities
 
@@ -67,6 +64,6 @@ var SizeList = React.createClass({
 	handleStarredChange: function(starChange) {
 		this.props.changeStarred(starChange)
 	}
-});
+})
 
-module.exports = SizeList;
+module.exports = SizeList

@@ -1,21 +1,20 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+/*global Auth0Lock*/
 
-var Router = require('react-router').Router;
-var Route = require('react-router').Route;
-var Link = require('react-router').Link;
-var Redirect = require('react-router').Redirect;
-var browserHistory = require('react-router').browserHistory;
-var jQuery = require('jquery')
-var $ = require('jquery'); // for bootstrap
-// require("bootstrap")
+var React = require('react')
+var ReactDOM = require('react-dom')
 
-var App = require('./App.jsx');
-var AppNav = require('./AppNav.jsx');
-var Orders = require('./Orders.jsx');
-var Order = require('./Order.jsx');
-var Profile = require('./Profile.jsx');
-var Landing = require('./Landing.jsx');
+var Router = require('react-router').Router
+var Route = require('react-router').Route
+var Redirect = require('react-router').Redirect
+var browserHistory = require('react-router').browserHistory
+var $ = require('jquery')
+
+var App = require('./App.jsx')
+var AppNav = require('./AppNav.jsx')
+var Orders = require('./Orders.jsx')
+var Order = require('./Order.jsx')
+var Profile = require('./Profile.jsx')
+var Landing = require('./Landing.jsx')
 
 var Main = React.createClass({
 
@@ -35,17 +34,17 @@ var Main = React.createClass({
 					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
 					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
-			);
+			)
 		} else {
 			return (
 				<div className="landing">
 					<Landing showLock={this.showLock}/>
 				</div>
-			);
+			)
 		}
 	},
 	componentWillMount: function() {
-		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
+		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN)
 		this.setState({idToken: this.getIdToken()})
 		$(document).ajaxError(function(event, request, settings) {
 			if (request.status == 401) {
@@ -85,7 +84,7 @@ var Main = React.createClass({
 				window.location.hash = ""
 			}
 			if (authHash.error) {
-				console.log("Error signing in with authHash:", authHash);
+				console.log("Error signing in with authHash:", authHash)
 				return null
 			}
 		}
@@ -103,7 +102,7 @@ var Main = React.createClass({
 		this.setState({currentBar: barID})
 	},
 	componentDidMount: function() {
-		this.getCurrentBar();
+		this.getCurrentBar()
 	},
 	getCurrentBar: function() {
 		// just loads the first bar we get back, for now.
@@ -136,8 +135,8 @@ var MainRouter = React.createClass({
 					<Route component={Profile} path="/profile"></Route>
 				</Route>
 			</Router>
-		);
+		)
 	}
-});
+})
 
 ReactDOM.render(< MainRouter />, document.getElementById('content'))

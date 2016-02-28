@@ -1,16 +1,14 @@
-var React = require('react');
+var React = require('react')
 
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var Panel = require('react-bootstrap').Panel;
+var Row = require('react-bootstrap').Row
+var Col = require('react-bootstrap').Col
+var Panel = require('react-bootstrap').Panel
 
-var DistributorField = require('./DistributorField.jsx');
-var RepField = require('./RepField.jsx');
-var SizeList = require('./SizeList.jsx');
+var DistributorField = require('./DistributorField.jsx')
+var RepField = require('./RepField.jsx')
+var SizeList = require('./SizeList.jsx')
 
-var $ = require('jquery');
+var $ = require('jquery')
 
 var ProductCard = React.createClass({
 	propTypes: {
@@ -21,7 +19,6 @@ var ProductCard = React.createClass({
 		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null})
 	},
 	render: function() {
-		// console.log(this.props.productID, this.props.starredSizes);
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
 			return (<div/>)
 		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
