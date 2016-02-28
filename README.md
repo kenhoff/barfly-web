@@ -5,7 +5,7 @@ The part that serves the pages
 
 **Build everything:** `nodemon --exec 'npm i' -e jsx,jade,styl`
 
-Build only app.js: `nodemon --exec 'npm run build' -e jsx`
+Set up hot reloading for app.js: `node_modules/.bin/watchify ./js/Main.jsx -t babelify -t localenvify -p livereactload -o static/app.js`
 
 Build and run tests: `nodemon --exec 'npm test -- --bail' -e jsx`
 

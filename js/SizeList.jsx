@@ -26,7 +26,7 @@ var SizeList = React.createClass({
 				</ListGroup>
 				{(this.props.inStarredProductsList || this.props.inOrderList)
 					? null
-					: <NewSizeForm productID={this.props.productID} refreshSizes={this.getSizesForProduct}/>}
+					: <NewSizeForm productName={this.props.productName} productID={this.props.productID} refreshSizes={this.getSizesForProduct}/>}
 			</div>
 		)
 	},
