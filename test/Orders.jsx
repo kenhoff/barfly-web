@@ -1,15 +1,13 @@
-React = require("react")
-ReactTestUtils = require("react-addons-test-utils")
-var chai = require('chai');
-var assert = chai.assert;
-var $ = require('jquery');
-var sinon = require('sinon');
-var ReactDOM = require('react-dom');
+var ReactTestUtils = require("react-addons-test-utils")
+var chai = require('chai')
+var assert = chai.assert
+var $ = require('jquery')
+var sinon = require('sinon')
 
-Orders = require("../js/Orders.jsx")
-var OrderListItem = require('../js/OrderListItem.jsx');
+var Orders = require("../js/Orders.jsx")
+var OrderListItem = require('../js/OrderListItem.jsx')
 
-var browserHistory = require('react-router').browserHistory;
+var browserHistory = require('react-router').browserHistory
 
 renderOrders = function() {
 	renderedOrders = ReactTestUtils.renderIntoDocument(< Orders bar = {
@@ -21,7 +19,7 @@ renderOrders = function() {
 
 describe("Orders", function() {
 	beforeEach(function() {
-		sinon.stub($, "ajax").yieldsTo("success", [
+		sinon.stub($, "ajax").onFirstCall().yieldsTo("success", [
 			{
 				id: 2,
 				sent: true
