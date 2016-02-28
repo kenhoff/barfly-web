@@ -1,15 +1,13 @@
-React = require("react")
-ReactTestUtils = require("react-addons-test-utils")
-var chai = require('chai');
-var assert = chai.assert;
-var $ = require('jquery');
-var sinon = require('sinon');
-var ReactDOM = require('react-dom');
+var ReactTestUtils = require("react-addons-test-utils")
+var chai = require('chai')
+var assert = chai.assert
+var $ = require('jquery')
+var sinon = require('sinon')
 
-Orders = require("../js/Orders.jsx")
-var OrderCard = require('../js/OrderCard.jsx');
+var Orders = require("../js/Orders.jsx")
+var OrderListItem = require('../js/OrderListItem.jsx')
 
-var browserHistory = require('react-router').browserHistory;
+var browserHistory = require('react-router').browserHistory
 
 renderOrders = function() {
 	renderedOrders = ReactTestUtils.renderIntoDocument(< Orders bar = {
@@ -21,7 +19,7 @@ renderOrders = function() {
 
 describe("Orders", function() {
 	beforeEach(function() {
-		sinon.stub($, "ajax").yieldsTo("success", [
+		sinon.stub($, "ajax").onFirstCall().yieldsTo("success", [
 			{
 				id: 2,
 				sent: true
@@ -67,9 +65,9 @@ describe("Orders", function() {
 		done()
 	})
 	it("when given a list of unsorted orders, sorts the orders before rendering them", function(done) {
-		orderCards = ReactTestUtils.scryRenderedComponentsWithType(renderedOrders, OrderCard)
+		OrderListItems = ReactTestUtils.scryRenderedComponentsWithType(renderedOrders, OrderListItem)
 		// because orders are shown in descending order (10...1) need to hack the iteration a bit
-		correctOrderCards = [
+		correctOrderListItems = [
 			10,
 			9,
 			8,
@@ -82,8 +80,8 @@ describe("Orders", function() {
 			1,
 			0
 		]
-		for (var i = 0; i < orderCards.length; i++) {
-			assert.equal(orderCards[i].props.order.id, correctOrderCards[i])
+		for (var i = 0; i < OrderListItems.length; i++) {
+			assert.equal(OrderListItems[i].props.order.id, correctOrderListItems[i])
 		}
 		done()
 	})
