@@ -1,11 +1,11 @@
-var React = require('react');
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
-var $ = require('jquery');
+var React = require('react')
+var Modal = require('react-bootstrap').Modal
+var Input = require('react-bootstrap').Input
+var $ = require('jquery')
 
-NewBarModal = React.createClass({
+var NewBarModal = React.createClass({
 	getInitialState: function() {
-		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false});
+		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false})
 	},
 	render: function() {
 		return (
@@ -31,7 +31,7 @@ NewBarModal = React.createClass({
 		)
 	},
 	handleBarNameInputChange: function(event) {
-		newValue = event.target.value
+		var newValue = event.target.value
 		this.setState({
 			barNameInputValue: newValue
 		}, function() {
@@ -39,7 +39,7 @@ NewBarModal = React.createClass({
 		})
 	},
 	handleZipCodeInputChange: function(event) {
-		newValue = event.target.value.replace(/[^0-9]/g, "").slice(0, 5)
+		var newValue = event.target.value.replace(/[^0-9]/g, "").slice(0, 5)
 		this.setState({
 			zipCodeInputValue: newValue
 		}, function() {

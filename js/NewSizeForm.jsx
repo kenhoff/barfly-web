@@ -1,21 +1,19 @@
-var React = require('react');
+var React = require('react')
 
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
-var ButtonInput = require('react-bootstrap').ButtonInput;
-var AddNewSizeModal = require('./AddNewSizeModal.jsx');
+var Button = require('react-bootstrap').Button
+var AddNewSizeModal = require('./AddNewSizeModal.jsx')
 
-var $ = require('jquery');
+var $ = require('jquery')
 
 var NewSizeForm = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			showAddNewSizeModal: false,
 			containers: [],
 			packaging: [],
 			newSizeButtonEnabled: false
 		}
-		return state;
+		return state
 	},
 	render: function() {
 		return (
@@ -29,7 +27,7 @@ var NewSizeForm = React.createClass({
 					this.setState({showAddNewSizeModal: false})
 				}.bind(this)} productName={this.props.productName}></AddNewSizeModal>
 			</div>
-		);
+		)
 	},
 
 	// <form className={this.state.showNewSizeForm
@@ -59,8 +57,8 @@ var NewSizeForm = React.createClass({
 		this.getPackaging()
 	},
 	handleNewSizeChange: function() {
-		containerID = this.refs.containerInput.getValue()
-		packagingID = this.refs.packagingInput.getValue()
+		var containerID = this.refs.containerInput.getValue()
+		var packagingID = this.refs.packagingInput.getValue()
 		if ((containerID == "nullContainer") || (packagingID == "nullPackaging")) {
 			this.setState({newSizeButtonEnabled: false})
 		} else {
@@ -68,15 +66,15 @@ var NewSizeForm = React.createClass({
 		}
 	},
 	handleNewSizeSubmit: function(event) {
-		event.preventDefault();
-		containerID = this.refs.containerInput.getValue()
-		packagingID = this.refs.packagingInput.getValue()
+		event.preventDefault()
+		var containerID = this.refs.containerInput.getValue()
+		var packagingID = this.refs.packagingInput.getValue()
 		// first, check to see if size already exists
 		this.checkToSeeIfSizeExists(containerID, packagingID, function(err, size) {
 			if (size) {
 				// if size exists, save returned size to product
 				this.saveSizeToProduct(size.id, function(err) {
-					if (err) {} else {
+					if (!err) {
 						// do whatever it is that we do once saving a product
 						this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 						this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"
@@ -88,7 +86,7 @@ var NewSizeForm = React.createClass({
 				// if not, create new size (and save new size to product)
 				this.createNewSize(containerID, packagingID, function(err, sizeID) {
 					this.saveSizeToProduct(sizeID, function(err) {
-						if (err) {} else {
+						if (!err) {
 							// do whatever it is that we do once saving a product
 							this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 							this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"
@@ -184,6 +182,6 @@ var NewSizeForm = React.createClass({
 			}.bind(this)
 		})
 	}
-});
+})
 
-module.exports = NewSizeForm;
+module.exports = NewSizeForm

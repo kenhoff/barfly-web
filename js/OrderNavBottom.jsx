@@ -1,6 +1,6 @@
-var React = require('react');
-var Navbar = require('react-bootstrap').Navbar;
-var Button = require('react-bootstrap').Button;
+var React = require('react')
+var Navbar = require('react-bootstrap').Navbar
+var Button = require('react-bootstrap').Button
 
 var OrderNavBottom = React.createClass({
 	render: function() {
@@ -23,6 +23,6 @@ var OrderNavBottom = React.createClass({
 			this.props.sendOrder()
 		}
 	}
-});
+})
 
 module.exports = OrderNavBottom

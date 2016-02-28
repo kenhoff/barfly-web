@@ -1,12 +1,11 @@
-var sinon = require('sinon');
-var React = require('react');
-var ReactTestUtils = require('react-addons-test-utils');
-var $ = require('jquery');
-var assert = require('assert');
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
+var sinon = require('sinon')
+var ReactTestUtils = require('react-addons-test-utils')
+var $ = require('jquery')
+var assert = require('assert')
+var Modal = require('react-bootstrap').Modal
+var Input = require('react-bootstrap').Input
 
-var AddDistributorModal = require('../js/AddDistributorModal.jsx');
+var AddDistributorModal = require('../js/AddDistributorModal.jsx')
 
 renderAddDistributorModal = function() {
 	renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
@@ -17,13 +16,9 @@ renderAddDistributorModal = function() {
 	} />)
 	buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button")
 
-	// inputs = ReactTestUtils.scryRenderedComponentsWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input)
-
 	newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
 		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "text")
 	})[0].getInputDOMNode()
-
-	// newDistributorNameInput = ReactTestUtils.findRenderedComponentWithType(renderedAddDistributorModal.refs.AddDistributorModal._modal, Input).getInputDOMNode()
 
 	submitButton = buttons[2]
 

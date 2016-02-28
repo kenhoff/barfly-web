@@ -1,8 +1,6 @@
-var React = require('react');
-var Navbar = require('react-bootstrap').Navbar;
-var Nav = require('react-bootstrap').Nav;
-var NavItem = require('react-bootstrap').NavItem;
-var Input = require('react-bootstrap').Input;
+var React = require('react')
+var Navbar = require('react-bootstrap').Navbar
+var Input = require('react-bootstrap').Input
 
 var SearchNav = React.createClass({
 
@@ -13,9 +11,8 @@ var SearchNav = React.createClass({
 					<Input type="text" placeholder="Search" value={this.props.value} onChange={this.props.updateSearch}/>
 				</Navbar.Form>
 			</Navbar>
-		);
-	},
+		)
+	}
+})
 
-});
-
-module.exports = SearchNav;
+module.exports = SearchNav

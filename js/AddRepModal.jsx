@@ -1,7 +1,7 @@
-var React = require('react');
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
-var $ = require('jquery');
+var React = require('react')
+var Modal = require('react-bootstrap').Modal
+var Input = require('react-bootstrap').Input
+var $ = require('jquery')
 
 var AddRepModal = React.createClass({
 	getInitialState: function() {
@@ -39,7 +39,7 @@ var AddRepModal = React.createClass({
 						: "disabled")} onClick={this.submitRep}>Add Rep</button>
 				</Modal.Footer>
 			</Modal>
-		);
+		)
 	},
 	submitRep: function() {
 		if (this.state.buttonEnabled) {
@@ -183,7 +183,7 @@ var AddRepModal = React.createClass({
 
 var RepOption = React.createClass({
 	getInitialState: function() {
-		return {repName: ""};
+		return {repName: ""}
 	},
 	render: function() {
 		return (<Input name="reps" label={this.state.repName} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>)
@@ -202,7 +202,6 @@ var RepOption = React.createClass({
 			}
 		})
 	}
-
-});
+})
 
 module.exports = AddRepModal
