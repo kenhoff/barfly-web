@@ -1,5 +1,3 @@
-/*global describe it before after beforeEach afterEach */
-
 var sinon = require('sinon')
 var ReactTestUtils = require('react-addons-test-utils')
 var $ = require('jquery')
@@ -9,20 +7,20 @@ var Input = require('react-bootstrap').Input
 
 var AddDistributorModal = require('../js/AddDistributorModal.jsx')
 
-var renderAddDistributorModal = function() {
-	var renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
+renderAddDistributorModal = function() {
+	renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
 		100
 	}
 	showModal = {
 		true
 	} />)
-	var buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button")
+	buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button")
 
-	var newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
+	newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
 		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "text")
 	})[0].getInputDOMNode()
 
-	var submitButton = buttons[2]
+	submitButton = buttons[2]
 
 	radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
 		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "radio")
