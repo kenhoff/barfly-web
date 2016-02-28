@@ -1,10 +1,8 @@
-var React = require('react');
-var PropTypes = React.PropTypes;
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
+var React = require('react')
+var Modal = require('react-bootstrap').Modal
 
-var ContainerSelect = require('./ContainerSelect.jsx');
-var PackagingSelect = require('./PackagingSelect.jsx');
+var ContainerSelect = require('./ContainerSelect.jsx')
+var PackagingSelect = require('./PackagingSelect.jsx')
 
 var AddNewSizeModal = React.createClass({
 
@@ -25,9 +23,8 @@ var AddNewSizeModal = React.createClass({
 					<button className="btn btn-primary" onClick={this.submitRep}>Save size</button>
 				</Modal.Footer>
 			</Modal>
-		);
+		)
 	}
+})
 
-});
-
-module.exports = AddNewSizeModal;
+module.exports = AddNewSizeModal
