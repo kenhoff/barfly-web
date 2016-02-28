@@ -8,7 +8,7 @@ var $ = require('jquery');
 
 var NewSizeForm = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			showNewSizeForm: false,
 			containers: [],
 			packaging: [],
@@ -49,7 +49,7 @@ var NewSizeForm = React.createClass({
 		);
 	},
 	componentDidMount: function() {
-		this.getContainers()
+		// this.getContainers()
 		this.getPackaging()
 	},
 	handleNewSizeChange: function() {
@@ -70,8 +70,7 @@ var NewSizeForm = React.createClass({
 			if (size) {
 				// if size exists, save returned size to product
 				this.saveSizeToProduct(size.id, function(err) {
-					if (err) {
-					} else {
+					if (err) {} else {
 						// do whatever it is that we do once saving a product
 						this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 						this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"
@@ -83,8 +82,7 @@ var NewSizeForm = React.createClass({
 				// if not, create new size (and save new size to product)
 				this.createNewSize(containerID, packagingID, function(err, sizeID) {
 					this.saveSizeToProduct(sizeID, function(err) {
-						if (err) {
-						} else {
+						if (err) {} else {
 							// do whatever it is that we do once saving a product
 							this.refs.containerInput.getInputDOMNode().value = "nullContainer"
 							this.refs.packagingInput.getInputDOMNode().value = "nullPackaging"
@@ -142,24 +140,6 @@ var NewSizeForm = React.createClass({
 					cb(null)
 				}
 			}
-		})
-	},
-	getContainers: function() {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/containers",
-			method: "GET",
-			success: function(containers) {
-				containers.sort(function(a, b) {
-					if (a.containerName.toLowerCase() > b.containerName.toLowerCase()) {
-						return 1
-					} else if (a.containerName.toLowerCase() < b.containerName.toLowerCase()) {
-						return -1
-					} else {
-						return 0
-					}
-				})
-				this.setState({containers: containers})
-			}.bind(this)
 		})
 	},
 	getPackaging: function() {

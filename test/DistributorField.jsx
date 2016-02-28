@@ -6,6 +6,8 @@ var ReactTestUtils = require('react-addons-test-utils');
 
 var DistributorField = require('../js/DistributorField.jsx');
 
+var $ = require('jquery');
+
 var AddDistributorModal = React.createClass({
 	render: function() {
 		return (<div/>)

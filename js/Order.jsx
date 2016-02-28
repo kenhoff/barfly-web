@@ -1,15 +1,16 @@
-var React = require('react');
-var PageHeader = require('react-bootstrap').PageHeader;
-var browserHistory = require('react-router').browserHistory;
-var Waypoint = require('react-waypoint');
-var $ = require('jquery');
-var async = require('async');
+// this is used for ESLint to ignore process.env
+/*global process*/
 
-var ProductList = require('./ProductList.jsx');
-var ProductCard = require('./ProductCard.jsx');
-var NewProductModal = require('./NewProductModal.jsx');
-var OrderNavBottom = require('./OrderNavBottom.jsx');
-var SearchNav = require('./SearchNav.jsx');
+var React = require("react")
+var PageHeader = require("react-bootstrap").PageHeader
+var browserHistory = require("react-router").browserHistory
+var Waypoint = require('react-waypoint')
+var $ = require('jquery')
+
+var ProductList = require('./ProductList.jsx')
+var NewProductModal = require('./NewProductModal.jsx')
+var OrderNavBottom = require('./OrderNavBottom.jsx')
+var SearchNav = require('./SearchNav.jsx')
 
 var Order = React.createClass({
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
@@ -27,7 +28,7 @@ var Order = React.createClass({
 			productOrders: [],
 			starred: [],
 			showNewProductModal: false,
-			search: "",
+			search: '',
 			sent: true,
 			searchNavFixed: false
 		}
@@ -77,10 +78,10 @@ var Order = React.createClass({
 					sizeID: starredChange.sizeID,
 					productID: starredChange.productID
 				},
-				success: function(stars) {
-					starred = this.state.starred
+				success: function() {
+					var starred = this.state.starred
 					starred.push({sizeID: starredChange.sizeID, productID: starredChange.productID})
-					this.setState({starred: starred});
+					this.setState({starred: starred})
 				}.bind(this)
 			})
 			// just push the value onto state.starred
@@ -97,10 +98,10 @@ var Order = React.createClass({
 					sizeID: starredChange.sizeID,
 					productID: starredChange.productID
 				},
-				success: function(stars) {
+				success: function() {
 					// find star in state.starred with the right sizeID and productID
-					starred = this.state.starred
-					for (star of starred) {
+					var starred = this.state.starred
+					for (var star of starred) {
 						if ((star.sizeID == starredChange.sizeID) && (star.productID == starredChange.productID)) {
 							starred.splice(starred.indexOf(star), 1)
 							this.setState({starred: starred})
@@ -126,7 +127,7 @@ var Order = React.createClass({
 		})
 	},
 	sendOrder: function() {
-		this.setState({sending: true});
+		this.setState({sending: true})
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -158,7 +159,7 @@ var Order = React.createClass({
 		// change existing state to reflect new quantity change
 
 		// if combination of productID and productSizeID exist in productOrders,
-		this.setState(function(prevState, currentProps) {
+		this.setState(function(prevState) {
 			for (var i = 0; i < prevState.productOrders.length; i++) {
 				if (((prevState.productOrders[i].productID == productID) && (prevState.productOrders[i].productSizeID == productSizeID))) {
 					// if productQuantity == 0, then remove from productOrders.splice(i, 1)
@@ -177,7 +178,7 @@ var Order = React.createClass({
 			}
 			// else, insert that particular combination of productID, productSizeID and productQuantity into productOrders
 			if (!isNaN(productQuantity)) {
-				newOrderProducts = this.state.productOrders
+				var newOrderProducts = this.state.productOrders
 				newOrderProducts.push({productID: productID, productSizeID: productSizeID, productQuantity: productQuantity})
 				// next, send a PATCH to /orders/:orderID with new order state
 				// this.patchOrder(newOrderProducts)
@@ -211,10 +212,10 @@ var Order = React.createClass({
 		})
 	},
 
-	patchOrder: function(productOrders) {
-		data = {
+	patchOrder: function() {
+		var data = {
 			orders: this.state.productOrders
-		},
+		}
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
@@ -222,7 +223,7 @@ var Order = React.createClass({
 			},
 			method: "PATCH",
 			data: data,
-			success: function(data) {}
+			success: function() {}
 		})
 	},
 

@@ -3,7 +3,7 @@ var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var $ = require('jquery');
 
-NewBarModal = React.createClass({
+var NewBarModal = React.createClass({
 	getInitialState: function() {
 		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false});
 	},

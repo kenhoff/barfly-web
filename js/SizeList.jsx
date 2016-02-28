@@ -14,7 +14,7 @@ var NewSizeForm = require('./NewSizeForm.jsx');
 
 var SizeList = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			productSizes: []
 		}
 		return (state)
@@ -37,7 +37,7 @@ var SizeList = React.createClass({
 		this.getSizesForProduct()
 	},
 	getStarred: function(sizeID) {
-		for (starredSize of this.props.starredSizes) {
+		for (var starredSize of this.props.starredSizes) {
 			if (starredSize == sizeID) {
 				return true
 			}
@@ -45,7 +45,7 @@ var SizeList = React.createClass({
 		return false
 	},
 	getQuantityForSizeID: function(sizeID) {
-		for (quantity of this.props.quantities) {
+		for (var quantity of this.props.quantities) {
 			if (quantity.productSizeID == sizeID) {
 				return quantity.productQuantity
 			}

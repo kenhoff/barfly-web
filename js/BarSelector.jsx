@@ -31,9 +31,9 @@ var BarSelector = React.createClass({
 				</div>
 			)
 		} else {
-			bars = this.state.bars
+			var bars = this.state.bars
 			// index of current bar
-			index = bars.indexOf(this.props.currentBar)
+			var index = bars.indexOf(this.props.currentBar)
 			bars.splice(index, 1)
 			return (
 				<ul className="nav navbar-nav">
@@ -83,7 +83,7 @@ var BarSelector = React.createClass({
 	}
 })
 
-BarSelectorDropdownDisplayed = React.createClass({
+var BarSelectorDropdownDisplayed = React.createClass({
 	getInitialState: function() {
 		return ({barName: "Loading bars..."})
 	},
@@ -95,20 +95,31 @@ BarSelectorDropdownDisplayed = React.createClass({
 		)
 	},
 	componentDidMount: function() {
-		resolveBarName(this.props.currentBar, function(barName) {
+		this.resolveBarName(this.props.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	},
 	componentWillReceiveProps: function(nextProps) {
-		resolveBarName(nextProps.currentBar, function(barName) {
+		this.resolveBarName(nextProps.currentBar, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
+	},
+	resolveBarName: function(barID, cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/bars/" + barID,
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(barInfo) {
+				cb(barInfo.barName)
+			}
+		})
 	}
 })
 
-BarSelectorDropdownList = React.createClass({
+var BarSelectorDropdownList = React.createClass({
 	render: function() {
-		bars = this.props.bars
+		var bars = this.props.bars
 		return (
 			<ul className="dropdown-menu">
 				{bars.map(function(bar) {
@@ -119,7 +130,7 @@ BarSelectorDropdownList = React.createClass({
 	}
 })
 
-IndividualBarInDropdownList = React.createClass({
+var IndividualBarInDropdownList = React.createClass({
 	getInitialState: function() {
 		return {barName: "Loading bar..."}
 	},
@@ -134,27 +145,26 @@ IndividualBarInDropdownList = React.createClass({
 		this.props.changeBar(this.props.barID)
 	},
 	componentDidMount: function() {
-		resolveBarName(this.props.barID, function(barName) {
+		this.resolveBarName(this.props.barID, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
 	},
 	componentWillReceiveProps: function(nextProps) {
-		resolveBarName(nextProps.barID, function(barName) {
+		this.resolveBarName(nextProps.barID, function(barName) {
 			this.setState({barName: barName})
 		}.bind(this))
+	},
+	resolveBarName: function(barID, cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/bars/" + barID,
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(barInfo) {
+				cb(barInfo.barName)
+			}
+		})
 	}
 })
-
-resolveBarName = function(barID, cb) {
-	$.ajax({
-		url: process.env.BURLOCK_API_URL + "/bars/" + barID,
-		headers: {
-			"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-		},
-		success: function(barInfo) {
-			cb(barInfo.barName)
-		}
-	})
-}
 
 module.exports = BarSelector

@@ -6,9 +6,9 @@ var Route = require('react-router').Route;
 var Link = require('react-router').Link;
 var Redirect = require('react-router').Redirect;
 var browserHistory = require('react-router').browserHistory;
-
-var $ = jQuery = require('jquery'); // for bootstrap
-require("bootstrap")
+var jQuery = require('jquery')
+var $ = require('jquery'); // for bootstrap
+// require("bootstrap")
 
 var App = require('./App.jsx');
 var AppNav = require('./AppNav.jsx');

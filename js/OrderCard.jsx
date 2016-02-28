@@ -1,14 +1,13 @@
-var React = require('react');
-var moment = require('moment-timezone');
-var jstz = require('jstimezonedetect');
+var React = require('react')
+var moment = require('moment-timezone')
+var jstz = require('jstimezonedetect')
 
-timezone = jstz.determine().name()
-
-var browserHistory = require('react-router').browserHistory;
+var browserHistory = require('react-router').browserHistory
 
 var OrderCard = React.createClass({
 	render: function() {
-		console.log(this.props.order);
+		var displayTime
+		var timezone = jstz.determine().name()
 		if ("sent" in this.props.order) {
 			if (this.props.order.sent) {
 				if ("sentAt" in this.props.order) {
@@ -31,11 +30,11 @@ var OrderCard = React.createClass({
 					</div>
 				</div>
 			</div>
-		);
+		)
 	},
 	navigateToOrder: function() {
 		browserHistory.push("/orders/" + this.props.order.id)
 	}
-});
+})
 
 module.exports = OrderCard

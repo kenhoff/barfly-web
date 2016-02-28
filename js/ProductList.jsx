@@ -29,8 +29,8 @@ var ProductList = React.createClass({
 		this.props.changeStarred(starredChange)
 	},
 	getQuantitiesForProduct: function(productID) {
-		productQuantities = []
-		for (productOrder of this.props.productOrders) {
+		var productQuantities = []
+		for (var productOrder of this.props.productOrders) {
 			if (productOrder.productID == productID) {
 				productQuantities.push({productQuantity: productOrder.productQuantity, productSizeID: productOrder.productSizeID})
 			}

@@ -6,7 +6,7 @@ var Input = require('react-bootstrap').Input;
 
 var NewProductModal = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			buttonEnabled: false
 		}
 		return (state)

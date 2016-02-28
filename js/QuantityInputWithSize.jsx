@@ -8,6 +8,7 @@ var FormControls = require("react-bootstrap").FormControls
 var Row = require("react-bootstrap").Row
 var Col = require("react-bootstrap").Col
 var ListGroupItem = require('react-bootstrap').ListGroupItem;
+var $ = require('jquery');
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
@@ -21,10 +22,10 @@ var QuantityInputWithSize = React.createClass({
 		} else if (this.props.disabled) {
 			return (<FormControls.Static label={this.state.containerName + ", " + this.state.packagingName} placeholder="0" type="number" value={this.state.quantity}/>)
 		} else {
-			minusButton = <Button onClick={this.decrement}>-</Button>
-			plusButton = <Button onClick={this.increment}>+</Button>
+			var minusButton = <Button onClick={this.decrement}>-</Button>
+			var plusButton = <Button onClick={this.increment}>+</Button>
 
-			starButton = <span className="glyphicon glyphicon-star"/>
+			var starButton = <span className="glyphicon glyphicon-star"/>
 
 			return (
 				<ListGroupItem>
