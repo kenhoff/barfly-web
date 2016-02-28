@@ -1,20 +1,17 @@
-var React = require('react');
+var React = require('react')
 
-var $ = require('jquery');
+var $ = require('jquery')
 
-var Input = require('react-bootstrap').Input;
-var Button = require('react-bootstrap').Button;
-var ButtonInput = require('react-bootstrap').ButtonInput;
-var ListGroup = require('react-bootstrap').ListGroup;
+var ListGroup = require('react-bootstrap').ListGroup
 
-var QuantityInputWithSize = require('./QuantityInputWithSize.jsx');
-var NewSizeForm = require('./NewSizeForm.jsx');
+var QuantityInputWithSize = require('./QuantityInputWithSize.jsx')
+var NewSizeForm = require('./NewSizeForm.jsx')
 
 // passed in a list of sizes, and quantities
 
 var SizeList = React.createClass({
 	getInitialState: function() {
-		state = {
+		var state = {
 			productSizes: []
 		}
 		return (state)
@@ -37,7 +34,7 @@ var SizeList = React.createClass({
 		this.getSizesForProduct()
 	},
 	getStarred: function(sizeID) {
-		for (starredSize of this.props.starredSizes) {
+		for (var starredSize of this.props.starredSizes) {
 			if (starredSize == sizeID) {
 				return true
 			}
@@ -45,7 +42,7 @@ var SizeList = React.createClass({
 		return false
 	},
 	getQuantityForSizeID: function(sizeID) {
-		for (quantity of this.props.quantities) {
+		for (var quantity of this.props.quantities) {
 			if (quantity.productSizeID == sizeID) {
 				return quantity.productQuantity
 			}
@@ -67,6 +64,6 @@ var SizeList = React.createClass({
 	handleStarredChange: function(starChange) {
 		this.props.changeStarred(starChange)
 	}
-});
+})
 
-module.exports = SizeList;
+module.exports = SizeList

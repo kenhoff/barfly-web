@@ -1,12 +1,14 @@
-sinon = require("sinon")
-React = require("react")
-ReactTestUtils = require("react-addons-test-utils")
-var ReactDOM = require('react-dom');
-Input = require("react-bootstrap").Input
-Button = require("react-bootstrap").Button
-var assert = require('assert');
+var sinon = require("sinon")
+// var React = require("react")
+var ReactTestUtils = require("react-addons-test-utils")
+var ReactDOM = require('react-dom')
+var Input = require("react-bootstrap").Input
+var Button = require("react-bootstrap").Button
+var assert = require('assert')
 
-var QuantityInputWithSize = require('../js/QuantityInputWithSize.jsx');
+var $ = require('jquery')
+
+var QuantityInputWithSize = require('../js/QuantityInputWithSize.jsx')
 
 describe("QuantityInputWithSize", function() {
 	renderQuantityInputWithSize = function(quantity) {

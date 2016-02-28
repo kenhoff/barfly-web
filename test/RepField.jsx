@@ -3,6 +3,8 @@ var sinon = require('sinon');
 var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
+var $ = require('jquery');
+
 var RepField = require('../js/RepField.jsx');
 
 var AddRepModal = React.createClass({

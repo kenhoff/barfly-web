@@ -1,13 +1,13 @@
-var React = require('react');
+var React = require('react')
 $ = require('jquery')
 var Button = require("react-bootstrap").Button
 var Glyphicon = require("react-bootstrap").Glyphicon
-var ButtonInput = require("react-bootstrap").ButtonInput
 var Input = require("react-bootstrap").Input
 var FormControls = require("react-bootstrap").FormControls
 var Row = require("react-bootstrap").Row
 var Col = require("react-bootstrap").Col
-var ListGroupItem = require('react-bootstrap').ListGroupItem;
+var ListGroupItem = require('react-bootstrap').ListGroupItem
+var $ = require('jquery')
 
 var QuantityInputWithSize = React.createClass({
 	getInitialState: function() {
@@ -21,10 +21,8 @@ var QuantityInputWithSize = React.createClass({
 		} else if (this.props.disabled) {
 			return (<FormControls.Static label={this.state.containerName + ", " + this.state.packagingName} placeholder="0" type="number" value={this.state.quantity}/>)
 		} else {
-			minusButton = <Button onClick={this.decrement}>-</Button>
-			plusButton = <Button onClick={this.increment}>+</Button>
-
-			starButton = <span className="glyphicon glyphicon-star"/>
+			var minusButton = <Button onClick={this.decrement}>-</Button>
+			var plusButton = <Button onClick={this.increment}>+</Button>
 
 			return (
 				<ListGroupItem>
@@ -52,7 +50,7 @@ var QuantityInputWithSize = React.createClass({
 				this.setState({containerName: containerName})
 			}.bind(this))
 			this.getPackagingName(size.packagingID, function(err, packagingName) {
-				this.setState({packagingName: packagingName});
+				this.setState({packagingName: packagingName})
 			}.bind(this))
 		}.bind(this))
 
@@ -131,6 +129,6 @@ var QuantityInputWithSize = React.createClass({
 			sizeID: this.props.sizeID
 		})
 	}
-});
+})
 
 module.exports = QuantityInputWithSize

@@ -1,11 +1,8 @@
-var React = require('react');
+var React = require('react')
 
-var $ = require('jquery');
+var $ = require('jquery')
 
-var Modal = require('react-bootstrap').Modal;
-var Input = require('react-bootstrap').Input;
-
-var AddDistributorModal = require('./AddDistributorModal.jsx');
+var AddDistributorModal = require('./AddDistributorModal.jsx')
 
 var DistributorField = React.createClass({
 	getInitialState: function() {
@@ -32,7 +29,7 @@ var DistributorField = React.createClass({
 						<b>Distributor:</b>&nbsp;
 						{this.state.distributorName}</p>
 				</div>
-			);
+			)
 		}
 	},
 	openModal: function() {

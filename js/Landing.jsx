@@ -1,5 +1,4 @@
-var React = require('react');
-var PropTypes = React.PropTypes;
+var React = require('react')
 
 var Landing = React.createClass({
 	render: function() {
