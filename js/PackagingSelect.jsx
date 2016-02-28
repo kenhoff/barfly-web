@@ -8,7 +8,7 @@ var PackagingSelect = React.createClass({
 	},
 	render: function() {
 		return (
-			<Input type="select" label="Packaging" ref="packagingInput">
+			<Input id="PackagingSelect" type="select" label="Packaging" ref="packagingInput" value={this.props.selectedPackagingID}>
 				<option key={null} value="nullPackaging">Please select a packaging</option>
 				{this.state.packaging.map(function(packaging) {
 					return (

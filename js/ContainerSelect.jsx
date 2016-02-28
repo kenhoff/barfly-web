@@ -8,7 +8,7 @@ var ContainerSelect = React.createClass({
 	},
 	render: function() {
 		return (
-			<Input type="select" label="Container" ref="containerInput">
+			<Input id="ContainerSelect" type="select" label="Container" ref="containerInput" value={this.props.selectedContainerID}>
 				<option key={null} value="nullContainer">Please select a container</option>
 				{this.state.containers.map(function(container) {
 					return (
