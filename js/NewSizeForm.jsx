@@ -33,29 +33,8 @@ var NewSizeForm = React.createClass({
 	// <form className={this.state.showNewSizeForm
 	// 	? "show"
 	// 	: "hidden"} onSubmit={this.handleNewSizeSubmit} onChange={this.handleNewSizeChange}>
-	// 	<Input type="select" label="Container" ref="containerInput">
-	// 		<option key={null} value="nullContainer">Please select a container</option>
-	// 		{this.state.containers.map(function(container) {
-	// 			return (
-	// 				<option key={container.id} value={container.id}>{container.containerName}</option>
-	// 			)
-	// 		})}
-	// 	</Input>
-	// 	<Input type="select" label="Packaging" ref="packagingInput">
-	// 		<option key={null} value="nullPackaging">Please select a packaging</option>
-	// 		{this.state.packaging.map(function(packaging) {
-	// 			return (
-	// 				<option key={packaging.id} value={packaging.id}>{packaging.packagingName}</option>
-	// 			)
-	// 		})}
-	// 	</Input>
-	// 	<ButtonInput type="submit" value="Add New Size" disabled={!this.state.newSizeButtonEnabled}/>
 	// </form>
 
-	componentDidMount: function() {
-		this.getContainers()
-		this.getPackaging()
-	},
 	handleNewSizeChange: function() {
 		var containerID = this.refs.containerInput.getValue()
 		var packagingID = this.refs.packagingInput.getValue()
@@ -144,42 +123,6 @@ var NewSizeForm = React.createClass({
 					cb(null)
 				}
 			}
-		})
-	},
-	getContainers: function() {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/containers",
-			method: "GET",
-			success: function(containers) {
-				containers.sort(function(a, b) {
-					if (a.containerName.toLowerCase() > b.containerName.toLowerCase()) {
-						return 1
-					} else if (a.containerName.toLowerCase() < b.containerName.toLowerCase()) {
-						return -1
-					} else {
-						return 0
-					}
-				})
-				this.setState({containers: containers})
-			}.bind(this)
-		})
-	},
-	getPackaging: function() {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/packaging",
-			method: "GET",
-			success: function(packaging) {
-				packaging.sort(function(a, b) {
-					if (a.packagingName.toLowerCase() > b.packagingName.toLowerCase()) {
-						return 1
-					} else if (a.packagingName.toLowerCase() < b.packagingName.toLowerCase()) {
-						return -1
-					} else {
-						return 0
-					}
-				})
-				this.setState({packaging: packaging})
-			}.bind(this)
 		})
 	}
 })
