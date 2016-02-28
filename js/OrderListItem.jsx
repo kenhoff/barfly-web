@@ -4,6 +4,7 @@ var jstz = require('jstimezonedetect')
 var $ = require('jquery')
 var Row = require('react-bootstrap').Row
 var Col = require('react-bootstrap').Col
+var ProductOrderSummaryItem = require('./ProductOrderSummaryItem.jsx')
 
 var browserHistory = require('react-router').browserHistory
 
@@ -35,7 +36,11 @@ var OrderListItem = React.createClass({
 							Order #{this.props.order.id}
 						</Col>
 						<Col xs={7}>
-							this is where the order info goes
+							<ul>
+								{this.state.productOrders.map(function(productOrder) {
+									return (<ProductOrderSummaryItem key={productOrder.id} productOrder={productOrder}/>)
+								})}
+							</ul>
 						</Col>
 						<Col xs={3}>
 							{displayTime}
