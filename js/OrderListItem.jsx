@@ -4,7 +4,7 @@ var jstz = require('jstimezonedetect')
 
 var browserHistory = require('react-router').browserHistory
 
-var OrderCard = React.createClass({
+var OrderListItem = React.createClass({
 	render: function() {
 		var displayTime
 		var timezone = jstz.determine().name()
@@ -37,4 +37,4 @@ var OrderCard = React.createClass({
 	}
 })
 
-module.exports = OrderCard
+module.exports = OrderListItem

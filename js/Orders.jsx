@@ -4,7 +4,7 @@ var browserHistory = require('react-router').browserHistory
 
 var $ = require('jquery')
 
-var OrderCard = require('./OrderCard.jsx')
+var OrderListItem = require('./OrderListItem.jsx')
 
 var Orders = React.createClass({
 	getInitialState: function() {
@@ -16,7 +16,7 @@ var Orders = React.createClass({
 				<h1>Orders</h1>
 				<button onClick={this.newOrder}>New Order</button>
 				{this.state.orders.map(function(order) {
-					return (<OrderCard key={order.id} order={order}/>)
+					return (<OrderListItem key={order.id} order={order}/>)
 				})}
 			</div>
 		)
