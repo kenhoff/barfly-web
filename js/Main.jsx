@@ -79,7 +79,9 @@ var Main = React.createClass({
 				idToken = authHash.id_token
 				// this is correct - we want to store and use the full JWT, not just the "access_token" in the authHash
 				localStorage.setItem("access_jwt", authHash.id_token)
-				localStorage.setItem("refresh_token", authHash.refresh_token)
+				if ("refresh_token" in authHash) {
+					localStorage.setItem("refresh_token", authHash.refresh_token)
+				}
 				// this is pretty hacky - get rid of the hash when the page gets redirected.
 				window.location.hash = ""
 			}
