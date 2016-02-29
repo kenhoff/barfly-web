@@ -1,30 +1,35 @@
 var React = require('react')
 var $ = require('jquery')
+var Navbar = require('react-bootstrap').Navbar
+var Nav = require('react-bootstrap').Nav
+var NavItem = require('react-bootstrap').NavItem
+var NavDropdown = require('react-bootstrap').NavDropdown
+var Button = require('react-bootstrap').Button
 
 var NewBarModal = require('./NewBarModal.jsx')
 
-
 var BarSelector = React.createClass({
+	propTypes: {
+		currentBar: React.PropTypes.number
+	},
 	getInitialState: function() {
-		return {showModal: false, bars: []}
+		return {showModal: false, bars: [], selectedBarName: "Loading bar..."}
 	},
 	render: function() {
 		if (this.props.currentBar == null) {
 			return (
-				<div>
-					<ul className="nav navbar-nav">
-						<li>
-							<a>Loading...</a>
-						</li>
-					</ul>
-				</div>
+				<NavItem>
+					Loading...
+				</NavItem>
 			)
 		} else if (this.props.currentBar == -1) {
 			return (
 				<div>
-					<div className="navbar-form navbar-left">
-						<button onClick={this.openNewBarModal} className="btn btn-default">Add a new Bar</button>
-					</div>
+					<Navbar.Form>
+						<Button onClick={this.openNewBarModal}>
+							Add a new Bar
+						</Button>
+					</Navbar.Form>
 					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.changeBar}/>
 				</div>
 			)
@@ -34,12 +39,14 @@ var BarSelector = React.createClass({
 			var index = bars.indexOf(this.props.currentBar)
 			bars.splice(index, 1)
 			return (
-				<ul className="nav navbar-nav">
-					<li className="dropdown">
-						<BarSelectorDropdownDisplayed currentBar={this.props.currentBar}/>
-						<BarSelectorDropdownList bars={bars} changeBar={this.changeBar}/>
-					</li>
-				</ul>
+				<Nav>
+					<NavDropdown id="Bar Select Menu" title={this.state.selectedBarName}>
+						{this.state.bars.map(function(bar) {
+							return (<IndividualBarInDropdownList key={bar} barID={bar} changeBar={this.props.changeBar}/>)
+						}.bind(this))}
+					</NavDropdown>
+				</Nav>
+
 			)
 		}
 	},
@@ -66,41 +73,24 @@ var BarSelector = React.createClass({
 		})
 	},
 	componentDidMount: function() {
-		if (this.props.currentBar >= 0) {
+		if (this.props.currentBar && this.props.currentBar >= 0) {
 			this.loadBars(function(bars) {
 				this.setState({bars: bars})
+			}.bind(this))
+			this.resolveBarName(this.props.currentBar, function(barName) {
+				this.setState({selectedBarName: barName})
 			}.bind(this))
 		}
 	},
 	componentWillReceiveProps: function(nextProps) {
-		if (nextProps.currentBar >= 0) {
+		if (nextProps.currentBar && nextProps.currentBar >= 0) {
 			this.loadBars(function(bars) {
 				this.setState({bars: bars})
 			}.bind(this))
+			this.resolveBarName(nextProps.currentBar, function(barName) {
+				this.setState({selectedBarName: barName})
+			}.bind(this))
 		}
-	}
-})
-
-var BarSelectorDropdownDisplayed = React.createClass({
-	getInitialState: function() {
-		return ({barName: "Loading bars..."})
-	},
-	render: function() {
-		return (
-			<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.barName}
-				<span className="caret"></span>
-			</a>
-		)
-	},
-	componentDidMount: function() {
-		this.resolveBarName(this.props.currentBar, function(barName) {
-			this.setState({barName: barName})
-		}.bind(this))
-	},
-	componentWillReceiveProps: function(nextProps) {
-		this.resolveBarName(nextProps.currentBar, function(barName) {
-			this.setState({barName: barName})
-		}.bind(this))
 	},
 	resolveBarName: function(barID, cb) {
 		$.ajax({
@@ -115,28 +105,15 @@ var BarSelectorDropdownDisplayed = React.createClass({
 	}
 })
 
-var BarSelectorDropdownList = React.createClass({
-	render: function() {
-		var bars = this.props.bars
-		return (
-			<ul className="dropdown-menu">
-				{bars.map(function(bar) {
-					return (<IndividualBarInDropdownList key={bar} barID={bar} changeBar={this.props.changeBar}/>)
-				}.bind(this))}
-			</ul>
-		)
-	}
-})
-
 var IndividualBarInDropdownList = React.createClass({
 	getInitialState: function() {
 		return {barName: "Loading bar..."}
 	},
 	render: function() {
 		return (
-			<li key={this.props.barID} onClick={this.changeBar}>
-				<a>{this.state.barName}</a>
-			</li>
+			<MenuItem onClick={this.changeBar}>
+				{this.state.barName}
+			</MenuItem>
 		)
 	},
 	changeBar: function() {
