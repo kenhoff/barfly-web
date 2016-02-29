@@ -44,7 +44,9 @@ var ProfilePhoneInput = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(user) {
-				this.setState({value: user.user_metadata.phone})
+				if ("user_metadata" in user) {
+					this.setState({value: user.user_metadata.phone})
+				}
 			}.bind(this)
 		})
 	},

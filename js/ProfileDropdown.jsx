@@ -1,6 +1,9 @@
 var React = require('react')
+var Nav = require('react-bootstrap').Nav
+var NavDropdown = require('react-bootstrap').NavDropdown
+var MenuItem = require('react-bootstrap').MenuItem
 
-var Link = require('react-router').Link
+var browserHistory = require('react-router').browserHistory
 
 var ProfileDropdown = React.createClass({
 	getInitialState: function() {
@@ -9,31 +12,23 @@ var ProfileDropdown = React.createClass({
 	render: function() {
 		if (this.state.profile) {
 			return (
-				<ul className="nav navbar-nav navbar-right">
-					<li className="dropdown">
-						<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hi there,&nbsp;
-							{this.state.profile.given_name}!
-							<span className="caret"></span>
-						</a>
-						<ul className="dropdown-menu">
-							<li>
-								<Link to={'/profile'}>
-									Profile
-								</Link>
-							</li>
-							<li role="separator" className="divider"></li>
-							<li onClick={this.props.signOut}>
-								<a href="#">
-									Log out
-								</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				<Nav pullRight>
+					<NavDropdown id="Profile Dropdown" title={"Hi there, " + this.state.profile.given_name + "!"}>
+						<MenuItem target="/profile" onSelect={this.navigate}>
+							Profile
+						</MenuItem>
+						<MenuItem divider/>
+						<MenuItem onSelect={this.props.signOut}>Log out</MenuItem>
+					</NavDropdown>
+				</Nav>
 			)
 		} else {
 			return <div/>
 		}
+	},
+	navigate: function(e) {
+		// a little hacky, but it works.
+		browserHistory.push(e.target.target)
 	},
 	componentDidMount: function() {
 		this.props.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
@@ -48,5 +43,4 @@ var ProfileDropdown = React.createClass({
 		}.bind(this))
 	}
 })
-
 module.exports = ProfileDropdown
