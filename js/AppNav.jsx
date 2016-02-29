@@ -7,8 +7,11 @@ var Nav = require('react-bootstrap').Nav
 var browserHistory = require('react-router').browserHistory
 
 var AppNav = React.createClass({
+	propTypes: {
+		currentBar: React.PropTypes.number
+	},
 	getInitialState: function() {
-		return {profile: null, currentBar: null}
+		return {profile: null}
 	},
 	render: function() {
 		return (
