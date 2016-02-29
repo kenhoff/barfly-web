@@ -29,12 +29,16 @@ var ProductOrderSummaryItem = React.createClass({
 
 		// get product size name (container + packaging)
 		this.getContainerAndPackagingID(function(err, size) {
-			this.getContainerName(size.containerID, function(err, containerName) {
-				this.setState({containerName: containerName})
-			}.bind(this))
-			this.getPackagingName(size.packagingID, function(err, packagingName) {
-				this.setState({packagingName: packagingName})
-			}.bind(this))
+			if ("containerID" in size) {
+				this.getContainerName(size.containerID, function(err, containerName) {
+					this.setState({containerName: containerName})
+				}.bind(this))
+			}
+			if ("packagingID" in size) {
+				this.getPackagingName(size.packagingID, function(err, packagingName) {
+					this.setState({packagingName: packagingName})
+				}.bind(this))
+			}
 		}.bind(this))
 
 	},
