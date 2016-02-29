@@ -5,7 +5,6 @@ var MenuItem = require('react-bootstrap').MenuItem
 
 var browserHistory = require('react-router').browserHistory
 
-
 var ProfileDropdown = React.createClass({
 	getInitialState: function() {
 		return {}
@@ -15,7 +14,7 @@ var ProfileDropdown = React.createClass({
 			return (
 				<Nav pullRight>
 					<NavDropdown id="Profile Dropdown" title={"Hi there, " + this.state.profile.given_name + "!"}>
-						<MenuItem href="/profile" eventKey="profile" onSelect={this.navigate}>
+						<MenuItem target="/profile" onSelect={this.navigate}>
 							Profile
 						</MenuItem>
 						<MenuItem divider/>
@@ -27,8 +26,9 @@ var ProfileDropdown = React.createClass({
 			return <div/>
 		}
 	},
-	navigate: function (eventKey, href) {
-		browserHistory.push(href)
+	navigate: function(e) {
+		// a little hacky, but it works.
+		browserHistory.push(e.target.target)
 	},
 	componentDidMount: function() {
 		this.props.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
