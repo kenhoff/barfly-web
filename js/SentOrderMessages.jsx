@@ -1,5 +1,8 @@
+var async = require('async')
 var React = require('react')
 var $ = require('jquery')
+
+var ProductOrderSummaryItem = require('./ProductOrderSummaryItem.jsx')
 
 var SentOrderMessages = React.createClass({
 	propTypes: {
@@ -57,11 +60,18 @@ var SentOrderMessagesDistributor = React.createClass({
 		zipCode: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
-		return {repName: ""}
+		return {repName: "", filteredProductOrders: []}
 	},
 	render: function() {
 		return (
-			<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
+			<div>
+				<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
+				<ul>
+					{this.state.filteredProductOrders.map(function(filteredProductOrder) {
+						return (<ProductOrderSummaryItem key={filteredProductOrder.id} productOrder={filteredProductOrder}/>)
+					})}
+				</ul>
+			</div>
 		)
 	},
 	componentDidMount: function() {
@@ -72,6 +82,17 @@ var SentOrderMessagesDistributor = React.createClass({
 				}.bind(this))
 			}
 		}.bind(this))
+		this.filterProductOrders(this.props.productOrders)
+	},
+	componentWillReceiveProps: function(nextProps) {
+		this.resolveAccount(function(account) {
+			if (account) {
+				this.resolveRepName(account.repID, function(repName) {
+					this.setState({repName: repName})
+				}.bind(this))
+			}
+		}.bind(this))
+		this.filterProductOrders(nextProps.productOrders)
 	},
 	resolveAccount: function(cb) {
 		$.ajax({
@@ -100,6 +121,24 @@ var SentOrderMessagesDistributor = React.createClass({
 			success: function(rep) {
 				cb(rep.name)
 			}
+		})
+	},
+	filterProductOrders: function(productOrders) {
+		async.filter(productOrders, this.checkIfProductIsCarriedByDistributor, function(results) {
+			this.setState({filteredProductOrders: results})
+		}.bind(this))
+	},
+	checkIfProductIsCarriedByDistributor: function(productOrder, cb) { // look up if the distributor carries this product
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/products/" + productOrder.productID + "/zipcodes/" + this.props.zipCode + "/distributor",
+			method: "GET",
+			success: function(distributor) {
+				if (distributor.distributorID == this.props.distributor.id) {
+					return cb(true)
+				} else {
+					return cb(false)
+				}
+			}.bind(this)
 		})
 	}
 })
