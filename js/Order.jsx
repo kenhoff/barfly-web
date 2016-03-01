@@ -15,6 +15,7 @@ var SentOrderContents = require('./SentOrderContents.jsx')
 var SentOrderMessages = require('./SentOrderMessages.jsx')
 
 var Order = React.createClass({
+	propTypes: {},
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
@@ -47,7 +48,7 @@ var Order = React.createClass({
 							<SentOrderContents productOrders={this.state.productOrders}/>
 						</Col>
 						<Col xs={12} sm={6}>
-							<SentOrderMessages/>
+							<SentOrderMessages productOrders={this.state.productOrders} barID={this.props.bar} zipCode={this.props.zipcode}/>
 						</Col>
 					</Row>
 				</Grid>
