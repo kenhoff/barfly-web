@@ -57,12 +57,50 @@ var SentOrderMessagesDistributor = React.createClass({
 		zipCode: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
-		return {}
+		return {repName: ""}
 	},
 	render: function() {
 		return (
-			<p>{this.props.distributor.distributorName}</p>
+			<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
 		)
+	},
+	componentDidMount: function() {
+		this.resolveAccount(function(account) {
+			if (account) {
+				this.resolveRepName(account.repID, function(repName) {
+					this.setState({repName: repName})
+				}.bind(this))
+			}
+		}.bind(this))
+	},
+	resolveAccount: function(cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/accounts",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "GET",
+			data: {
+				barID: this.props.barID,
+				distributorID: this.props.distributor.id
+			},
+			success: function(account) {
+				if (Object.keys(account).length == 0) {
+					cb(null)
+				} else {
+					cb(account)
+				}
+			}
+		})
+	},
+	resolveRepName: function(repID, cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
+			method: "GET",
+			success: function(rep) {
+				cb(rep.name)
+			}
+		})
 	}
 })
 
