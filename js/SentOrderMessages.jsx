@@ -51,9 +51,13 @@ var SentOrderMessages = React.createClass({
 
 var SentOrderMessagesDistributor = React.createClass({
 	propTypes: {
+		distributor: React.PropTypes.object.isRequired,
 		productOrders: React.PropTypes.array.isRequired,
 		barID: React.PropTypes.number.isRequired,
 		zipCode: React.PropTypes.number.isRequired
+	},
+	getInitialState: function() {
+		return {}
 	},
 	render: function() {
 		return (
