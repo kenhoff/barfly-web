@@ -39,6 +39,10 @@ describe("Order", function() {
 				productName: "Product A"
 			}
 		])
+		ajaxStub.onThirdCall().yieldsTo("success", {
+			productOrders: [],
+			sent: false
+		})
 		renderedOrder = renderOrder()
 	})
 	afterEach(function() {
