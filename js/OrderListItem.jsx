@@ -32,18 +32,18 @@ var OrderListItem = React.createClass({
 			<div className="panel panel-default" onClick={this.navigateToOrder}>
 				<div className="panel-body">
 					<Row>
-						<Col xs={2}>
+						<Col xs={4} sm={2}>
 							Order #{this.props.order.id}
 						</Col>
-						<Col xs={7}>
+						<Col xs={8} sm={3} smPush={7}>
+							{displayTime}
+						</Col>
+						<Col xs={12} sm={7} smPull={3}>
 							<ul>
 								{this.state.productOrders.map(function(productOrder) {
 									return (<ProductOrderSummaryItem key={productOrder.id} productOrder={productOrder}/>)
 								})}
 							</ul>
-						</Col>
-						<Col xs={3}>
-							{displayTime}
 						</Col>
 					</Row>
 				</div>
