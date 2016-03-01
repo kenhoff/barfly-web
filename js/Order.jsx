@@ -3,14 +3,19 @@ var PageHeader = require("react-bootstrap").PageHeader
 var browserHistory = require("react-router").browserHistory
 var Waypoint = require('react-waypoint')
 var $ = require('jquery')
+var Row = require('react-bootstrap').Row
+var Col = require('react-bootstrap').Col
+var Grid = require('react-bootstrap').Grid
 
 var ProductList = require('./ProductList.jsx')
 var NewProductModal = require('./NewProductModal.jsx')
 var OrderNavBottom = require('./OrderNavBottom.jsx')
 var SearchNav = require('./SearchNav.jsx')
 var SentOrderContents = require('./SentOrderContents.jsx')
+var SentOrderMessages = require('./SentOrderMessages.jsx')
 
 var Order = React.createClass({
+	propTypes: {},
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
 	updateTimeout: function() {
 		clearTimeout(this.timeout)
@@ -27,16 +32,32 @@ var Order = React.createClass({
 			starred: [],
 			showNewProductModal: false,
 			search: '',
-			sent: true,
-			searchNavFixed: false
+			sent: false,
+			searchNavFixed: false,
+			resolving: true
 		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
 	},
 	render: function() {
-		if (this.state.sent) {
-			return (<SentOrderContents productOrders={this.state.productOrders}/>)
+		if (this.state.resolving) {
+			return (
+				<div></div>
+			)
+		} else if (this.state.sent) {
+			return (
+				<Grid>
+					<Row>
+						<Col xs={12} sm={6}>
+							<SentOrderContents productOrders={this.state.productOrders}/>
+						</Col>
+						<Col xs={12} sm={6}>
+							<SentOrderMessages productOrders={this.state.productOrders} barID={this.props.bar} zipCode={this.props.zipcode}/>
+						</Col>
+					</Row>
+				</Grid>
+			)
 		} else {
 			return (
 				<div>
@@ -208,7 +229,8 @@ var Order = React.createClass({
 				// handle if sent isn't actually in the order yet
 				this.setState({
 					productOrders: data.productOrders,
-					sent: (data.sent || false)
+					sent: (data.sent || false),
+					resolving: false
 				})
 			}.bind(this)
 		})
