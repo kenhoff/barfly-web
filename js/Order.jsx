@@ -36,9 +36,7 @@ var Order = React.createClass({
 	},
 	render: function() {
 		if (this.state.sent) {
-			return (
-				<SentOrderContents/>
-			)
+			return (<SentOrderContents productOrders={this.state.productOrders}/>)
 		} else {
 			return (
 				<div>
