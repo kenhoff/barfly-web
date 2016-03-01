@@ -3,12 +3,16 @@ var PageHeader = require("react-bootstrap").PageHeader
 var browserHistory = require("react-router").browserHistory
 var Waypoint = require('react-waypoint')
 var $ = require('jquery')
+var Row = require('react-bootstrap').Row
+var Col = require('react-bootstrap').Col
+var Grid = require('react-bootstrap').Grid
 
 var ProductList = require('./ProductList.jsx')
 var NewProductModal = require('./NewProductModal.jsx')
 var OrderNavBottom = require('./OrderNavBottom.jsx')
 var SearchNav = require('./SearchNav.jsx')
 var SentOrderContents = require('./SentOrderContents.jsx')
+var SentOrderMessages = require('./SentOrderMessages.jsx')
 
 var Order = React.createClass({
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
@@ -36,7 +40,18 @@ var Order = React.createClass({
 	},
 	render: function() {
 		if (this.state.sent) {
-			return (<SentOrderContents productOrders={this.state.productOrders}/>)
+			return (
+				<Grid>
+					<Row>
+						<Col xs={12} sm={6}>
+							<SentOrderContents productOrders={this.state.productOrders}/>
+						</Col>
+						<Col xs={12} sm={6}>
+							<SentOrderMessages/>
+						</Col>
+					</Row>
+				</Grid>
+			)
 		} else {
 			return (
 				<div>
