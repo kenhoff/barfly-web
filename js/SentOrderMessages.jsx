@@ -63,7 +63,7 @@ var SentOrderMessagesDistributor = React.createClass({
 		return {repName: "", filteredProductOrders: []}
 	},
 	render: function() {
-		if (filteredProductOrders.length == 0) {
+		if (this.state.filteredProductOrders.length == 0) {
 			return (<div/>)
 		} else {
 			return (
