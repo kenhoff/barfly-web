@@ -1,5 +1,10 @@
 var React = require('react')
 
+var Button = require('react-bootstrap').Button
+var Col = require('react-bootstrap').Col
+var Row = require('react-bootstrap').Row
+var Grid = require('react-bootstrap').Grid
+
 var browserHistory = require('react-router').browserHistory
 
 var $ = require('jquery')
@@ -12,13 +17,17 @@ var Orders = React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="container">
-				<h1>Orders</h1>
-				<button onClick={this.newOrder}>New Order</button>
-				{this.state.orders.map(function(order) {
-					return (<OrderListItem key={order.id} order={order} barID={this.props.bar}/>)
-				}.bind(this))}
-			</div>
+			<Grid>
+				<Row>
+					<h1>Orders</h1>
+					<Button bsStyle="primary" bsSize="large" onClick={this.newOrder}>New Order</Button>
+				</Row>
+				<Row>
+					{this.state.orders.map(function(order) {
+						return (<OrderListItem key={order.id} order={order} barID={this.props.bar}/>)
+					}.bind(this))}
+				</Row>
+			</Grid>
 		)
 	},
 	componentDidMount: function() {

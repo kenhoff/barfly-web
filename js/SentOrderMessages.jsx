@@ -63,16 +63,20 @@ var SentOrderMessagesDistributor = React.createClass({
 		return {repName: "", filteredProductOrders: []}
 	},
 	render: function() {
-		return (
-			<div>
-				<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
-				<ul>
-					{this.state.filteredProductOrders.map(function(filteredProductOrder) {
-						return (<ProductOrderSummaryItem key={filteredProductOrder.id} productOrder={filteredProductOrder}/>)
-					})}
-				</ul>
-			</div>
-		)
+		if (filteredProductOrders.length == 0) {
+			return (<div/>)
+		} else {
+			return (
+				<div>
+					<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
+					<ul>
+						{this.state.filteredProductOrders.map(function(filteredProductOrder) {
+							return (<ProductOrderSummaryItem key={filteredProductOrder.id} productOrder={filteredProductOrder}/>)
+						})}
+					</ul>
+				</div>
+			)
+		}
 	},
 	componentDidMount: function() {
 		this.resolveAccount(function(account) {
