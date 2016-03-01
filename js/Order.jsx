@@ -32,7 +32,7 @@ var Order = React.createClass({
 			starred: [],
 			showNewProductModal: false,
 			search: '',
-			sent: true,
+			sent: false,
 			searchNavFixed: false
 		}
 	},
