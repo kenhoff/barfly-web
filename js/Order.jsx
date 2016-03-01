@@ -33,14 +33,19 @@ var Order = React.createClass({
 			showNewProductModal: false,
 			search: '',
 			sent: false,
-			searchNavFixed: false
+			searchNavFixed: false,
+			resolving: true
 		}
 	},
 	componentWillUnmount: function() {
 		clearTimeout(this.timeout)
 	},
 	render: function() {
-		if (this.state.sent) {
+		if (this.state.resolving) {
+			return (
+				<div></div>
+			)
+		} else if (this.state.sent) {
 			return (
 				<Grid>
 					<Row>
@@ -224,7 +229,8 @@ var Order = React.createClass({
 				// handle if sent isn't actually in the order yet
 				this.setState({
 					productOrders: data.productOrders,
-					sent: (data.sent || false)
+					sent: (data.sent || false),
+					resolving: false
 				})
 			}.bind(this)
 		})
