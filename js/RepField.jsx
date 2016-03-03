@@ -19,9 +19,9 @@ var RepField = React.createClass({
 					<div>
 						<span>
 							{this.state.repName}
-							<Button bsStyle="link" bsSize="xs" onClick={this.openModal}>Change rep</Button>
-							<AddRepModal changeRep={true} showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 						</span>
+						<Button bsStyle="link" bsSize="xs" onClick={this.openModal}>Change rep</Button>
+						<AddRepModal changeRep={true} showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 					</div>
 				)
 			} else {
