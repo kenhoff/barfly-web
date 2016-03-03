@@ -18,7 +18,9 @@ var AddRepModal = React.createClass({
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Looks like we don't have a rep listed for you at&nbsp;{this.props.distributorName}. Mind helping us out?</Modal.Title>
+					<Modal.Title>{this.props.changeRep
+							? "We're sorry that we've got the wrong rep for you at " + this.props.distributorName + "! Let's get that fixed."
+							: "Looks like we don't have a rep listed for you at " + this.props.distributorName + ". Mind helping us out?"}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					{this.state.reps.map(function(rep) {
