@@ -38,7 +38,9 @@ var AddRepModal = React.createClass({
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
 					<button className={"btn btn-primary " + (this.state.buttonEnabled
 						? ""
-						: "disabled")} onClick={this.submitRep}>Add Rep</button>
+						: "disabled")} onClick={this.submitRep}>{this.props.changeRep
+							? "Change Rep"
+							: "Add Rep"}</button>
 				</Modal.Footer>
 			</Modal>
 		)
