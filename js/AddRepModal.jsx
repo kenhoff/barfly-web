@@ -18,7 +18,9 @@ var AddRepModal = React.createClass({
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Looks like we don't have a rep listed for you at&nbsp;{this.props.distributorName}. Mind helping us out?</Modal.Title>
+					<Modal.Title>{this.props.changeRep
+							? "We're sorry that we've got the wrong rep for you at " + this.props.distributorName + "! Let's get that fixed."
+							: "Looks like we don't have a rep listed for you at " + this.props.distributorName + ". Mind helping us out?"}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					{this.state.reps.map(function(rep) {
@@ -36,7 +38,9 @@ var AddRepModal = React.createClass({
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
 					<button className={"btn btn-primary " + (this.state.buttonEnabled
 						? ""
-						: "disabled")} onClick={this.submitRep}>Add Rep</button>
+						: "disabled")} onClick={this.submitRep}>{this.props.changeRep
+							? "Change Rep"
+							: "Add Rep"}</button>
 				</Modal.Footer>
 			</Modal>
 		)
