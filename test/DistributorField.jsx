@@ -76,11 +76,10 @@ describe("DistributorField", function() {
 		})
 		it('renders a button with text "Add a Distributor for {productName}"', function(done) {
 			button = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "button")
-			assert.equal(button.children[0].innerHTML, "Add a Distributor for ")
-			assert.equal(button.children[1].innerHTML, "Product X")
+			assert.equal(button.innerHTML, "Add a Distributor for Product X")
 			done()
 		})
-		it.skip('when button is clicked, "AddDistributorModal" is opened', function (done) {
+		it.skip('when button is clicked, "AddDistributorModal" is opened', function(done) {
 			openModalSpy = sinon.spy(renderedDistributorField, "openModal")
 			button = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "button")
 			ReactTestUtils.Simulate.click(button)

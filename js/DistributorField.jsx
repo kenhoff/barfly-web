@@ -17,9 +17,9 @@ var DistributorField = React.createClass({
 			return (
 				<div>
 					<p>
-						<button className="btn btn-default" onClick={this.openModal}>Add a Distributor for {this.props.productName}</button>
+						<button className="btn btn-default" onClick={this.openModal}>{"Add a Distributor for " + this.props.productName}</button>
 					</p>
-					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName}/>
+					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName} reresolveOrder={this.props.reresolveOrder}/>
 				</div>
 			)
 		} else {

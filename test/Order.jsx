@@ -50,8 +50,7 @@ describe("Order", function() {
 	})
 	it("renders an h1 with the orderID at the top", function(done) {
 		h1Tag = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrder, "h1")
-		assert.equal(ReactDOM.findDOMNode(h1Tag).children[0].innerHTML, "Order #");
-		assert.equal(ReactDOM.findDOMNode(h1Tag).children[1].innerHTML, "10");
+		assert.equal(ReactDOM.findDOMNode(h1Tag).children[0].innerHTML, "Order #10 ");
 		done()
 	})
 
