@@ -2,8 +2,8 @@ var React = require('react')
 var Input = require('react-bootstrap').Input
 
 var DistributorSelect = React.createClass({
-	getInitialState: function() {
-		return {distributors: []}
+	propTypes: {
+		// selectedDistributor: React.PropTypes.oneOfType([React.PropTypes.number, "newDistributor", null])
 	},
 	render: function() {
 		return (
