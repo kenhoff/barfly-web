@@ -28,14 +28,6 @@ describe("OrderNavBottom", function() {
 		assert(nav)
 		done()
 	})
-	it("when called with disabled = true, just renders an empty div", function(done) {
-		renderedOrderNavBottom = renderOrderNavBottom(< OrderNavBottom disabled = {
-			true
-		} />)
-		navs = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedOrderNavBottom, "nav")
-		assert.equal(navs.length, 0)
-		done()
-	})
 	describe("if props.sending = true", function() {
 		beforeEach(function() {
 			sendOrderSpy = sinon.spy()

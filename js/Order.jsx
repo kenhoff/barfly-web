@@ -6,6 +6,8 @@ var $ = require('jquery')
 var Row = require('react-bootstrap').Row
 var Col = require('react-bootstrap').Col
 var Grid = require('react-bootstrap').Grid
+var moment = require('moment-timezone')
+var jstz = require('jstimezonedetect')
 
 var ProductList = require('./ProductList.jsx')
 var NewProductModal = require('./NewProductModal.jsx')
@@ -34,7 +36,8 @@ var Order = React.createClass({
 			search: '',
 			sent: false,
 			searchNavFixed: false,
-			resolving: true
+			resolving: true,
+			sentAt: null
 		}
 	},
 	componentWillUnmount: function() {
@@ -46,8 +49,16 @@ var Order = React.createClass({
 				<div></div>
 			)
 		} else if (this.state.sent) {
+			var timezone = jstz.determine().name()
 			return (
 				<Grid>
+					<Row>
+						<PageHeader>{"Order #" + this.props.params.orderID + " "}
+							<small>{(this.state.sentAt
+									? moment(this.state.sentAt).tz(timezone).format('llll')
+									: "Sent")}</small>
+						</PageHeader>
+					</Row>
 					<Row>
 						<Col xs={12} sm={6}>
 							<SentOrderContents productOrders={this.state.productOrders}/>
@@ -73,7 +84,9 @@ var Order = React.createClass({
 						this.setState({search: event.target.value})
 					}.bind(this)}/>
 					<div className="container">
-						<PageHeader>Order #{this.props.params.orderID}</PageHeader>
+						<PageHeader>{"Order #" + this.props.params.orderID + " "}
+							<small>Unsent</small>
+						</PageHeader>
 						<ProductList title="Your Order" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={false} isOrderList={true} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
 						<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
 						<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false} search={this.state.search}/>
@@ -82,7 +95,7 @@ var Order = React.createClass({
 						</p>
 					</div>
 					<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
-					<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
+					<OrderNavBottom disabled={this.state.productOrders.length == 0} sendOrder={this.sendOrder} sending={this.state.sending}/>
 				</div>
 			)
 		}
@@ -230,7 +243,8 @@ var Order = React.createClass({
 				this.setState({
 					productOrders: data.productOrders,
 					sent: (data.sent || false),
-					resolving: false
+					resolving: false,
+					sentAt: (data.sentAt || null)
 				})
 			}.bind(this)
 		})
