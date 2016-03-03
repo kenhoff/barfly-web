@@ -35,7 +35,7 @@ var ProductCard = React.createClass({
 							</p>
 						</Col>
 						<Col xs={12} sm={4}>
-							<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange}/>
+							<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange} reresolveOrder={this.props.reresolveOrder}/>
 						</Col>
 						<Col xs={12} sm={4}>
 							{this.state.distributorID

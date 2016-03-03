@@ -63,12 +63,14 @@ var AddDistributorModal = React.createClass({
 					// now POST to product/zipcode/distributor with new distributorID
 					this.saveDistributor(newDistributorID, function() {
 						this.props.onHide()
+						this.props.reresolveOrder()
 					}.bind(this))
 				}.bind(this))
 			} else {
 				// now POST to product/zipcode/distributor with new distributorID
 				this.saveDistributor(this.state.selectedDistributor, function() {
 					this.props.onHide()
+					this.props.reresolveOrder()
 				}.bind(this))
 			}
 		}
