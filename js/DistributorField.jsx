@@ -1,12 +1,21 @@
 var React = require('react')
+var Button = require('react-bootstrap').Button
 
 var $ = require('jquery')
 
 var AddDistributorModal = require('./AddDistributorModal.jsx')
+var ChangeDistributorModal = require('./ChangeDistributorModal.jsx')
 
 var DistributorField = React.createClass({
 	getInitialState: function() {
-		return ({distributorName: "Finding distributor...", showAddDistributorModal: false, zipCode: null, resolving: true})
+		var state = {
+			distributorName: "Finding distributor...",
+			showAddDistributorModal: false,
+			zipCode: null,
+			resolving: true,
+			showChangeDistributorModal: false
+		}
+		return (state)
 	},
 	render: function() {
 		if (this.state.resolving) {
@@ -23,11 +32,24 @@ var DistributorField = React.createClass({
 				</div>
 			)
 		} else {
+			var changeDistributorProps = {
+				zipCode: this.state.zipCode,
+				productID: this.props.productID,
+				productName: this.props.productName,
+				showModal: this.state.showChangeDistributorModal,
+				closeModal: function() {
+					this.setState({showChangeDistributorModal: false})
+				}.bind(this),
+				reresolveOrder: this.props.reresolveOrder
+			}
 			return (
 				<div>
-					<p>
-						<b>Distributor:</b>&nbsp;
-						{this.state.distributorName}</p>
+					<span>
+						{this.state.distributorName}</span>
+					<Button bsStyle="link" bsSize="xs" onClick={function() {
+						this.setState({showChangeDistributorModal: true})
+					}.bind(this)}>Change distributor</Button>
+					<ChangeDistributorModal {...changeDistributorProps}/>
 				</div>
 			)
 		}

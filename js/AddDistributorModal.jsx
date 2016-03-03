@@ -1,7 +1,7 @@
 var React = require('react')
 var $ = require('jquery')
 var Modal = require('react-bootstrap').Modal
-var Input = require('react-bootstrap').Input
+var DistributorSelect = require('./DistributorSelect.jsx')
 
 var AddDistributorModal = React.createClass({
 	getInitialState: function() {
@@ -14,13 +14,7 @@ var AddDistributorModal = React.createClass({
 					<Modal.Title>Looks like we don't have a distributor listed for&nbsp;{this.props.productName}&nbsp;in&nbsp;{this.props.zipCode}&nbsp;yet. Mind helping us out?</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
-					{this.state.distributors.map(function(distributor) {
-						return (<Input key={distributor.id} name="distributors" type="radio" value={distributor.id} label={distributor.distributorName} onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == distributor.id}/>)
-					}.bind(this))}
-					<Input type="radio" name="distributors" value="newDistributor" label="Add new distributor" onChange={this.handleDistributorChange} checked={this.state.selectedDistributor == "newDistributor"}/>
-					<Input value={this.state.newDistributorNameValue} onChange={this.handleNewDistributorNameChange} className={this.state.showNewDistributorInput
-						? "show"
-						: "hidden"} type="text" placeholder="Bob's Distribution Company"/>
+					<DistributorSelect distributors={this.state.distributors} newDistributorNameValue={this.state.newDistributorNameValue} selectedDistributor={this.state.selectedDistributor} showNewDistributorInput={this.state.showNewDistributorInput} handleDistributorChange={this.handleDistributorChange} handleNewDistributorNameChange={this.handleNewDistributorNameChange}/>
 				</Modal.Body>
 				<Modal.Footer>
 					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>

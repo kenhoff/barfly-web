@@ -13,18 +13,24 @@ var AddDistributorModal = React.createClass({
 		return (<div/>)
 	}
 })
+var ChangeDistributorModal = React.createClass({
+	render: function() {
+		return (<div/>)
+	}
+})
 
 DistributorField.__set__("AddDistributorModal", AddDistributorModal)
+DistributorField.__set__("ChangeDistributorModal", ChangeDistributorModal)
 
 renderDistributorField = function(jsx) {
 	renderedDistributorField = ReactTestUtils.renderIntoDocument(jsx)
-	pElement = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "p")
 	return renderedDistributorField
 }
 
 describe("DistributorField", function() {
 	beforeEach(function() {
 		renderedDistributorField = renderDistributorField(<DistributorField productName={"Product X"}/>)
+		pElement = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "p")
 	})
 	it.skip("requires a productID and a barID")
 	describe("if a distributor is resolving", function() {
@@ -45,14 +51,13 @@ describe("DistributorField", function() {
 			changeDistributorSpy = sinon.spy()
 
 			renderedDistributorField = renderDistributorField(<DistributorField productName={"Product X"} changeDistributor={changeDistributorSpy}/>)
+			spanElement = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "span")
 		})
 		afterEach(function() {
 			$.ajax.restore()
 		})
 		it('renders "Distributor: {distributorName}', function(done) {
-			assert.equal(pElement.children[0].innerHTML, "Distributor:");
-			assert.equal(pElement.children[1].innerHTML, "&nbsp;")
-			assert.equal(pElement.children[2].innerHTML, "Distributor Y")
+			assert.equal(spanElement.innerHTML, "Distributor Y")
 			done()
 		})
 		it('calls this.props.changeDistributor with the distributorID and distributorName', function(done) {
