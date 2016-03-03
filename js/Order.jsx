@@ -93,7 +93,7 @@ var Order = React.createClass({
 						</p>
 					</div>
 					<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
-					<OrderNavBottom disabled={this.state.sent} sendOrder={this.sendOrder} sending={this.state.sending}/>
+					<OrderNavBottom disabled={this.state.productOrders.length == 0} sendOrder={this.sendOrder} sending={this.state.sending}/>
 				</div>
 			)
 		}
