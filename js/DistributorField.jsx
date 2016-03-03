@@ -39,7 +39,8 @@ var DistributorField = React.createClass({
 				showModal: this.state.showChangeDistributorModal,
 				closeModal: function() {
 					this.setState({showChangeDistributorModal: false})
-				}.bind(this)
+				}.bind(this),
+				reresolveOrder: this.props.reresolveOrder
 			}
 			return (
 				<div>
