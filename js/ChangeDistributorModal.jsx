@@ -1,6 +1,7 @@
 var React = require('react')
 var Modal = require('react-bootstrap').Modal
 var Button = require('react-bootstrap').Button
+var Input = require('react-bootstrap').Input
 var DistributorSelect = require('./DistributorSelect.jsx')
 var $ = require('jquery')
 
@@ -10,7 +11,8 @@ var ChangeDistributorModal = React.createClass({
 			selectedDistributor: null,
 			distributors: [],
 			newDistributorNameValue: "",
-			buttonEnabled: false
+			buttonEnabled: false,
+			validationInputValue: ""
 		}
 		return state
 	},
@@ -19,14 +21,20 @@ var ChangeDistributorModal = React.createClass({
 			<Modal show={this.props.showModal} onHide={this.props.closeModal}>
 				<Modal.Header closeButton>
 					<Modal.Title>
-						{"Change distributor for " + this.props.productName}
+						{"Do we have the wrong distributor for " + this.props.productName + "? Let's get that fixed."}
 					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
+					<label>{"Select the correct distributor for " + this.props.productName + ":"}</label>
 					<DistributorSelect handleDistributorChange={this.handleDistributorChange} handleNewDistributorNameChange={this.handleNewDistributorNameChange} showNewDistributorInput={this.state.showNewDistributorInput} newDistributorNameValue={this.state.newDistributorNameValue} selectedDistributor={this.state.selectedDistributor} distributors={this.state.distributors}/>
+					<label>{"This will change " + this.props.productName + "'s distributor for all bars in " + this.props.zipCode + ". "}</label>
+					<label style={{
+						color: "red"
+					}}>{"Are you sure you want to do this?"}</label>
+					<Input type="text" label="Type the new distributor's name to continue." onChange={this.handleValidationInputChange} value={this.state.validationInputValue}/>
 				</Modal.Body>
-				<Modal.Footer onClick={this.props.closeModal}>
-					<Button>
+				<Modal.Footer>
+					<Button onClick={this.props.closeModal}>
 						Cancel
 					</Button>
 
@@ -35,6 +43,10 @@ var ChangeDistributorModal = React.createClass({
 				</Modal.Footer>
 			</Modal>
 		)
+	},
+
+	handleValidationInputChange: function(event) {
+		this.setState({validationInputValue: event.target.value})
 	},
 
 	handleDistributorChange: function(event) {

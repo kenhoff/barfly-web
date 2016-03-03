@@ -33,6 +33,7 @@ var DistributorField = React.createClass({
 			)
 		} else {
 			var changeDistributorProps = {
+				zipCode: this.state.zipCode,
 				productID: this.props.productID,
 				productName: this.props.productName,
 				showModal: this.state.showChangeDistributorModal,
