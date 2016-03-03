@@ -54,7 +54,9 @@ var Order = React.createClass({
 				<Grid>
 					<Row>
 						<PageHeader>{"Order #" + this.props.params.orderID + " "}
-							<small>{moment(this.state.sentAt).tz(timezone).format('llll')}</small>
+							<small>{(this.state.sentAt
+									? moment(this.state.sentAt).tz(timezone).format('llll')
+									: "Sent")}</small>
 						</PageHeader>
 					</Row>
 					<Row>
