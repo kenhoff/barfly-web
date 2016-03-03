@@ -1,4 +1,5 @@
 var React = require('react')
+var Button = require('react-bootstrap').Button
 
 var $ = require('jquery')
 
@@ -25,9 +26,10 @@ var DistributorField = React.createClass({
 		} else {
 			return (
 				<div>
-					<p>
+					<span>
 						<b>Distributor:</b>&nbsp;
-						{this.state.distributorName}</p>
+						{this.state.distributorName}</span>
+					<Button bsStyle="link" bsSize="xs">Change distributor</Button>
 				</div>
 			)
 		}
