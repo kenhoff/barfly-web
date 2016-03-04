@@ -25,6 +25,7 @@ var Main = React.createClass({
 	},
 	render: function() {
 		if (this.state.idToken) {
+
 			// oh my god, this is stupid, but let me explain.
 			// react-router forces us to specify the children that we're going to render as part of our route, but neglects to give us a way to pass ""default"" props to these children - in our case, our "default" props is the barID that we're working with.
 			// (the reason we're doing this is so that we have /orders/1234 instead of /bars/1234/orders/1234)
@@ -45,7 +46,33 @@ var Main = React.createClass({
 	},
 	componentWillMount: function() {
 		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN)
-		this.setState({idToken: this.getIdToken()})
+		this.setState({
+			idToken: this.getIdToken()
+		}, function() {
+
+			// get user profile info?
+
+			if (this.state.idToken) {
+				// new state is set, if state.idToken, user is logged in and we need to initialize Intercom
+				this.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
+					if (err) {
+						this.refreshToken(function() {
+							this.componentWillMount()
+						}.bind(this))
+						return
+					} else {
+						window.Intercom('boot', {
+							app_id: process.env.INTERCOM_APP_ID,
+							user_id: profile.sub,
+							name: profile.name
+						})
+					}
+				}.bind(this))
+
+			} else {
+				window.Intercom("boot", {app_id: "nuxvgj9g"})
+			}
+		})
 		$(document).ajaxError(function(event, request, settings) {
 			if (request.status == 401) {
 				this.refreshToken(function() {
@@ -95,7 +122,7 @@ var Main = React.createClass({
 	showLock: function() {
 		this.lock.show({
 			authParams: {
-				scope: "openid offline_access user_id given_name app_metadata"
+				scope: "openid offline_access user_id given_name name app_metadata"
 			},
 			connections: ['facebook']
 		})

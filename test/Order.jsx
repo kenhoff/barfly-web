@@ -62,6 +62,8 @@ describe("Order", function() {
 		done()
 	})
 	it("on sendOrder, if 200, navigates to /orders", function(done) {
+		window.Intercom = sinon.stub()
+
 		$.ajax.restore()
 
 		ajaxStub = sinon.stub($, "ajax")
