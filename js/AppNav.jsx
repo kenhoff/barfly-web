@@ -33,8 +33,6 @@ var AppNav = React.createClass({
 			</Navbar>
 		)
 	},
-
-	componentDidMount: function() {},
 	signOut: function() {
 		localStorage.removeItem("access_jwt")
 		localStorage.removeItem("refresh_token")
