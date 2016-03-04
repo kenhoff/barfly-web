@@ -172,6 +172,12 @@ var Order = React.createClass({
 			method: "POST",
 			success: function() {
 				this.setState({sending: false})
+				// send intercom thing
+				var metadata = {
+					product_orders: this.state.productOrders.length,
+					sent_date: Math.floor((new Date()).getTime() / 1000)
+				}
+				window.Intercom('trackEvent', "sent_order", metadata)
 				browserHistory.push("/orders")
 			}.bind(this),
 			error: function() {
