@@ -55,7 +55,6 @@ var Main = React.createClass({
 			if (this.state.idToken) {
 				// new state is set, if state.idToken, user is logged in and we need to initialize Intercom
 				this.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
-					console.log(profile);
 					if (err) {
 						this.refreshToken(function() {
 							this.componentWillMount()
@@ -63,7 +62,7 @@ var Main = React.createClass({
 						return
 					} else {
 						window.Intercom('boot', {
-							app_id: 'nuxvgj9g',
+							app_id: process.env.INTERCOM_APP_ID,
 							user_id: profile.sub,
 							name: profile.name
 						})
