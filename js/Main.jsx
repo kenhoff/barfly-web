@@ -13,7 +13,7 @@ var App = require('./App.jsx')
 var AppNav = require('./AppNav.jsx')
 var Orders = require('./Orders.jsx')
 var Order = require('./Order.jsx')
-var Profile = require('./Profile.jsx')
+var Account = require('./Account.jsx')
 var Landing = require('./Landing.jsx')
 
 var Main = React.createClass({
@@ -161,7 +161,7 @@ var MainRouter = React.createClass({
 						<Route path="orders" component={Orders}/>
 						<Route path="orders/:orderID" component={Order}></Route>
 					</Route>
-					<Route component={Profile} path="/profile"></Route>
+					<Route component={Account} path="/account"></Route>
 				</Route>
 			</Router>
 		)

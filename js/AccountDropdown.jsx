@@ -5,7 +5,7 @@ var MenuItem = require('react-bootstrap').MenuItem
 
 var browserHistory = require('react-router').browserHistory
 
-var ProfileDropdown = React.createClass({
+var AccountDropdown = React.createClass({
 	getInitialState: function() {
 		return {}
 	},
@@ -14,8 +14,8 @@ var ProfileDropdown = React.createClass({
 			return (
 				<Nav pullRight>
 					<NavDropdown id="Profile Dropdown" title={"Hi there, " + this.state.profile.given_name + "!"}>
-						<MenuItem target="/profile" onSelect={this.navigate}>
-							Profile
+						<MenuItem target="/account" onSelect={this.navigate}>
+							Account
 						</MenuItem>
 						<MenuItem divider/>
 						<MenuItem onSelect={this.props.signOut}>Log out</MenuItem>
@@ -43,4 +43,4 @@ var ProfileDropdown = React.createClass({
 		}.bind(this))
 	}
 })
-module.exports = ProfileDropdown
+module.exports = AccountDropdown
