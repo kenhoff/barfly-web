@@ -1,17 +1,17 @@
-var React = require('react')
-var $ = require('jquery')
-var StripeCheckout = require('react-stripe-checkout')
-var Button = require('react-bootstrap').Button
-var OverlayTrigger = require('react-bootstrap').OverlayTrigger
-var Popover = require('react-bootstrap').Popover
+var React = require("react");
+var $ = require("jquery");
+var StripeCheckout = require("react-stripe-checkout");
+var Button = require("react-bootstrap").Button;
+var OverlayTrigger = require("react-bootstrap").OverlayTrigger;
+var Popover = require("react-bootstrap").Popover;
 
 var PaymentMethodField = React.createClass({
 	getInitialState: function() {
 		var data = {
 			resolving: true,
 			card: null
-		}
-		return data
+		};
+		return data;
 	},
 
 	render: function() {
@@ -21,7 +21,7 @@ var PaymentMethodField = React.createClass({
 					<Popover title="Are you sure you want to remove this card?" id="Remove card">
 						<Button bsStyle="danger">Remove card</Button>
 					</Popover>
-				)
+				);
 				return (
 					<div>
 						<label>Payment Method</label>
@@ -33,7 +33,7 @@ var PaymentMethodField = React.createClass({
 							<Button>Remove card</Button>
 						</OverlayTrigger>
 					</div>
-				)
+				);
 			} else {
 				return (
 					<div>
@@ -43,10 +43,10 @@ var PaymentMethodField = React.createClass({
 							<Button bsStyle="primary">Add card</Button>
 						</StripeCheckout>
 					</div>
-				)
+				);
 			}
 		} else {
-			return (<div/>)
+			return (<div/>);
 		}
 	},
 	handleToken: function(token) {
@@ -59,7 +59,16 @@ var PaymentMethodField = React.createClass({
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			}
-		})
+		});
+	},
+	deleteCard: function() {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/paymentmethods",
+			method: "DELETE",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			}
+		});
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -70,13 +79,13 @@ var PaymentMethodField = React.createClass({
 			},
 			success: function(card) {
 				if (Object.keys(card).length == 0) {
-					this.setState({resolving: false, card: null})
+					this.setState({resolving: false, card: null});
 				} else {
-					this.setState({resolving: false, card: card})
+					this.setState({resolving: false, card: card});
 				}
 			}.bind(this)
-		})
+		});
 	}
-})
+});
 
-module.exports = PaymentMethodField
+module.exports = PaymentMethodField;
