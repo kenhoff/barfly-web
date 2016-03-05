@@ -5,7 +5,7 @@ var MenuItem = require('react-bootstrap').MenuItem
 
 var browserHistory = require('react-router').browserHistory
 
-var ProfileDropdown = React.createClass({
+var AccountDropdown = React.createClass({
 	getInitialState: function() {
 		return {}
 	},
@@ -43,4 +43,4 @@ var ProfileDropdown = React.createClass({
 		}.bind(this))
 	}
 })
-module.exports = ProfileDropdown
+module.exports = AccountDropdown

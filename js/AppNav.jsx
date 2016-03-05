@@ -1,6 +1,6 @@
 var React = require('react')
 var BarSelector = require('./BarSelector.jsx')
-var ProfileDropdown = require('./ProfileDropdown.jsx')
+var AccountDropdown = require('./AccountDropdown.jsx')
 var Navbar = require('react-bootstrap').Navbar
 var Nav = require('react-bootstrap').Nav
 
@@ -27,7 +27,7 @@ var AppNav = React.createClass({
 						<BarSelector currentBar={this.props.currentBar} changeBar={this.props.changeBar}/>
 					</Nav>
 					<Nav pullRight>
-						<ProfileDropdown signOut={this.signOut} lock={this.props.lock}/>
+						<AccountDropdown signOut={this.signOut} lock={this.props.lock}/>
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
