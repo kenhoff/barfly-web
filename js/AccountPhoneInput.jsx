@@ -4,7 +4,7 @@ var Button = require('react-bootstrap').Button
 
 var $ = require('jquery')
 
-var ProfilePhoneInput = React.createClass({
+var AccountPhoneInput = React.createClass({
 	getInitialState: function() {
 		return {value: "", hasBeenChanged: false}
 	},
@@ -55,4 +55,4 @@ var ProfilePhoneInput = React.createClass({
 	}
 })
 
-module.exports = ProfilePhoneInput
+module.exports = AccountPhoneInput

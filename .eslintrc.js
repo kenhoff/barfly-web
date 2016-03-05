@@ -27,9 +27,13 @@ module.exports = {
 		],
 		"semi": [
 			2,
-			"never"
+			"always"
 		],
 		"react/jsx-uses-vars": 2,
+		"quotes": [
+			2,
+			"double"
+		],
 
 	}
 };
