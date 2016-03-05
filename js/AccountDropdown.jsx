@@ -14,8 +14,8 @@ var AccountDropdown = React.createClass({
 			return (
 				<Nav pullRight>
 					<NavDropdown id="Profile Dropdown" title={"Hi there, " + this.state.profile.given_name + "!"}>
-						<MenuItem target="/profile" onSelect={this.navigate}>
-							Profile
+						<MenuItem target="/account" onSelect={this.navigate}>
+							Account
 						</MenuItem>
 						<MenuItem divider/>
 						<MenuItem onSelect={this.props.signOut}>Log out</MenuItem>
