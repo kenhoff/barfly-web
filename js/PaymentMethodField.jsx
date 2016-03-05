@@ -17,7 +17,13 @@ var PaymentMethodField = React.createClass({
 			<div>
 				<label>Payment Method</label>
 				{(!this.state.resolving && this.state.card)
-					? <p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
+					? <div>
+							<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
+							<StripeCheckout name="Update card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
+								<Button bsStyle="primary">Update card</Button>
+							</StripeCheckout>
+							<Button>Remove card</Button>
+						</div>
 					: <div>
 						<p>No card found</p>
 						<StripeCheckout name="Add card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
@@ -28,7 +34,7 @@ var PaymentMethodField = React.createClass({
 			</div>
 		)
 	},
-	handleToken: function(token) {},
+	handleToken: function() {},
 	componentDidMount: function() {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/paymentmethods",
