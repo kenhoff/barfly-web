@@ -1,6 +1,16 @@
 # burlock-web
 The part that serves the pages
 
+## Pipeline
+
+`development --> staging --> master`
+
+On the `development` branch, `BURLOCK_API_URL` specified in `.env`.
+
+On the `staging` branch, `BURLOCK_API_URL` points to `https://api-staging.burlockorders.com`.
+
+On the `master` branch, `BURLOCK_API_URL` points to `https://api.burlockorders.com`.
+
 ## Building
 
 **Build everything:** `nodemon --exec 'npm i' -e jsx,jade,styl`
