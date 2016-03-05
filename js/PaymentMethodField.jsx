@@ -26,7 +26,7 @@ var PaymentMethodField = React.createClass({
 					<div>
 						<label>Payment Method</label>
 						<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
-						<StripeCheckout name="Update card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
+						<StripeCheckout name="Update card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false}>
 							<Button bsStyle="primary">Update card</Button>
 						</StripeCheckout>
 						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
@@ -39,7 +39,7 @@ var PaymentMethodField = React.createClass({
 					<div>
 						<label>Payment Method</label>
 						<p>No card found</p>
-						<StripeCheckout name="Add card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
+						<StripeCheckout name="Add card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false}>
 							<Button bsStyle="primary">Add card</Button>
 						</StripeCheckout>
 					</div>
