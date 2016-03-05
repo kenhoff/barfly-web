@@ -2,6 +2,8 @@ var React = require('react')
 var $ = require('jquery')
 var StripeCheckout = require('react-stripe-checkout')
 var Button = require('react-bootstrap').Button
+var OverlayTrigger = require('react-bootstrap').OverlayTrigger
+var Popover = require('react-bootstrap').Popover
 
 var PaymentMethodField = React.createClass({
 	getInitialState: function() {
@@ -13,26 +15,39 @@ var PaymentMethodField = React.createClass({
 	},
 
 	render: function() {
-		return (
-			<div>
-				<label>Payment Method</label>
-				{(!this.state.resolving && this.state.card)
-					? <div>
-							<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
-							<StripeCheckout name="Update card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
-								<Button bsStyle="primary">Update card</Button>
-							</StripeCheckout>
+		if (!this.state.resolving) {
+			if (this.state.card) {
+				var popover = (
+					<Popover title="Are you sure you want to remove this card?" id="Remove card">
+						<Button bsStyle="danger">Remove card</Button>
+					</Popover>
+				)
+				return (
+					<div>
+						<label>Payment Method</label>
+						<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
+						<StripeCheckout name="Update card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
+							<Button bsStyle="primary">Update card</Button>
+						</StripeCheckout>
+						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
 							<Button>Remove card</Button>
-						</div>
-					: <div>
+						</OverlayTrigger>
+					</div>
+				)
+			} else {
+				return (
+					<div>
+						<label>Payment Method</label>
 						<p>No card found</p>
 						<StripeCheckout name="Add card" token={this.handleToken} stripeKey="pk_test_oCFFFgI2gCUg4T5emh8EYsBQ" allowRememberMe={false}>
 							<Button bsStyle="primary">Add card</Button>
 						</StripeCheckout>
 					</div>
-}
-			</div>
-		)
+				)
+			}
+		} else {
+			return (<div/>)
+		}
 	},
 	handleToken: function() {},
 	componentDidMount: function() {
@@ -50,7 +65,6 @@ var PaymentMethodField = React.createClass({
 				}
 			}.bind(this)
 		})
-
 	}
 })
 
