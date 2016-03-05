@@ -19,7 +19,7 @@ var PaymentMethodField = React.createClass({
 			if (this.state.card) {
 				var popover = (
 					<Popover title="Are you sure you want to remove this card?" id="Remove card">
-						<Button bsStyle="danger">Remove card</Button>
+						<Button bsStyle="danger" onClick={this.deleteCard}>Remove card</Button>
 					</Popover>
 				);
 				return (
@@ -58,7 +58,10 @@ var PaymentMethodField = React.createClass({
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			}
+			},
+			success: function() {
+				this.componentDidMount();
+			}.bind(this)
 		});
 	},
 	deleteCard: function() {
@@ -67,7 +70,10 @@ var PaymentMethodField = React.createClass({
 			method: "DELETE",
 			headers: {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			}
+			},
+			success: function() {
+				this.componentDidMount();
+			}.bind(this)
 		});
 	},
 	componentDidMount: function() {
