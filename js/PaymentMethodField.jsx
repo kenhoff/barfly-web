@@ -49,7 +49,18 @@ var PaymentMethodField = React.createClass({
 			return (<div/>)
 		}
 	},
-	handleToken: function() {},
+	handleToken: function(token) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/paymentmethods",
+			data: {
+				token: token
+			},
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			}
+		})
+	},
 	componentDidMount: function() {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/paymentmethods",
