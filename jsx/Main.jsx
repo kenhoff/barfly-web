@@ -10,7 +10,7 @@ var browserHistory = require('react-router').browserHistory
 var $ = require('jquery')
 
 var App = require('./App.jsx')
-var AppNav = require('./AppNav.jsx')
+var AppNav = require("./AppNav/AppNav.jsx");
 var Orders = require('./Orders.jsx')
 var Order = require('./Order.jsx')
 var Account = require('./Account.jsx')

@@ -1,5 +1,5 @@
 var assert = require('assert');
-var NewBarModal = require('../jsx/NewBarModal.jsx');
+var NewBarModal = require("../jsx/AppNav/NewBarModal.jsx");
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
