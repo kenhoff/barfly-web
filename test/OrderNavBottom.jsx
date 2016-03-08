@@ -6,7 +6,7 @@ var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var ShallowTestUtils = require('react-shallow-testutils');
 
-var OrderNavBottom = require('../js/OrderNavBottom.jsx');
+var OrderNavBottom = require('../jsx/OrderNavBottom.jsx');
 
 renderOrderNavBottom = function(component) {
 	renderedOrderNavBottom = ReactTestUtils.renderIntoDocument(component)

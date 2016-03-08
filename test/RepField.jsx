@@ -5,7 +5,7 @@ var ReactTestUtils = require('react-addons-test-utils');
 
 var $ = require('jquery');
 
-var RepField = require('../js/RepField.jsx');
+var RepField = require('../jsx/RepField.jsx');
 
 var AddRepModal = React.createClass({
 	render: function() {

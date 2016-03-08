@@ -5,7 +5,7 @@ var assert = require('assert')
 var Modal = require('react-bootstrap').Modal
 var Input = require('react-bootstrap').Input
 
-var AddDistributorModal = require('../js/AddDistributorModal.jsx')
+var AddDistributorModal = require('../jsx/AddDistributorModal.jsx')
 
 renderAddDistributorModal = function() {
 	renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
