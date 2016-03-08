@@ -1,11 +1,11 @@
-var React = require('react')
+var React = require('react');
 
-var Grid = require('react-bootstrap').Grid
-var Row = require('react-bootstrap').Row
-var PageHeader = require('react-bootstrap').PageHeader
+var Grid = require('react-bootstrap').Grid;
+var Row = require('react-bootstrap').Row;
+var PageHeader = require('react-bootstrap').PageHeader;
 
-var AccountPhoneInput = require('./AccountPhoneInput.jsx')
-var PaymentMethodField = require('./PaymentMethodField.jsx')
+var AccountPhoneInput = require('./AccountPhoneInput.jsx');
+var PaymentMethodField = require('./PaymentMethodField.jsx');
 
 var Account = React.createClass({
 
@@ -23,9 +23,9 @@ var Account = React.createClass({
 					<PaymentMethodField/>
 				</Row>
 			</Grid>
-		)
+		);
 	}
 
-})
+});
 
-module.exports = Account
+module.exports = Account;

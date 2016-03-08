@@ -1,19 +1,19 @@
-var React = require('react')
-var $ = require('jquery')
-var Navbar = require('react-bootstrap').Navbar
-var Nav = require('react-bootstrap').Nav
-var NavItem = require('react-bootstrap').NavItem
-var NavDropdown = require('react-bootstrap').NavDropdown
-var Button = require('react-bootstrap').Button
+var React = require('react');
+var $ = require('jquery');
+var Navbar = require('react-bootstrap').Navbar;
+var Nav = require('react-bootstrap').Nav;
+var NavItem = require('react-bootstrap').NavItem;
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var Button = require('react-bootstrap').Button;
 
-var NewBarModal = require('./NewBarModal.jsx')
+var NewBarModal = require('./NewBarModal.jsx');
 
 var BarSelector = React.createClass({
 	propTypes: {
 		currentBar: React.PropTypes.number
 	},
 	getInitialState: function() {
-		return {showModal: false, bars: [], selectedBarName: "Loading bar..."}
+		return {showModal: false, bars: [], selectedBarName: "Loading bar..."};
 	},
 	render: function() {
 		if (this.props.currentBar == null) {
@@ -21,7 +21,7 @@ var BarSelector = React.createClass({
 				<NavItem>
 					Loading...
 				</NavItem>
-			)
+			);
 		} else if (this.props.currentBar == -1) {
 			return (
 				<div>
@@ -32,32 +32,31 @@ var BarSelector = React.createClass({
 					</Navbar.Form>
 					<NewBarModal showModal={this.state.showModal} onHide={this.closeNewBarModal} onBarChange={this.props.changeBar}/>
 				</div>
-			)
+			);
 		} else {
-			var bars = this.state.bars
+			var bars = this.state.bars;
 			// index of current bar
-			var index = bars.indexOf(this.props.currentBar)
-			bars.splice(index, 1)
+			var index = bars.indexOf(this.props.currentBar);
+			bars.splice(index, 1);
 			return (
 				<Nav>
 					<NavDropdown id="Bar Select Menu" title={this.state.selectedBarName}>
 						{this.state.bars.map(function(bar) {
-							return (<IndividualBarInDropdownList key={bar} barID={bar} changeBar={this.props.changeBar}/>)
+							return (<IndividualBarInDropdownList key={bar} barID={bar} changeBar={this.props.changeBar}/>);
 						}.bind(this))}
 					</NavDropdown>
 				</Nav>
-
-			)
+			);
 		}
 	},
 	changeBar: function(barID) {
-		this.props.changeBar(barID)
+		this.props.changeBar(barID);
 	},
 	openNewBarModal: function() {
-		this.setState({showModal: true})
+		this.setState({showModal: true});
 	},
 	closeNewBarModal: function() {
-		this.setState({showModal: false})
+		this.setState({showModal: false});
 	},
 	loadBars: function(cb) {
 		$.ajax({
@@ -67,29 +66,29 @@ var BarSelector = React.createClass({
 			},
 			success: function(data) {
 				if (data.length != 0) {
-					cb(data)
+					cb(data);
 				}
 			}
-		})
+		});
 	},
 	componentDidMount: function() {
 		if (this.props.currentBar && this.props.currentBar >= 0) {
 			this.loadBars(function(bars) {
-				this.setState({bars: bars})
-			}.bind(this))
+				this.setState({bars: bars});
+			}.bind(this));
 			this.resolveBarName(this.props.currentBar, function(barName) {
-				this.setState({selectedBarName: barName})
-			}.bind(this))
+				this.setState({selectedBarName: barName});
+			}.bind(this));
 		}
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if (nextProps.currentBar && nextProps.currentBar >= 0) {
 			this.loadBars(function(bars) {
-				this.setState({bars: bars})
-			}.bind(this))
+				this.setState({bars: bars});
+			}.bind(this));
 			this.resolveBarName(nextProps.currentBar, function(barName) {
-				this.setState({selectedBarName: barName})
-			}.bind(this))
+				this.setState({selectedBarName: barName});
+			}.bind(this));
 		}
 	},
 	resolveBarName: function(barID, cb) {
@@ -99,35 +98,35 @@ var BarSelector = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(barInfo) {
-				cb(barInfo.barName)
+				cb(barInfo.barName);
 			}
-		})
+		});
 	}
-})
+});
 
 var IndividualBarInDropdownList = React.createClass({
 	getInitialState: function() {
-		return {barName: "Loading bar..."}
+		return {barName: "Loading bar..."};
 	},
 	render: function() {
 		return (
 			<MenuItem onClick={this.changeBar}>
 				{this.state.barName}
 			</MenuItem>
-		)
+		);
 	},
 	changeBar: function() {
-		this.props.changeBar(this.props.barID)
+		this.props.changeBar(this.props.barID);
 	},
 	componentDidMount: function() {
 		this.resolveBarName(this.props.barID, function(barName) {
-			this.setState({barName: barName})
-		}.bind(this))
+			this.setState({barName: barName});
+		}.bind(this));
 	},
 	componentWillReceiveProps: function(nextProps) {
 		this.resolveBarName(nextProps.barID, function(barName) {
-			this.setState({barName: barName})
-		}.bind(this))
+			this.setState({barName: barName});
+		}.bind(this));
 	},
 	resolveBarName: function(barID, cb) {
 		$.ajax({
@@ -136,10 +135,10 @@ var IndividualBarInDropdownList = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function(barInfo) {
-				cb(barInfo.barName)
+				cb(barInfo.barName);
 			}
-		})
+		});
 	}
-})
+});
 
-module.exports = BarSelector
+module.exports = BarSelector;
