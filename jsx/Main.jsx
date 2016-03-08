@@ -13,7 +13,7 @@ var App = require('./App.jsx')
 var AppNav = require("./AppNav/AppNav.jsx");
 var Orders = require('./Orders.jsx')
 var Order = require('./Order.jsx')
-var Account = require('./Account.jsx')
+var Account = require("./Account/Account.jsx");
 var Landing = require('./Landing.jsx')
 
 var Main = React.createClass({
