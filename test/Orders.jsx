@@ -4,8 +4,8 @@ var assert = chai.assert
 var $ = require('jquery')
 var sinon = require('sinon')
 
-var Orders = require("../js/Orders.jsx")
-var OrderListItem = require('../js/OrderListItem.jsx')
+var Orders = require("../jsx/OrderList/Orders.jsx")
+var OrderListItem = require('../jsx/OrderList/OrderListItem.jsx')
 
 var browserHistory = require('react-router').browserHistory
 

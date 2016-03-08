@@ -4,7 +4,7 @@ var jstz = require('jstimezonedetect')
 var $ = require('jquery')
 var Row = require('react-bootstrap').Row
 var Col = require('react-bootstrap').Col
-var ProductOrderSummaryItem = require('./ProductOrderSummaryItem.jsx')
+var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
 
 var browserHistory = require('react-router').browserHistory
 

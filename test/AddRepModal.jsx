@@ -6,7 +6,7 @@ var assert = require('assert');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
-var AddRepModal = require('../js/AddRepModal.jsx');
+var AddRepModal = require("../jsx/Order/AddRepModal.jsx");
 
 renderAddRepModal = function() {
 	renderedAddRepModal = ReactTestUtils.renderIntoDocument(< AddRepModal distributorID = {
