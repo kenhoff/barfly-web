@@ -6,6 +6,7 @@ var PageHeader = require('react-bootstrap').PageHeader;
 
 var AccountPhoneInput = require('./AccountPhoneInput.jsx');
 var PaymentMethodField = require('./PaymentMethodField.jsx');
+var SubscriptionField = require('./SubscriptionField.jsx');
 
 var Account = React.createClass({
 
@@ -21,6 +22,9 @@ var Account = React.createClass({
 				<br></br>
 				<Row>
 					<PaymentMethodField/>
+				</Row>
+				<Row>
+					<SubscriptionField/>
 				</Row>
 			</Grid>
 		);
