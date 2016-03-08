@@ -4,7 +4,7 @@ var assert = require('assert');
 var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
-var DistributorField = require('../jsx/DistributorField.jsx');
+var DistributorField = require("../jsx/Order/DistributorField.jsx");
 
 var $ = require('jquery');
 

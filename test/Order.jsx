@@ -8,8 +8,8 @@ var ReactDOM = require('react-dom')
 
 var browserHistory = require('react-router').browserHistory;
 
-Order = require("../jsx/Order.jsx")
-ProductCard = require("../jsx/ProductCard.jsx")
+var Order = require("../jsx/Order/Order.jsx");
+var ProductCard = require("../jsx/Order/ProductCard.jsx");
 
 renderOrder = function() {
 	renderedOrder = ReactTestUtils.renderIntoDocument(< Order bar = {

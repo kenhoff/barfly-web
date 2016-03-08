@@ -2,7 +2,7 @@ var async = require('async')
 var React = require('react')
 var $ = require('jquery')
 
-var ProductOrderSummaryItem = require('./ProductOrderSummaryItem.jsx')
+var ProductOrderSummaryItem = require("../ProductOrderSummaryItem.jsx");
 
 var SentOrderMessages = React.createClass({
 	propTypes: {

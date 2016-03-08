@@ -7,7 +7,7 @@ var ReactTestUtils = require('react-addons-test-utils');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
-var NewProductModal = require('../jsx/NewProductModal.jsx');
+var NewProductModal = require("../jsx/Order/NewProductModal.jsx");
 
 // notes: for a bunch of these, we actually need to check to see if the disabled button is clicked, and handle accordingly
 
