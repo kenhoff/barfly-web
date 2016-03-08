@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Grid = require('react-bootstrap').Grid;
+var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var PageHeader = require('react-bootstrap').PageHeader;
 
@@ -14,7 +15,9 @@ var Account = React.createClass({
 		return (
 			<Grid className="app">
 				<Row>
-					<PageHeader>Account</PageHeader>
+					<Col xs={12}>
+						<PageHeader>Account</PageHeader>
+					</Col>
 				</Row>
 				<Row>
 					<AccountPhoneInput/>

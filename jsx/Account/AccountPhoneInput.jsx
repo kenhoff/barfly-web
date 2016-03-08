@@ -1,6 +1,7 @@
 var React = require('react');
 var Input = require('react-bootstrap').Input;
 var Button = require('react-bootstrap').Button;
+var Col = require('react-bootstrap').Col;
 
 var $ = require('jquery');
 
@@ -10,12 +11,12 @@ var AccountPhoneInput = React.createClass({
 	},
 	render: function() {
 		return (
-			<div>
+			<Col xs={12}>
 				<Input onChange={this.handleChange} label="Phone" type="number" placeholder="3038826490" help={this.state.hasBeenChanged
 					? "A number that we can send order confirmations to."
 					: ""} value={this.state.value}/>
 				<Button onClick={this.handleSave} bsStyle="primary" disabled={!this.state.hasBeenChanged}>Save</Button>
-			</div>
+			</Col>
 		);
 	},
 	handleChange: function(event) {
