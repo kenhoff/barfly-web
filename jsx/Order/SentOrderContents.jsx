@@ -1,5 +1,5 @@
 var React = require('react')
-var ProductOrderSummaryItem = require('../ProductOrderSummaryItem.jsx')
+var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
 
 var SentOrderContents = React.createClass({
 
