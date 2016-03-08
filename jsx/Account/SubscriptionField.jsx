@@ -5,24 +5,27 @@ var Button = require('react-bootstrap').Button;
 
 var SubscriptionField = React.createClass({
 	getInitialState: function() {
-		return {subscription: {}};
+		return {subscription: null};
 	},
 	render: function() {
+		if (!this.state.subscription) {
+			return (<div/>);
+		}
 		if (Object.keys(this.state.subscription).length == 0) {
 			return (
 				<Col xs={12}>
 					<label>Subscription</label>
-					<Button>Activate subscription</Button>
+					<Button onClick={this.postSubscription} bsStyle="primary">Activate subscription</Button>
 				</Col>
-			)
+			);
+		} else {
+			return (
+				<Col xs={12}>
+					<label>Subscription</label>
+					<p>Standard Plan</p>
+				</Col>
+			);
 		}
-
-		return (
-			<div>
-				<label>Subscription</label>
-				<p>Subscription info goes here</p>
-			</div>
-		);
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -35,8 +38,19 @@ var SubscriptionField = React.createClass({
 				this.setState({subscription: subscription});
 			}.bind(this)
 		});
+	},
+	postSubscription: function() {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/subscriptions",
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function() {
+				this.componentDidMount();
+			}.bind(this)
+		});
 	}
-
 });
 
 module.exports = SubscriptionField;
