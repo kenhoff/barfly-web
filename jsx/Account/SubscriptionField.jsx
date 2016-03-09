@@ -38,9 +38,8 @@ var SubscriptionField = React.createClass({
 							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining"}</p>
 							<p>{"On " + dateTrialEnds + ", your subscription will end, and your card will not be charged."}</p>
 							<Button bsStyle="primary">
-								Activate subscription
+								{"Set subscription to activate at end of trial"}
 							</Button>
-
 						</Col>
 					);
 				} else {
@@ -48,9 +47,9 @@ var SubscriptionField = React.createClass({
 						<Col xs={12}>
 							<h4>Subscription</h4>
 							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining"}</p>
-							<p>{"On " + dateTrialEnds + ", your subscription will end, and your card will not be charged."}</p>
+							<p>{"On " + dateTrialEnds + ", your subscription will begin, and your card will be charged."}</p>
 							<Button bsStyle="primary">
-								Activate subscription
+								{"Set subscription to deactivate at end of trial"}
 							</Button>
 						</Col>
 					);
