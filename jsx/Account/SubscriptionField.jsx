@@ -5,6 +5,9 @@ var Button = require('react-bootstrap').Button;
 var Popover = require('react-bootstrap').Popover;
 var OverlayTrigger = require('react-bootstrap').OverlayTrigger;
 
+var moment = require('moment-timezone');
+var jstz = require('jstimezonedetect');
+
 var SubscriptionField = React.createClass({
 	getInitialState: function() {
 		return {subscription: null};
@@ -23,23 +26,53 @@ var SubscriptionField = React.createClass({
 				</Col>
 			);
 		} else {
-			var popover = (
-				<Popover title="This will cancel your subscription immediately." id="Cancel subscription">
-					<Button bsStyle="danger" onClick={this.deleteSubscription}>Cancel subscription</Button>
-				</Popover>
-			);
-			return (
-				<Col xs={12}>
-					<label>Subscription</label >
-					<p>Standard Plan</p>
-					<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
-						<Button bsStyle="warning">
-							Cancel subscription
-						</Button>
-					</OverlayTrigger>
 
-				</Col>
-			);
+			if (this.state.subscription.status == "trialing") {
+				var timezone = jstz.determine().name();
+				var dateTrialEnds = moment(this.state.subscription.trial_end * 1000).tz(timezone).format('LL');
+				var trialDaysRemaining = moment.duration((this.state.subscription.trial_end * 1000) - Date.now()).days();
+				if (this.state.subscription.cancel_at_period_end == true) {
+					return (
+						<Col xs={12}>
+							<label>Subscription</label >
+							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining. Your card will not be charged, and your subscription will end on " + dateTrialEnds + "."}</p>
+							<Button bsStyle="primary">
+								Activate subscription
+							</Button>
+
+						</Col>
+					);
+				} else {
+					return (
+						<Col xs={12}>
+							<label>Subscription</label >
+							<p>Standard Plan</p>
+							<Button bsStyle="warning">
+								Cancel subscription
+							</Button>
+						</Col>
+					);
+				}
+			} else {
+				var popover = (
+					<Popover title="This will cancel your subscription immediately." id="Cancel subscription">
+						<Button bsStyle="danger" onClick={this.deleteSubscription}>Cancel subscription</Button>
+					</Popover>
+				);
+				return (
+					<Col xs={12}>
+						<label>Subscription</label >
+						<p>Standard Plan</p>
+						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
+							<Button bsStyle="warning">
+								Cancel subscription
+							</Button>
+						</OverlayTrigger>
+
+					</Col>
+				);
+			}
+
 		}
 	},
 	componentDidMount: function() {
