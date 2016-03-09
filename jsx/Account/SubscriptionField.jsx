@@ -19,7 +19,7 @@ var SubscriptionField = React.createClass({
 		if (Object.keys(this.state.subscription).length == 0) {
 			return (
 				<Col xs={12}>
-					<label>Subscription</label>
+					<h4>Subscription</h4>
 					<p>
 						<Button onClick={this.postSubscription} bsStyle="primary">Activate subscription</Button>
 					</p>
@@ -34,8 +34,9 @@ var SubscriptionField = React.createClass({
 				if (this.state.subscription.cancel_at_period_end == true) {
 					return (
 						<Col xs={12}>
-							<label>Subscription</label >
-							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining. Your card will not be charged, and your subscription will end on " + dateTrialEnds + "."}</p>
+							<h4>Subscription</h4>
+							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining"}</p>
+							<p>{"On " + dateTrialEnds + ", your subscription will end, and your card will not be charged."}</p>
 							<Button bsStyle="primary">
 								Activate subscription
 							</Button>
@@ -45,10 +46,11 @@ var SubscriptionField = React.createClass({
 				} else {
 					return (
 						<Col xs={12}>
-							<label>Subscription</label >
-							<p>Standard Plan</p>
-							<Button bsStyle="warning">
-								Cancel subscription
+							<h4>Subscription</h4>
+							<p>{"Standard Plan - " + trialDaysRemaining + " trial days remaining"}</p>
+							<p>{"On " + dateTrialEnds + ", your subscription will end, and your card will not be charged."}</p>
+							<Button bsStyle="primary">
+								Activate subscription
 							</Button>
 						</Col>
 					);
@@ -61,7 +63,7 @@ var SubscriptionField = React.createClass({
 				);
 				return (
 					<Col xs={12}>
-						<label>Subscription</label >
+						<h4>Subscription</h4>
 						<p>Standard Plan</p>
 						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
 							<Button bsStyle="warning">

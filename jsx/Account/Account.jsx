@@ -4,6 +4,7 @@ var Grid = require('react-bootstrap').Grid;
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var PageHeader = require('react-bootstrap').PageHeader;
+var Panel = require('react-bootstrap').Panel;
 
 var AccountPhoneInput = require('./AccountPhoneInput.jsx');
 var PaymentMethodField = require('./PaymentMethodField.jsx');
@@ -20,14 +21,19 @@ var Account = React.createClass({
 					</Col>
 				</Row>
 				<Row>
-					<AccountPhoneInput/>
-				</Row>
-				<br></br>
-				<Row>
-					<PaymentMethodField/>
+					<Panel>
+						<AccountPhoneInput/>
+					</Panel>
 				</Row>
 				<Row>
-					<SubscriptionField/>
+					<Panel>
+						<PaymentMethodField/>
+					</Panel>
+				</Row>
+				<Row>
+					<Panel>
+						<SubscriptionField/>
+					</Panel>
 				</Row>
 			</Grid>
 		);

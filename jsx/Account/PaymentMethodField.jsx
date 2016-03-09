@@ -25,7 +25,7 @@ var PaymentMethodField = React.createClass({
 				);
 				return (
 					<Col xs={12}>
-						<label>Payment Method</label>
+						<h4>Payment Method</h4>
 						<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
 						<StripeCheckout name="Update card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false} panelLabel="Update card">
 							<Button bsStyle="primary">Update card</Button>
@@ -38,7 +38,7 @@ var PaymentMethodField = React.createClass({
 			} else {
 				return (
 					<Col xs={12}>
-						<label>Payment Method</label>
+						<h4>Payment Method</h4>
 						<p>No card found</p>
 						<StripeCheckout name="Add card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false} panelLabel="Add card">
 							<Button bsStyle="primary">Add card</Button>

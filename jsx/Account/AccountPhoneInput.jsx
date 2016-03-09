@@ -12,7 +12,8 @@ var AccountPhoneInput = React.createClass({
 	render: function() {
 		return (
 			<Col xs={12}>
-				<Input onChange={this.handleChange} label="Phone" type="number" placeholder="3038826490" help={this.state.hasBeenChanged
+				<h4>Phone</h4>
+				<Input onChange={this.handleChange} type="number" placeholder="3038826490" help={this.state.hasBeenChanged
 					? "A number that we can send order confirmations to."
 					: ""} value={this.state.value}/>
 				<Button onClick={this.handleSave} bsStyle="primary" disabled={!this.state.hasBeenChanged}>Save</Button>
