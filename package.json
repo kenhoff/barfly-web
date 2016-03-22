@@ -8,7 +8,7 @@
     "test": "mocha",
     "postinstall": "npm run build ; stylus static/style.styl ; jade static/index.jade",
     "pretest": "rm ./test/test.js; browserify ./test/Main.jsx -t reactify -t localenvify -t rewireify -o ./test/test.js",
-    "build": "rm ./static/app.js; browserify ./js/Main.jsx -t reactify -t localenvify -o ./static/app.js",
+    "build": "rm ./static/app.js; browserify ./jsx/Main.jsx -t reactify -t localenvify -o ./static/app.js",
     "dev": ""
   },
   "repository": {
