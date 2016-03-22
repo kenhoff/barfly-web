@@ -1,13 +1,13 @@
-var React = require('react')
-var Nav = require('react-bootstrap').Nav
-var NavDropdown = require('react-bootstrap').NavDropdown
-var MenuItem = require('react-bootstrap').MenuItem
+var React = require('react');
+var Nav = require('react-bootstrap').Nav;
+var NavDropdown = require('react-bootstrap').NavDropdown;
+var MenuItem = require('react-bootstrap').MenuItem;
 
-var browserHistory = require('react-router').browserHistory
+var browserHistory = require('react-router').browserHistory;
 
 var AccountDropdown = React.createClass({
 	getInitialState: function() {
-		return {}
+		return {};
 	},
 	render: function() {
 		if (this.state.profile) {
@@ -21,26 +21,27 @@ var AccountDropdown = React.createClass({
 						<MenuItem onSelect={this.props.signOut}>Log out</MenuItem>
 					</NavDropdown>
 				</Nav>
-			)
+			);
 		} else {
-			return <div/>
+			return <div/>;
 		}
 	},
 	navigate: function(e) {
 		// a little hacky, but it works.
-		browserHistory.push(e.target.target)
+		browserHistory.push(e.target.target);
 	},
 	componentDidMount: function() {
 		this.props.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
 			if (err) {
 				this.refreshToken(function() {
-					this.componentDidMount()
-				}.bind(this))
-				return
+					this.componentDidMount();
+				}.bind(this));
+				return;
 			} else {
-				this.setState({profile: profile})
+				this.setState({profile: profile});
 			}
-		}.bind(this))
+		}.bind(this));
 	}
-})
-module.exports = AccountDropdown
+});
+
+module.exports = AccountDropdown;

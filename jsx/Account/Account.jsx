@@ -1,11 +1,14 @@
-var React = require('react')
+var React = require('react');
 
-var Grid = require('react-bootstrap').Grid
-var Row = require('react-bootstrap').Row
-var PageHeader = require('react-bootstrap').PageHeader
+var Grid = require('react-bootstrap').Grid;
+var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
+var PageHeader = require('react-bootstrap').PageHeader;
+var Panel = require('react-bootstrap').Panel;
 
-var AccountPhoneInput = require('./AccountPhoneInput.jsx')
-var PaymentMethodField = require('./PaymentMethodField.jsx')
+var AccountPhoneInput = require('./AccountPhoneInput.jsx');
+var PaymentMethodField = require('./PaymentMethodField.jsx');
+var SubscriptionField = require('./SubscriptionField.jsx');
 
 var Account = React.createClass({
 
@@ -13,19 +16,29 @@ var Account = React.createClass({
 		return (
 			<Grid className="app">
 				<Row>
-					<PageHeader>Account</PageHeader>
+					<Col xs={12}>
+						<PageHeader>Account</PageHeader>
+					</Col>
 				</Row>
 				<Row>
-					<AccountPhoneInput/>
+					<Panel>
+						<AccountPhoneInput/>
+					</Panel>
 				</Row>
-				<br></br>
 				<Row>
-					<PaymentMethodField/>
+					<Panel>
+						<PaymentMethodField/>
+					</Panel>
+				</Row>
+				<Row>
+					<Panel>
+						<SubscriptionField/>
+					</Panel>
 				</Row>
 			</Grid>
-		)
+		);
 	}
 
-})
+});
 
-module.exports = Account
+module.exports = Account;

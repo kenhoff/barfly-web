@@ -4,6 +4,7 @@ var StripeCheckout = require("react-stripe-checkout");
 var Button = require("react-bootstrap").Button;
 var OverlayTrigger = require("react-bootstrap").OverlayTrigger;
 var Popover = require("react-bootstrap").Popover;
+var Col = require("react-bootstrap").Col;
 
 var PaymentMethodField = React.createClass({
 	getInitialState: function() {
@@ -23,8 +24,8 @@ var PaymentMethodField = React.createClass({
 					</Popover>
 				);
 				return (
-					<div>
-						<label>Payment Method</label>
+					<Col xs={12}>
+						<h4>Payment Method</h4>
 						<p>{this.state.card.brand + " **** **** **** " + this.state.card.last4}</p>
 						<StripeCheckout name="Update card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false} panelLabel="Update card">
 							<Button bsStyle="primary">Update card</Button>
@@ -32,17 +33,17 @@ var PaymentMethodField = React.createClass({
 						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
 							<Button>Remove card</Button>
 						</OverlayTrigger>
-					</div>
+					</Col>
 				);
 			} else {
 				return (
-					<div>
-						<label>Payment Method</label>
+					<Col xs={12}>
+						<h4>Payment Method</h4>
 						<p>No card found</p>
 						<StripeCheckout name="Add card" token={this.handleToken} stripeKey={process.env.STRIPE_PUBLISHABLE_KEY} allowRememberMe={false} panelLabel="Add card">
 							<Button bsStyle="primary">Add card</Button>
 						</StripeCheckout>
-					</div>
+					</Col>
 				);
 			}
 		} else {

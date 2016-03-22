@@ -1,7 +1,7 @@
-var React = require('react')
-var Modal = require('react-bootstrap').Modal
-var Input = require('react-bootstrap').Input
-var $ = require('jquery')
+var React = require('react');
+var Modal = require('react-bootstrap').Modal;
+var Input = require('react-bootstrap').Input;
+var $ = require('jquery');
 
 var NewBarModal = React.createClass({
 	getInitialState: function() {
