@@ -1,14 +1,14 @@
-var React = require('react')
+var React = require('react');
 
-var Row = require('react-bootstrap').Row
-var Col = require('react-bootstrap').Col
-var Panel = require('react-bootstrap').Panel
+var Row = require('react-bootstrap').Row;
+var Col = require('react-bootstrap').Col;
+var Panel = require('react-bootstrap').Panel;
 
-var DistributorField = require('./DistributorField.jsx')
-var RepField = require('./RepField.jsx')
-var SizeList = require('./SizeList.jsx')
+var DistributorField = require('./DistributorField.jsx');
+var RepField = require('./RepField.jsx');
+var SizeList = require('./SizeList.jsx');
 
-var $ = require('jquery')
+var $ = require('jquery');
 
 var ProductCard = React.createClass({
 	propTypes: {
@@ -16,22 +16,22 @@ var ProductCard = React.createClass({
 		barID: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
-		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null})
+		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null});
 	},
 	render: function() {
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
-			return (<div/>)
+			return (<div/>);
 		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
-			return (<div/>)
+			return (<div/>);
 		} else if (!this.state.productName.toLowerCase().includes(this.props.searchText.toLowerCase())) {
-			return (<div/>)
+			return (<div/>);
 		} else {
 			return (
 				<Panel>
 					<Row>
 						<Col xs={12} sm={4}>
 							<p>
-								<b>Product:</b>&nbsp;{this.state.productName}
+								<b>{this.state.productName}</b>
 							</p>
 						</Col>
 						<Col xs={12} sm={4}>
@@ -51,18 +51,18 @@ var ProductCard = React.createClass({
 						</Col>
 					</Row>
 				</Panel>
-			)
+			);
 		}
 	},
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
 		// for some reason this is necessary - trying to bind directly to this.props.changeQuantity causes React to get cranky :(
-		this.props.changeQuantity(productID, productSizeID, productQuantity)
+		this.props.changeQuantity(productID, productSizeID, productQuantity);
 	},
 	handleDistributorChange: function(distributorID, distributorName) {
-		this.setState({distributorID: distributorID, distributorName: distributorName})
+		this.setState({distributorID: distributorID, distributorName: distributorName});
 	},
 	handleRepChange: function(repID, repName) {
-		this.setState({repID: repID, repName: repName})
+		this.setState({repID: repID, repName: repName});
 	},
 	componentDidMount: function() {
 		// resolve name
@@ -70,14 +70,14 @@ var ProductCard = React.createClass({
 			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID,
 			method: "GET",
 			success: function(product) {
-				this.setState({productName: product.productName})
+				this.setState({productName: product.productName});
 			}.bind(this)
-		})
+		});
 	},
 	handleStarredChange: function(starredChange) {
-		starredChange.productID = this.props.productID
-		this.props.changeStarred(starredChange)
+		starredChange.productID = this.props.productID;
+		this.props.changeStarred(starredChange);
 	}
-})
+});
 
-module.exports = ProductCard
+module.exports = ProductCard;

@@ -93,7 +93,7 @@ describe("ProductCard", function() {
 			done()
 		})
 		it("renders the correct product name", function(done) {
-			assert.equal(title.children[2].innerHTML, "Product X")
+			assert.equal(title.children[0].innerHTML, "Product X")
 			done()
 		})
 	})
