@@ -10,7 +10,7 @@ var jstz = require('jstimezonedetect');
 
 var SubscriptionField = React.createClass({
 	getInitialState: function() {
-		return {subscription: null};
+		return {subscription: null, invoice: null};
 	},
 	render: function() {
 		if (!this.state.subscription) {
@@ -26,7 +26,6 @@ var SubscriptionField = React.createClass({
 				</Col>
 			);
 		} else {
-
 			if (this.state.subscription.status == "trialing") {
 				var timezone = jstz.determine().name();
 				var dateTrialEnds = moment(this.state.subscription.trial_end * 1000).tz(timezone).format('LL');
@@ -60,20 +59,47 @@ var SubscriptionField = React.createClass({
 						<Button bsStyle="danger" onClick={this.deleteSubscription}>Cancel subscription</Button>
 					</Popover>
 				);
-				return (
-					<Col xs={12}>
-						<h4>Subscription</h4>
-						<p>Standard Plan</p>
-						<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
-							<Button bsStyle="warning">
-								Cancel subscription
-							</Button>
-						</OverlayTrigger>
+				var invoiceField;
+				if (this.state.invoice && (this.state.invoice.paid == false)) {
+					invoiceField = (
+						<span>{" - $" + (this.state.invoice.amount_due / 100) + " past due "}
+							<Button bsStyle="primary" onClick={this.postInvoice}>Pay now</Button>
+						</span>
+					);
+				} else {
+					invoiceField = (
+						<span></span>
+					);
+				}
 
-					</Col>
-				);
+				if (this.state.subscription.status == "unpaid") {
+					return (
+						<Col xs={12}>
+							<h4>Subscription</h4>
+							<p>{"Standard Plan (paused)"}{invoiceField}</p>
+						</Col>
+					);
+				} else if (this.state.subscription.status == "past_due") {
+					return (
+						<Col xs={12}>
+							<h4>Subscription</h4>
+							<p>{"Standard Plan"}{invoiceField}</p>
+						</Col>
+					);
+				} else {
+					return (
+						<Col xs={12}>
+							<h4>Subscription</h4>
+							<p>{"Standard Plan"}{invoiceField}</p>
+							<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
+								<Button bsStyle="warning">
+									Cancel subscription
+								</Button>
+							</OverlayTrigger>
+						</Col>
+					);
+				}
 			}
-
 		}
 	},
 	componentDidMount: function() {
@@ -85,6 +111,28 @@ var SubscriptionField = React.createClass({
 			},
 			success: function(subscription) {
 				this.setState({subscription: subscription});
+			}.bind(this)
+		});
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/invoices",
+			method: "GET",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(invoice) {
+				this.setState({invoice: invoice});
+			}.bind(this)
+		});
+	},
+	postInvoice: function() {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/invoices",
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function() {
+				this.componentDidMount();
 			}.bind(this)
 		});
 	},
