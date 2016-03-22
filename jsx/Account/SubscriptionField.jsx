@@ -10,21 +10,40 @@ var jstz = require('jstimezonedetect');
 
 var SubscriptionField = React.createClass({
 	getInitialState: function() {
-		return {subscription: null, invoice: null};
+		return {subscription: null, invoice: null, user: null};
 	},
 	render: function() {
 		if (!this.state.subscription) {
 			return (<div/>);
 		}
 		if (Object.keys(this.state.subscription).length == 0) {
-			return (
-				<Col xs={12}>
-					<h4>Subscription</h4>
-					<p>
-						<Button onClick={this.postSubscription} bsStyle="primary">Activate subscription</Button>
-					</p>
-				</Col>
-			);
+			// check if user has ever activated a subscription before
+			if (("app_metadata" in this.state.user) && ("startedTrial" in this.state.user.app_metadata) && (this.state.user.app_metadata.startedTrial)) {
+				var popover = (
+					<Popover title="This will activate your subscription immediately and charge your card $30." id="Reactivate subscription">
+						<Button bsStyle="primary" onClick={this.postSubscription}>Reactivate subscription</Button>
+					</Popover>
+				);
+				return (
+					<Col xs={12}>
+						<h4>Subscription</h4>
+						<p>
+							<OverlayTrigger trigger="click" rootClose placement="right" overlay={popover}>
+								<Button onClick={this.postSubscription} bsStyle="primary">Reactivate subscription</Button>
+							</OverlayTrigger>
+						</p>
+					</Col>
+				);
+			} else {
+				return (
+					<Col xs={12}>
+						<h4>Subscription</h4>
+						<p>
+							<Button onClick={this.postSubscription} bsStyle="primary">Activate trial</Button>
+						</p>
+					</Col>
+				);
+			}
 		} else {
 			if (this.state.subscription.status == "trialing") {
 				var timezone = jstz.determine().name();
@@ -54,7 +73,7 @@ var SubscriptionField = React.createClass({
 					);
 				}
 			} else {
-				var popover = (
+				popover = (
 					<Popover title="This will cancel your subscription immediately." id="Cancel subscription">
 						<Button bsStyle="danger" onClick={this.deleteSubscription}>Cancel subscription</Button>
 					</Popover>
@@ -71,7 +90,6 @@ var SubscriptionField = React.createClass({
 						<span></span>
 					);
 				}
-
 				if (this.state.subscription.status == "unpaid") {
 					return (
 						<Col xs={12}>
@@ -121,6 +139,16 @@ var SubscriptionField = React.createClass({
 			},
 			success: function(invoice) {
 				this.setState({invoice: invoice});
+			}.bind(this)
+		});
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/user",
+			method: "GET",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: function(user) {
+				this.setState({user: user});
 			}.bind(this)
 		});
 	},
