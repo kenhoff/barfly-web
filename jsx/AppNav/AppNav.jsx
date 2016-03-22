@@ -31,16 +31,16 @@ var AppNav = React.createClass({
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>
-		)
+		);
 	},
 	signOut: function() {
-		localStorage.removeItem("access_jwt")
-		localStorage.removeItem("refresh_token")
-		window.location.href = "/"
+		localStorage.removeItem("access_jwt");
+		localStorage.removeItem("refresh_token");
+		window.location.href = "/";
 	},
 	goHome: function() {
-		browserHistory.push('/')
+		browserHistory.push('/');
 	}
-})
+});
 
-module.exports = AppNav
+module.exports = AppNav;

@@ -15,7 +15,7 @@ On the `master` branch, `BURLOCK_API_URL` points to `https://api.burlockorders.c
 
 **Build everything:** `nodemon --exec 'npm i' -e jsx,jade,styl`
 
-Set up hot reloading for app.js: `node_modules/.bin/watchify ./js/Main.jsx -t babelify -t localenvify -p livereactload -o static/app.js`
+Set up hot reloading for app.js: `node_modules/.bin/watchify ./jsx/Main.jsx -t babelify -t localenvify -p livereactload -o static/app.js`
 
 Build and run tests: `nodemon --exec 'npm test -- --bail' -e jsx`
 

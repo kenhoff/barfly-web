@@ -1,25 +1,27 @@
-var React = require('react')
-var Input = require('react-bootstrap').Input
-var Button = require('react-bootstrap').Button
+var React = require('react');
+var Input = require('react-bootstrap').Input;
+var Button = require('react-bootstrap').Button;
+var Col = require('react-bootstrap').Col;
 
-var $ = require('jquery')
+var $ = require('jquery');
 
 var AccountPhoneInput = React.createClass({
 	getInitialState: function() {
-		return {value: "", hasBeenChanged: false}
+		return {value: "", hasBeenChanged: false};
 	},
 	render: function() {
 		return (
-			<div>
-				<Input onChange={this.handleChange} label="Phone" type="number" placeholder="3038826490" help={this.state.hasBeenChanged
+			<Col xs={12}>
+				<h4>Phone</h4>
+				<Input onChange={this.handleChange} type="number" placeholder="3038826490" help={this.state.hasBeenChanged
 					? "A number that we can send order confirmations to."
 					: ""} value={this.state.value}/>
 				<Button onClick={this.handleSave} bsStyle="primary" disabled={!this.state.hasBeenChanged}>Save</Button>
-			</div>
-		)
+			</Col>
+		);
 	},
 	handleChange: function(event) {
-		this.setState({value: event.target.value, hasBeenChanged: true})
+		this.setState({value: event.target.value, hasBeenChanged: true});
 	},
 	handleSave: function() {
 		$.ajax({
@@ -32,9 +34,9 @@ var AccountPhoneInput = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function() {
-				this.setState({hasBeenChanged: false})
+				this.setState({hasBeenChanged: false});
 			}.bind(this)
-		})
+		});
 	},
 	getPhoneNumber: function() {
 		$.ajax({
@@ -45,14 +47,14 @@ var AccountPhoneInput = React.createClass({
 			},
 			success: function(user) {
 				if ("user_metadata" in user) {
-					this.setState({value: user.user_metadata.phone})
+					this.setState({value: user.user_metadata.phone});
 				}
 			}.bind(this)
-		})
+		});
 	},
 	componentDidMount: function() {
-		this.getPhoneNumber()
+		this.getPhoneNumber();
 	}
-})
+});
 
-module.exports = AccountPhoneInput
+module.exports = AccountPhoneInput;

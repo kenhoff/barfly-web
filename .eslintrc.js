@@ -30,10 +30,6 @@ module.exports = {
 			"always"
 		],
 		"react/jsx-uses-vars": 2,
-		"quotes": [
-			2,
-			"double"
-		],
-
+		"jsx-quotes": [2, "prefer-double"]
 	}
 };

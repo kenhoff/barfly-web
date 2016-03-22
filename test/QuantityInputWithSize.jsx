@@ -8,7 +8,7 @@ var assert = require('assert')
 
 var $ = require('jquery')
 
-var QuantityInputWithSize = require('../js/QuantityInputWithSize.jsx')
+var QuantityInputWithSize = require('../jsx/Order/QuantityInputWithSize.jsx')
 
 describe("QuantityInputWithSize", function() {
 	renderQuantityInputWithSize = function(quantity) {

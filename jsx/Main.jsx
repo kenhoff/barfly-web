@@ -1,20 +1,20 @@
 /*global Auth0Lock*/
 
-var React = require('react')
-var ReactDOM = require('react-dom')
+var React = require('react');
+var ReactDOM = require('react-dom');
 
-var Router = require('react-router').Router
-var Route = require('react-router').Route
-var Redirect = require('react-router').Redirect
-var browserHistory = require('react-router').browserHistory
-var $ = require('jquery')
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Redirect = require('react-router').Redirect;
+var browserHistory = require('react-router').browserHistory;
+var $ = require('jquery');
 
-var App = require('./App.jsx')
-var AppNav = require('./AppNav.jsx')
-var Orders = require('./Orders.jsx')
-var Order = require('./Order.jsx')
-var Account = require('./Account.jsx')
-var Landing = require('./Landing.jsx')
+var App = require('./App.jsx');
+var AppNav = require("./AppNav/AppNav.jsx");
+var Orders = require('./OrderList/Orders.jsx');
+var Order = require('./Order/Order.jsx');
+var Account = require("./Account/Account.jsx");
+var Landing = require('./Landing.jsx');
 
 var Main = React.createClass({
 
