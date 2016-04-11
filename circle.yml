@@ -5,8 +5,8 @@ deployment:
   production:
     branch: master
     heroku:
-      appname: burlock-web
+      appname: barfly-web
   staging:
     branch: staging
     heroku:
-      appname: burlock-web-staging
+      appname: barfly-web-staging

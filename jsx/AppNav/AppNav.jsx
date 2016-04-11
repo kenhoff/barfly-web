@@ -18,7 +18,7 @@ var AppNav = React.createClass({
 			<Navbar>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="#" onClick={this.goHome} className="logo">burlock</a>
+						<a href="#" onClick={this.goHome} className="logo">barfly</a>
 					</Navbar.Brand>
 					<Navbar.Toggle/>
 				</Navbar.Header>
