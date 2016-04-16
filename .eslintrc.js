@@ -6,7 +6,7 @@ module.exports = {
 		"es6": true,
 		"mocha": true
 	},
-	// "extends": ["eslint:recommended"],
+	"extends": ["eslint:recommended"],
 	"parserOptions": {
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true,
@@ -30,6 +30,7 @@ module.exports = {
 			"always"
 		],
 		"react/jsx-uses-vars": 2,
-		"jsx-quotes": [2, "prefer-double"]
+		"jsx-quotes": [2, "prefer-double"],
+		"no-console": 1
 	}
 };
