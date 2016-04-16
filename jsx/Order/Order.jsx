@@ -12,7 +12,7 @@ var jstz = require('jstimezonedetect')
 var ProductList = require('./ProductList.jsx')
 var NewProductModal = require('./NewProductModal.jsx')
 var OrderNavBottom = require('./OrderNavBottom.jsx')
-var SearchNav = require('./SearchNav.jsx')
+var OrderNav = require('./OrderNav.jsx')
 var SentOrderContents = require('./SentOrderContents.jsx')
 var SentOrderMessages = require('./SentOrderMessages.jsx')
 
@@ -35,7 +35,7 @@ var Order = React.createClass({
 			showNewProductModal: false,
 			search: '',
 			sent: false,
-			searchNavFixed: false,
+			OrderNavFixed: false,
 			resolving: true,
 			sentAt: null
 		}
@@ -73,14 +73,14 @@ var Order = React.createClass({
 			return (
 				<div>
 					<Waypoint onEnter={function() {
-						this.setState({searchNavFixed: false})
+						this.setState({OrderNavFixed: false})
 					}.bind(this)} onLeave={function() {
-						this.setState({searchNavFixed: true})
+						this.setState({OrderNavFixed: true})
 					}.bind(this)}/>
-					<div className={this.state.searchNavFixed
+					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
-					<SearchNav fixedTop={this.state.searchNavFixed} value={this.state.search} updateSearch={function(event) {
+					<OrderNav fixedTop={this.state.OrderNavFixed} value={this.state.search} updateSearch={function(event) {
 						this.setState({search: event.target.value})
 					}.bind(this)}/>
 					<div className="container">
