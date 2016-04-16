@@ -1,11 +1,11 @@
-var React = require('react')
-var $ = require('jquery')
-var Modal = require('react-bootstrap').Modal
-var DistributorSelect = require('./DistributorSelect.jsx')
+var React = require('react');
+var $ = require('jquery');
+var Modal = require('react-bootstrap').Modal;
+var DistributorSelect = require('./DistributorSelect.jsx');
 
 var AddDistributorModal = React.createClass({
 	getInitialState: function() {
-		return ({showNewDistributorInput: false, distributors: [], selectedDistributor: "newDistributor", buttonEnabled: false, newDistributorNameValue: ""})
+		return ({showNewDistributorInput: false, distributors: [], selectedDistributor: "newDistributor", buttonEnabled: false, newDistributorNameValue: ""});
 	},
 	render: function() {
 		return (
@@ -23,20 +23,20 @@ var AddDistributorModal = React.createClass({
 						: "disabled")} onClick={this.submitDistributor}>Add Distributor</button>
 				</Modal.Footer>
 			</Modal>
-		)
+		);
 	},
 	handleDistributorChange: function(event) {
 		// console.log(event.target.getChecked())
-		this.setState({selectedDistributor: event.target.value})
+		this.setState({selectedDistributor: event.target.value});
 		if (event.target.value == "newDistributor") {
-			this.setState({showNewDistributorInput: true})
+			this.setState({showNewDistributorInput: true});
 			if (this.state.newDistributorNameValue.trim() != "") {
-				this.setState({buttonEnabled: true})
+				this.setState({buttonEnabled: true});
 			} else {
-				this.setState({buttonEnabled: false})
+				this.setState({buttonEnabled: false});
 			}
 		} else {
-			this.setState({showNewDistributorInput: false, buttonEnabled: true})
+			this.setState({showNewDistributorInput: false, buttonEnabled: true});
 		}
 	},
 	handleNewDistributorNameChange: function(event) {
@@ -44,11 +44,11 @@ var AddDistributorModal = React.createClass({
 			newDistributorNameValue: event.target.value
 		}, function() {
 			if (this.state.newDistributorNameValue.trim() != "") {
-				this.setState({buttonEnabled: true})
+				this.setState({buttonEnabled: true});
 			} else {
-				this.setState({buttonEnabled: false})
+				this.setState({buttonEnabled: false});
 			}
-		}.bind(this))
+		}.bind(this));
 	},
 	submitDistributor: function() {
 		if (this.state.buttonEnabled) {
@@ -56,16 +56,16 @@ var AddDistributorModal = React.createClass({
 				this.createNewDistributor(this.state.newDistributorNameValue, function(newDistributorID) {
 					// now POST to product/zipcode/distributor with new distributorID
 					this.saveDistributor(newDistributorID, function() {
-						this.props.onHide()
-						this.props.reresolveOrder()
-					}.bind(this))
-				}.bind(this))
+						this.props.onHide();
+						this.props.reresolveOrder();
+					}.bind(this));
+				}.bind(this));
 			} else {
 				// now POST to product/zipcode/distributor with new distributorID
 				this.saveDistributor(this.state.selectedDistributor, function() {
-					this.props.onHide()
-					this.props.reresolveOrder()
-				}.bind(this))
+					this.props.onHide();
+					this.props.reresolveOrder();
+				}.bind(this));
 			}
 		}
 	},
@@ -80,28 +80,28 @@ var AddDistributorModal = React.createClass({
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: function() {
-				cb()
+				cb();
 			}
-		})
+		});
 	},
 	getDistributors: function() {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/distributors",
 			method: "GET",
 			success: function(distributors) {
-				this.setState({distributors: distributors})
+				this.setState({distributors: distributors});
 				if (distributors.length == 0) {
-					this.setState({showNewDistributorInput: true, selectedDistributor: "newDistributor"})
+					this.setState({showNewDistributorInput: true, selectedDistributor: "newDistributor"});
 				} else {
-					this.setState({showNewDistributorInput: false, selectedDistributor: distributors[0]})
+					this.setState({showNewDistributorInput: false, selectedDistributor: distributors[0]});
 				}
 			}.bind(this)
-		})
+		});
 	},
 	createNewDistributor: function(distributorName, cb) {
 		var data = {
 			distributorName: distributorName
-		}
+		};
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/distributors",
 			headers: {
@@ -110,13 +110,13 @@ var AddDistributorModal = React.createClass({
 			method: "POST",
 			data: data,
 			success: function(distributorID) {
-				cb(distributorID.distributorID)
+				cb(distributorID.distributorID);
 			}
-		})
+		});
 	},
 	componentDidMount: function() {
-		this.getDistributors()
+		this.getDistributors();
 	}
-})
+});
 
-module.exports = AddDistributorModal
+module.exports = AddDistributorModal;

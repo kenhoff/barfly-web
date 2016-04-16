@@ -1,8 +1,8 @@
+var React = require('react');
 var sinon = require('sinon');
 var assert = require('chai').assert;
 
 var React = require('react');
-var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 
 var $ = require('jquery');
@@ -27,36 +27,36 @@ var SizeList = React.createClass({
 
 // rewireify set stuff
 
-ProductCard.__set__("DistributorField", DistributorField)
-ProductCard.__set__("RepField", RepField)
-ProductCard.__set__("SizeList", SizeList)
+ProductCard.__set__("DistributorField", DistributorField);
+ProductCard.__set__("RepField", RepField);
+ProductCard.__set__("SizeList", SizeList);
 
-renderProductCard = function(jsx) {
-	renderedProductCard = ReactTestUtils.renderIntoDocument(jsx)
-	getComponents(renderedProductCard)
-	return renderedProductCard
-}
+var renderProductCard = function(jsx) {
+	renderedProductCard = ReactTestUtils.renderIntoDocument(jsx);
+	getComponents(renderedProductCard);
+	return renderedProductCard;
+};
 
-getComponents = function(mainComponent) {
-	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(mainComponent, "p")[0]
-	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(mainComponent, DistributorField)
+var getComponents = function(mainComponent) {
+	title = ReactTestUtils.scryRenderedDOMComponentsWithTag(mainComponent, "p")[0];
+	distributorFieldComponent = ReactTestUtils.findRenderedComponentWithType(mainComponent, DistributorField);
 	repFieldComponent = function() {
-		repFields = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, RepField)
+		repFields = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, RepField);
 		if (repFields.length >= 1) {
-			return repFields[0]
+			return repFields[0];
 		} else {
-			return null
+			return null;
 		}
-	}()
+	}();
 	sizeListComponent = function() {
-		sizeLists = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, SizeList)
+		sizeLists = ReactTestUtils.scryRenderedComponentsWithType(mainComponent, SizeList);
 		if (sizeLists.length >= 1) {
-			return sizeLists[0]
+			return sizeLists[0];
 		} else {
-			return null
+			return null;
 		}
-	}()
-}
+	}();
+};
 
 describe("ProductCard", function() {
 	beforeEach(function() {
@@ -64,88 +64,88 @@ describe("ProductCard", function() {
 			"id": 2,
 			"productName": "Product X",
 			"productSizes": []
-		})
+		});
 		renderedProductCard = renderProductCard(< ProductCard barID = {
 			1
 		}
 		productID = {
 			2
 		}
-		searchText = "" />)
-	})
+		searchText = "" />);
+	});
 	afterEach(function() {
-		$.ajax.restore()
-	})
+		$.ajax.restore();
+	});
 
 	// stupid shitty console.error isn't stubbing or something
 	it.skip("throws an error if neither a productID or barID is provided", function(done) {
-		consoleStub = sinon.stub(console, "error")
-		renderedProductCard = renderProductCard(< ProductCard />)
-		console.log(consoleStub.callCount)
-	})
-	it.skip("throws an error if a productID is provided, but a barID isn't provided")
-	it.skip("throws an error if a barID is provided, but a productID isn't provided")
-	it.skip("does not throw an error if a productID and barID are provided")
+		consoleStub = sinon.stub(console, "error");
+		renderedProductCard = renderProductCard(< ProductCard />);
+		console.log(consoleStub.callCount);
+	});
+	it.skip("throws an error if a productID is provided, but a barID isn't provided");
+	it.skip("throws an error if a barID is provided, but a productID isn't provided");
+	it.skip("does not throw an error if a productID and barID are provided");
 
 	describe("if everything is provided", function() {
 		it("renders a panel", function(done) {
-			assert(ReactTestUtils.findRenderedDOMComponentWithClass(renderedProductCard, "panel"))
-			done()
-		})
+			assert(ReactTestUtils.findRenderedDOMComponentWithClass(renderedProductCard, "panel"));
+			done();
+		});
 		it("renders the correct product name", function(done) {
-			assert.equal(title.children[0].innerHTML, "Product X")
-			done()
-		})
-	})
+			assert.equal(title.children[0].innerHTML, "Product X");
+			done();
+		});
+	});
 	describe("distributor/rep availability", function() {
 		it("renders a distributor field by default", function(done) {
-			assert(distributorFieldComponent)
-			done()
-		})
+			assert(distributorFieldComponent);
+			done();
+		});
 		describe("if a distributor is not found", function() {
 			beforeEach(function() {
-				renderedProductCard.handleDistributorChange(null, null)
-				getComponents(renderedProductCard)
-			})
+				renderedProductCard.handleDistributorChange(null, null);
+				getComponents(renderedProductCard);
+			});
 			it("does not display a rep field", function(done) {
-				assert(!repFieldComponent)
-				done()
-			})
+				assert(!repFieldComponent);
+				done();
+			});
 			it("does not display a size list", function(done) {
-				assert(!sizeListComponent)
-				done()
-			})
-		})
+				assert(!sizeListComponent);
+				done();
+			});
+		});
 		describe("if a distributor is found", function() {
 			beforeEach(function() {
-				renderedProductCard.handleDistributorChange(100, "Distributor Y")
-				getComponents(renderedProductCard)
+				renderedProductCard.handleDistributorChange(100, "Distributor Y");
+				getComponents(renderedProductCard);
 
-			})
+			});
 			it("renders a rep field by default", function(done) {
-				assert(repFieldComponent)
-				done()
-			})
+				assert(repFieldComponent);
+				done();
+			});
 			describe("if a rep is not found", function() {
 				beforeEach(function() {
-					renderedProductCard.handleRepChange(null, null)
-					getComponents(renderedProductCard)
-				})
+					renderedProductCard.handleRepChange(null, null);
+					getComponents(renderedProductCard);
+				});
 				it("does not render a size list", function(done) {
-					assert(!sizeListComponent)
-					done()
-				})
-			})
+					assert(!sizeListComponent);
+					done();
+				});
+			});
 			describe("if a rep is found", function() {
 				beforeEach(function() {
-					renderedProductCard.handleRepChange(200, "Rep Z")
-					getComponents(renderedProductCard)
-				})
+					renderedProductCard.handleRepChange(200, "Rep Z");
+					getComponents(renderedProductCard);
+				});
 				it("renders a size list", function(done) {
-					assert(sizeListComponent)
-					done()
-				})
-			})
-		})
-	})
-})
+					assert(sizeListComponent);
+					done();
+				});
+			});
+		});
+	});
+});

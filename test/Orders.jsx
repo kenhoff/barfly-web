@@ -1,21 +1,22 @@
-var ReactTestUtils = require("react-addons-test-utils")
-var chai = require('chai')
-var assert = chai.assert
-var $ = require('jquery')
-var sinon = require('sinon')
+var React = require('react');
+var ReactTestUtils = require("react-addons-test-utils");
+var chai = require('chai');
+var assert = chai.assert;
+var $ = require('jquery');
+var sinon = require('sinon');
 
-var Orders = require("../jsx/OrderList/Orders.jsx")
-var OrderListItem = require('../jsx/OrderList/OrderListItem.jsx')
+var Orders = require("../jsx/OrderList/Orders.jsx");
+var OrderListItem = require('../jsx/OrderList/OrderListItem.jsx');
 
-var browserHistory = require('react-router').browserHistory
+var browserHistory = require('react-router').browserHistory;
 
-renderOrders = function() {
+var renderOrders = function() {
 	renderedOrders = ReactTestUtils.renderIntoDocument(< Orders bar = {
 		12345
-	} />)
-	newOrderButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrders, "button")
-	return renderedOrders
-}
+	} />);
+	newOrderButton = ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrders, "button");
+	return renderedOrders;
+};
 
 describe("Orders", function() {
 	beforeEach(function() {
@@ -54,18 +55,18 @@ describe("Orders", function() {
 				id: 0,
 				sent: true
 			}
-		])
-		renderedOrders = renderOrders()
-	})
+		]);
+		renderedOrders = renderOrders();
+	});
 	afterEach(function() {
-		$.ajax.restore()
-	})
+		$.ajax.restore();
+	});
 	it("renders a h1 with 'Orders'", function(done) {
-		assert(ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrders, "h1"))
-		done()
-	})
+		assert(ReactTestUtils.findRenderedDOMComponentWithTag(renderedOrders, "h1"));
+		done();
+	});
 	it("when given a list of unsorted orders, sorts the orders before rendering them", function(done) {
-		OrderListItems = ReactTestUtils.scryRenderedComponentsWithType(renderedOrders, OrderListItem)
+		OrderListItems = ReactTestUtils.scryRenderedComponentsWithType(renderedOrders, OrderListItem);
 		// because orders are shown in descending order (10...1) need to hack the iteration a bit
 		correctOrderListItems = [
 			10,
@@ -79,22 +80,22 @@ describe("Orders", function() {
 			2,
 			1,
 			0
-		]
+		];
 		for (var i = 0; i < OrderListItems.length; i++) {
-			assert.equal(OrderListItems[i].props.order.id, correctOrderListItems[i])
+			assert.equal(OrderListItems[i].props.order.id, correctOrderListItems[i]);
 		}
-		done()
-	})
+		done();
+	});
 	it("when 'new order' is clicked, navigate into order with new ID", function(done) {
-		$.ajax.restore()
+		$.ajax.restore();
 
-		sinon.stub($, "ajax").yieldsTo("success", 100)
-		browserHistoryMock = sinon.mock(browserHistory)
-		browserHistoryExpect = browserHistoryMock.expects("push")
+		sinon.stub($, "ajax").yieldsTo("success", 100);
+		browserHistoryMock = sinon.mock(browserHistory);
+		browserHistoryExpect = browserHistoryMock.expects("push");
 
-		ReactTestUtils.Simulate.click(newOrderButton)
-		assert(browserHistoryExpect.once().withArgs("/orders/100"))
-		browserHistory.push.restore()
-		done()
-	})
-})
+		ReactTestUtils.Simulate.click(newOrderButton);
+		assert(browserHistoryExpect.once().withArgs("/orders/100"));
+		browserHistory.push.restore();
+		done();
+	});
+});
