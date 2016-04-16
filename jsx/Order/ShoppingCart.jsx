@@ -35,9 +35,7 @@ var ShoppingCart = React.createClass({
 				<DropdownButton title={buttonTitle} bsStyle={(this.props.productOrders.length == 0
 					? "default"
 					: "primary")} id="Shopping Cart">{(this.props.productOrders.length == 0
-						? (
-							<MenuItem>{"You don't have any items in this order yet. Add some below to get started!"}</MenuItem>
-						)
+						? <MenuItem>{"You don't have any items in this order yet. Add some below to get started!"}</MenuItem>
 						: productOrderElements)}
 					<MenuItem divider/>
 					<MenuItem>
