@@ -27,7 +27,9 @@ var ProductCard = React.createClass({
 			return (<div/>);
 		} else {
 			return (
-				<Panel>
+				<Panel className={(this.props.inStarredProductsList
+					? "starredProductCard"
+					: "")}>
 					<Row>
 						<Col xs={12} sm={4}>
 							<p>
