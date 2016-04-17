@@ -7,8 +7,8 @@ var PageHeader = require('react-bootstrap').PageHeader;
 var Panel = require('react-bootstrap').Panel;
 
 var AccountPhoneInput = require('./AccountPhoneInput.jsx');
-var PaymentMethodField = require('./PaymentMethodField.jsx');
-var SubscriptionField = require('./SubscriptionField.jsx');
+// var PaymentMethodField = require('./PaymentMethodField.jsx');
+// var SubscriptionField = require('./SubscriptionField.jsx');
 
 var Account = React.createClass({
 
@@ -25,20 +25,20 @@ var Account = React.createClass({
 						<AccountPhoneInput/>
 					</Panel>
 				</Row>
-				<Row>
-					<Panel>
-						<PaymentMethodField/>
-					</Panel>
-				</Row>
-				<Row>
-					<Panel>
-						<SubscriptionField/>
-					</Panel>
-				</Row>
 			</Grid>
 		);
 	}
 
+	// <Row>
+	// 	<Panel>
+	// 		<PaymentMethodField/>
+	// 	</Panel>
+	// </Row>
+	// <Row>
+	// 	<Panel>
+	// 		<SubscriptionField/>
+	// 	</Panel>
+	// </Row>
 });
 
 module.exports = Account;
