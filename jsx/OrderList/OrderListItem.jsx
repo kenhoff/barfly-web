@@ -1,32 +1,32 @@
-var React = require('react')
-var moment = require('moment-timezone')
-var jstz = require('jstimezonedetect')
-var $ = require('jquery')
-var Row = require('react-bootstrap').Row
-var Col = require('react-bootstrap').Col
+var React = require('react');
+var moment = require('moment-timezone');
+var jstz = require('jstimezonedetect');
+var $ = require('jquery');
+var Row = require('react-bootstrap').Row;
+var Col = require('react-bootstrap').Col;
 var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
 
-var browserHistory = require('react-router').browserHistory
+var browserHistory = require('react-router').browserHistory;
 
 var OrderListItem = React.createClass({
 	getInitialState: function() {
-		return {productOrders: []}
+		return {productOrders: []};
 	},
 	render: function() {
-		var displayTime
-		var timezone = jstz.determine().name()
+		var displayTime;
+		var timezone = jstz.determine().name();
 		if ("sent" in this.props.order) {
 			if (this.props.order.sent) {
 				if ("sentAt" in this.props.order) {
-					displayTime = "Sent: " + moment(this.props.order.sentAt).tz(timezone).format('llll')
+					displayTime = "Sent: " + moment(this.props.order.sentAt).tz(timezone).format('llll');
 				} else {
-					displayTime = "Sent"
+					displayTime = "Sent";
 				}
 			} else {
-				displayTime = "Unsent"
+				displayTime = "Unsent";
 			}
 		} else {
-			displayTime = ""
+			displayTime = "";
 		}
 		return (
 			<div className="panel panel-default" onClick={this.navigateToOrder}>
@@ -41,17 +41,17 @@ var OrderListItem = React.createClass({
 						<Col xs={12} sm={7} smPull={3}>
 							<ul>
 								{this.state.productOrders.map(function(productOrder) {
-									return (<ProductOrderSummaryItem key={productOrder.id} productOrder={productOrder}/>)
+									return (<ProductOrderSummaryItem key={productOrder.id} productOrder={productOrder}/>);
 								})}
 							</ul>
 						</Col>
 					</Row>
 				</div>
 			</div>
-		)
+		);
 	},
 	navigateToOrder: function() {
-		browserHistory.push("/orders/" + this.props.order.id)
+		browserHistory.push("/orders/" + this.props.order.id);
 	},
 	componentDidMount: function() {
 		$.ajax({
@@ -65,10 +65,10 @@ var OrderListItem = React.createClass({
 				this.setState({
 					productOrders: data.productOrders,
 					sent: (data.sent || false)
-				})
+				});
 			}.bind(this)
-		})
+		});
 	}
-})
+});
 
-module.exports = OrderListItem
+module.exports = OrderListItem;
