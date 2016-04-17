@@ -1,9 +1,6 @@
 var React = require('react');
-var Nav = require('react-bootstrap').Nav;
 var Navbar = require('react-bootstrap').Navbar;
 var Input = require('react-bootstrap').Input;
-
-var ShoppingCart = require('./ShoppingCart.jsx');
 
 var OrderNav = React.createClass({
 	render: function() {

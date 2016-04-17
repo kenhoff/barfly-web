@@ -1,7 +1,6 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var assert = require('assert');
 var sinon = require('sinon');
-var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
 var $ = require('jquery');
@@ -15,6 +14,14 @@ var AddRepModal = React.createClass({
 });
 
 RepField.__set__("AddRepModal", AddRepModal);
+
+var renderedRepFieldComponent;
+var changeRepStub;
+var pElement;
+var ajaxStub;
+var spanElement;
+var button;
+
 
 var renderRepFieldComponent = function(jsx) {
 	renderedRepFieldComponent = ReactTestUtils.renderIntoDocument(jsx);

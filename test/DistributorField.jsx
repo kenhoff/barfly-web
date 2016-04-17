@@ -1,8 +1,7 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require('sinon');
 var assert = require('assert');
 
-var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
 var DistributorField = require("../jsx/Order/DistributorField.jsx");
@@ -22,6 +21,12 @@ var ChangeDistributorModal = React.createClass({
 
 DistributorField.__set__("AddDistributorModal", AddDistributorModal);
 DistributorField.__set__("ChangeDistributorModal", ChangeDistributorModal);
+
+var renderedDistributorField;
+var pElement;
+var spanElement;
+var changeDistributorSpy;
+var button;
 
 var renderDistributorField = function(jsx) {
 	renderedDistributorField = ReactTestUtils.renderIntoDocument(jsx);
@@ -44,7 +49,7 @@ describe("DistributorField", function() {
 	});
 	describe("if a distributor is resolved", function() {
 		beforeEach(function() {
-			ajaxStub = sinon.stub($, "ajax");
+			var ajaxStub = sinon.stub($, "ajax");
 			ajaxStub.onFirstCall().yieldsTo("success", {zipCode: 12345});
 			ajaxStub.onSecondCall().yieldsTo("success", {distributorID: 100});
 			ajaxStub.onThirdCall().yieldsTo("success", {distributorName: "Distributor Y"});
@@ -69,7 +74,7 @@ describe("DistributorField", function() {
 	});
 	describe("if a distributor is not found", function() {
 		beforeEach(function() {
-			ajaxStub = sinon.stub($, "ajax");
+			var ajaxStub = sinon.stub($, "ajax");
 			ajaxStub.onFirstCall().yieldsTo("success", {zipCode: 12345});
 			ajaxStub.onSecondCall().yieldsTo("success", {});
 
@@ -85,7 +90,7 @@ describe("DistributorField", function() {
 			assert.equal(button.innerHTML, "Add a Distributor for Product X");
 			done();
 		});
-		it.skip('when button is clicked, "AddDistributorModal" is opened', function(done) {
+		it.skip('when button is clicked, "AddDistributorModal" is opened', function() {
 			openModalSpy = sinon.spy(renderedDistributorField, "openModal");
 			button = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "button");
 			ReactTestUtils.Simulate.click(button);

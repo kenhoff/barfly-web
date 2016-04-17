@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require("sinon");
 // var React = require("react")
 var ReactTestUtils = require("react-addons-test-utils");
@@ -10,6 +10,13 @@ var assert = require('assert');
 var $ = require('jquery');
 
 var QuantityInputWithSize = require('../jsx/Order/QuantityInputWithSize.jsx');
+
+var changeQuantitySpy;
+var ajaxStub;
+var renderedQuantityInputWithSize;
+var inputComponent;
+var buttons;
+var label;
 
 describe("QuantityInputWithSize", function() {
 	var renderQuantityInputWithSize = function(quantity) {

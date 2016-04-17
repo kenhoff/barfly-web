@@ -1,9 +1,7 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var assert = require('assert');
 var sinon = require('sinon');
 var $ = require('jquery');
-var React = require('react');
-var ReactDOM = require('react-dom');
 var ReactTestUtils = require('react-addons-test-utils');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
@@ -11,6 +9,14 @@ var Input = require('react-bootstrap').Input;
 var NewProductModal = require("../jsx/Order/NewProductModal.jsx");
 
 // notes: for a bunch of these, we actually need to check to see if the disabled button is clicked, and handle accordingly
+
+var renderedNewProductModal;
+var productNameInputNode;
+var submitButton;
+var ajaxMock;
+var ajaxExpects;
+var ajaxSpy;
+var submitProductSpy;
 
 var renderNewProductModal = function() {
 	renderedNewProductModal = ReactTestUtils.renderIntoDocument(< NewProductModal showModal = {

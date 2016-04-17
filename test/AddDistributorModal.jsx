@@ -1,5 +1,5 @@
+var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require('sinon');
-var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 var $ = require('jquery');
 var assert = require('assert');
@@ -10,6 +10,8 @@ var AddDistributorModal = require("../jsx/Order/AddDistributorModal.jsx");
 
 var renderedAddDistributorModal;
 var radioButtons;
+var newDistributorNameInput;
+var submitButton;
 
 var renderAddDistributorModal = function() {
 	renderedAddDistributorModal = ReactTestUtils.renderIntoDocument(< AddDistributorModal productName = "asdfasdfasdf" zipCode = "12345" productID = {
@@ -20,13 +22,13 @@ var renderAddDistributorModal = function() {
 	} />);
 	var buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddDistributorModal.refs.AddDistributorModal._modal, "button");
 
-	var newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
+	newDistributorNameInput = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
 		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "text");
 	})[0].getInputDOMNode();
 
-	var submitButton = buttons[2];
+	submitButton = buttons[2];
 
-	var radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
+	radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddDistributorModal.refs.AddDistributorModal._modal, function(component) {
 		return (ReactTestUtils.isCompositeComponentWithType(component, Input) && component.getInputDOMNode().type == "radio");
 	});
 
@@ -56,7 +58,7 @@ describe("AddDistributorModal", function() {
 				distributorName: "distributor 3"
 			}
 		]);
-		var renderedAddDistributorModal = renderAddDistributorModal();
+		renderedAddDistributorModal = renderAddDistributorModal();
 	});
 
 	afterEach(function() {
@@ -75,7 +77,7 @@ describe("AddDistributorModal", function() {
 		done();
 	});
 	it("the distributor select input is a radio button selector, not a dropdown", function(done) {
-		for (radioButton of radioButtons) {
+		for (var radioButton of radioButtons) {
 			assert.equal(radioButton.getInputDOMNode().type, "radio");
 		}
 		done();
@@ -121,7 +123,7 @@ describe("AddDistributorModal", function() {
 			});
 
 			it("the distributor select input is blank", function(done) {
-				for (radioButton of radioButtons) {
+				for (var radioButton of radioButtons) {
 					assert(!radioButton.getChecked());
 				}
 				done();
@@ -134,7 +136,7 @@ describe("AddDistributorModal", function() {
 
 			it("changing the distributor select input to 'newDistributor' causes the 'newDistributorName' input to become visible", function(done) {
 				// find the radio button with the right value
-				for (radioButton of radioButtons) {
+				for (var radioButton of radioButtons) {
 					if (radioButton.getValue() == "newDistributor") {
 						ReactTestUtils.Simulate.change(radioButton.getInputDOMNode());
 					}
@@ -153,7 +155,7 @@ describe("AddDistributorModal", function() {
 
 		describe("if there's more than one distributor in the system", function() {
 			it("the distributor select input is blank", function(done) {
-				for (radioButton of radioButtons) {
+				for (var radioButton of radioButtons) {
 					assert(!radioButton.getChecked());
 				}
 				done();
@@ -178,7 +180,7 @@ describe("AddDistributorModal", function() {
 		});
 
 		it("changing the distributor select input to 'newDistributor' causes the 'newDistributorName' input to become visible", function(done) {
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				if (radioButton.getValue() == "newDistributor") {
 					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode());
 				}
@@ -195,7 +197,7 @@ describe("AddDistributorModal", function() {
 		it("clicking the 'submit' button causes a single POST to /products/:productID/zipcodes/:zipcode/distributor", function(done) {
 			$.ajax.restore();
 
-			ajaxSpy = sinon.spy($, "ajax");
+			var ajaxSpy = sinon.spy($, "ajax");
 
 			ReactTestUtils.Simulate.click(submitButton);
 
@@ -215,7 +217,7 @@ describe("AddDistributorModal", function() {
 	describe("if the distributor input is set to 'newDistributor'", function() {
 
 		beforeEach(function() {
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				if (radioButton.getValue() == "newDistributor") {
 					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode());
 				}
@@ -240,7 +242,7 @@ describe("AddDistributorModal", function() {
 
 			it("clicking on the 'submit' button does nothing", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
@@ -261,7 +263,7 @@ describe("AddDistributorModal", function() {
 			});
 			it("clicking on the 'submit' button does nothing", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
@@ -283,8 +285,8 @@ describe("AddDistributorModal", function() {
 
 			it("then clicking the 'submit' button causes a POST to /distributors, then a POST to /products/:productID/zipcodes/:zipcode/distributor", function(done) {
 				$.ajax.restore();
-				ajaxMock = sinon.mock($);
-				ajaxExpects = ajaxMock.expects("ajax").twice();
+				var ajaxMock = sinon.mock($);
+				var ajaxExpects = ajaxMock.expects("ajax").twice();
 
 				ajaxExpects.onCall(0).yieldsTo("success", {
 					distributorID: 100,

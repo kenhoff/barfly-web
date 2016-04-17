@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var ReactTestUtils = require("react-addons-test-utils");
 var chai = require('chai');
 var assert = chai.assert;
@@ -9,6 +9,13 @@ var Orders = require("../jsx/OrderList/Orders.jsx");
 var OrderListItem = require('../jsx/OrderList/OrderListItem.jsx');
 
 var browserHistory = require('react-router').browserHistory;
+
+var renderedOrders;
+var newOrderButton;
+var OrderListItems;
+var correctOrderListItems;
+var browserHistoryMock;
+var browserHistoryExpect;
 
 var renderOrders = function() {
 	renderedOrders = ReactTestUtils.renderIntoDocument(< Orders bar = {
