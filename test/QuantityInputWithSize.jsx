@@ -1,3 +1,4 @@
+var React = require('react'); // eslint-disable-line no-unused-vars
 var React = require('react');
 var sinon = require("sinon");
 // var React = require("react")
