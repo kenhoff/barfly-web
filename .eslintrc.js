@@ -19,7 +19,9 @@ module.exports = {
 	"rules": {
 		"indent": [
 			2,
-			"tab"
+			"tab", {
+				"SwitchCase": 1
+			}
 		],
 		"linebreak-style": [
 			2,
