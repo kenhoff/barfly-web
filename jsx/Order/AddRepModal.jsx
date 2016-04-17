@@ -1,7 +1,7 @@
-var React = require('react')
-var Modal = require('react-bootstrap').Modal
-var Input = require('react-bootstrap').Input
-var $ = require('jquery')
+var React = require('react');
+var Modal = require('react-bootstrap').Modal;
+var Input = require('react-bootstrap').Input;
+var $ = require('jquery');
 
 var AddRepModal = React.createClass({
 	getInitialState: function() {
@@ -12,7 +12,7 @@ var AddRepModal = React.createClass({
 			buttonEnabled: false,
 			newRepNameValue: "",
 			newRepPhoneValue: ""
-		})
+		});
 	},
 	render: function() {
 		return (
@@ -24,7 +24,7 @@ var AddRepModal = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					{this.state.reps.map(function(rep) {
-						return (<RepOption key={rep.repID} repID={rep.repID} handleRepSelectChange={this.handleRepSelectChange} checked={this.state.repSelectValue == rep.repID}/>)
+						return (<RepOption key={rep.repID} repID={rep.repID} handleRepSelectChange={this.handleRepSelectChange} checked={this.state.repSelectValue == rep.repID}/>);
 					}.bind(this))}
 					<Input name="reps" label="Add New Rep" onChange={this.handleRepSelectChange} checked={this.state.repSelectValue == "newRep"} value="newRep" type="radio"/>
 					<div id="newRepForm" className={this.state.showNewRepInput
@@ -43,7 +43,7 @@ var AddRepModal = React.createClass({
 							: "Add Rep"}</button>
 				</Modal.Footer>
 			</Modal>
-		)
+		);
 	},
 	submitRep: function() {
 		if (this.state.buttonEnabled) {
@@ -53,14 +53,14 @@ var AddRepModal = React.createClass({
 				this.createRep(function(newRepID) {
 					this.saveRepToDistributor(newRepID, this.props.distributorID, function() {
 						this.createAccount(this.props.barID, newRepID, this.props.distributorID, function() {
-							this.props.onHide()
-						}.bind(this))
-					}.bind(this))
-				}.bind(this))
+							this.props.onHide();
+						}.bind(this));
+					}.bind(this));
+				}.bind(this));
 			} else {
 				this.createAccount(this.props.barID, this.state.repSelectValue, this.props.distributorID, function() {
-					this.props.onHide()
-				}.bind(this))
+					this.props.onHide();
+				}.bind(this));
 			}
 		} else {
 			// toast or something
@@ -78,9 +78,9 @@ var AddRepModal = React.createClass({
 				repPhone: this.state.newRepPhoneValue
 			},
 			success: function(newRep) {
-				cb(newRep.user_id)
+				cb(newRep.user_id);
 			}
-		})
+		});
 	},
 	saveRepToDistributor: function(repID, distributorID, cb) {
 		$.ajax({
@@ -94,10 +94,10 @@ var AddRepModal = React.createClass({
 			},
 			success: function() {
 				if (cb) {
-					cb()
+					cb();
 				}
 			}
-		})
+		});
 	},
 	createAccount: function(barID, repID, distributorID, cb) {
 		$.ajax({
@@ -113,57 +113,57 @@ var AddRepModal = React.createClass({
 			},
 			success: function() {
 				if (cb) {
-					cb()
+					cb();
 				}
 			}
-		})
+		});
 	},
 	componentDidMount: function() {
 		if (this.props.distributorID) {
-			this.getAllRepsForDistributor(this.props.distributorID)
+			this.getAllRepsForDistributor(this.props.distributorID);
 		}
 	},
 	componentWillReceiveProps: function(nextProps) {
 		if (nextProps.distributorID) {
-			this.getAllRepsForDistributor(nextProps.distributorID)
+			this.getAllRepsForDistributor(nextProps.distributorID);
 		}
 	},
 	handleRepNameChange: function(event) {
 		this.setState({
 			newRepNameValue: event.target.value
 		}, function() {
-			this.updateButtonEnabled()
-		}.bind(this))
+			this.updateButtonEnabled();
+		}.bind(this));
 	},
 	handleRepPhoneChange: function(event) {
 		this.setState({
 			newRepPhoneValue: event.target.value.replace(/[^0-9]/g, "").slice(0, 10)
 		}, function() {
-			this.updateButtonEnabled()
-		}.bind(this))
+			this.updateButtonEnabled();
+		}.bind(this));
 	},
 	handleRepSelectChange: function(event) {
 		this.setState({
 			repSelectValue: event.target.value
 		}, function() {
-			this.updateNewRepFormShown()
-			this.updateButtonEnabled()
-		}.bind(this))
+			this.updateNewRepFormShown();
+			this.updateButtonEnabled();
+		}.bind(this));
 	},
 	updateNewRepFormShown: function() {
 		if (this.state.repSelectValue == "newRep") {
-			this.setState({showNewRepInput: true})
+			this.setState({showNewRepInput: true});
 		} else {
-			this.setState({showNewRepInput: false})
+			this.setState({showNewRepInput: false});
 		}
 	},
 	updateButtonEnabled: function() {
 		if (this.state.repSelectValue && (this.state.repSelectValue != "newRep")) {
-			this.setState({buttonEnabled: true})
+			this.setState({buttonEnabled: true});
 		} else if ((this.state.newRepNameValue.trim() != "") && (this.state.newRepPhoneValue.length == 10)) {
-			this.setState({buttonEnabled: true})
+			this.setState({buttonEnabled: true});
 		} else {
-			this.setState({buttonEnabled: false})
+			this.setState({buttonEnabled: false});
 		}
 	},
 	getAllRepsForDistributor: function(distributorID) {
@@ -174,38 +174,38 @@ var AddRepModal = React.createClass({
 				distributorID: distributorID
 			},
 			success: function(reps) {
-				this.setState({reps: reps})
+				this.setState({reps: reps});
 				if (reps.length == 0) {
-					this.setState({showNewRepInput: true, repSelectValue: "newRep", buttonEnabled: false})
+					this.setState({showNewRepInput: true, repSelectValue: "newRep", buttonEnabled: false});
 				} else {
-					this.setState({showNewRepInput: false, buttonEnabled: false})
+					this.setState({showNewRepInput: false, buttonEnabled: false});
 				}
 			}.bind(this)
-		})
+		});
 	}
-})
+});
 
 var RepOption = React.createClass({
 	getInitialState: function() {
-		return {repName: ""}
+		return {repName: ""};
 	},
 	render: function() {
-		return (<Input name="reps" label={this.state.repName} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>)
+		return (<Input name="reps" label={this.state.repName} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>);
 	},
 	componentDidMount: function() {
 		this.resolveRepName(function(repName) {
-			this.setState({repName: repName})
-		}.bind(this))
+			this.setState({repName: repName});
+		}.bind(this));
 	},
 	resolveRepName: function(cb) {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/reps/" + this.props.repID,
 			method: "GET",
 			success: function(rep) {
-				cb(rep.name)
+				cb(rep.name);
 			}
-		})
+		});
 	}
-})
+});
 
-module.exports = AddRepModal
+module.exports = AddRepModal;
