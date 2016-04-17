@@ -7,8 +7,8 @@ var PageHeader = require('react-bootstrap').PageHeader;
 var Panel = require('react-bootstrap').Panel;
 
 var AccountPhoneInput = require('./AccountPhoneInput.jsx');
-var PaymentMethodField = require('./PaymentMethodField.jsx');
-var SubscriptionField = require('./SubscriptionField.jsx');
+// var PaymentMethodField = require('./PaymentMethodField.jsx');
+// var SubscriptionField = require('./SubscriptionField.jsx');
 
 var Account = React.createClass({
 
