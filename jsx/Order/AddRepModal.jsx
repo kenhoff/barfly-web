@@ -24,7 +24,7 @@ var AddRepModal = React.createClass({
 				</Modal.Header>
 				<Modal.Body>
 					{this.state.reps.map(function(rep) {
-						return (<RepOption key={rep.repID} repID={rep.repID} handleRepSelectChange={this.handleRepSelectChange} checked={this.state.repSelectValue == rep.repID}/>);
+						return (<RepOption key={rep.repID} repID={rep.repID} repPhone={parseInt(rep.repPhone)} handleRepSelectChange={this.handleRepSelectChange} checked={this.state.repSelectValue == rep.repID}/>);
 					}.bind(this))}
 					<Input name="reps" label="Add New Rep" onChange={this.handleRepSelectChange} checked={this.state.repSelectValue == "newRep"} value="newRep" type="radio"/>
 					<div id="newRepForm" className={this.state.showNewRepInput
@@ -186,11 +186,15 @@ var AddRepModal = React.createClass({
 });
 
 var RepOption = React.createClass({
+	propTypes: {
+		repID: React.PropTypes.string.isRequired,
+		repPhone: React.PropTypes.number.isRequired
+	},
 	getInitialState: function() {
 		return {repName: ""};
 	},
 	render: function() {
-		return (<Input name="reps" label={this.state.repName} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>);
+		return (<Input name="reps" label={this.state.repName + ", " + this.props.repPhone} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>);
 	},
 	componentDidMount: function() {
 		this.resolveRepName(function(repName) {
