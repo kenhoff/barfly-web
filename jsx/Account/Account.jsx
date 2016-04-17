@@ -25,20 +25,20 @@ var Account = React.createClass({
 						<AccountPhoneInput/>
 					</Panel>
 				</Row>
-				<Row>
-					<Panel>
-						<PaymentMethodField/>
-					</Panel>
-				</Row>
-				<Row>
-					<Panel>
-						<SubscriptionField/>
-					</Panel>
-				</Row>
 			</Grid>
 		);
 	}
 
+	// <Row>
+	// 	<Panel>
+	// 		<PaymentMethodField/>
+	// 	</Panel>
+	// </Row>
+	// <Row>
+	// 	<Panel>
+	// 		<SubscriptionField/>
+	// 	</Panel>
+	// </Row>
 });
 
 module.exports = Account;
