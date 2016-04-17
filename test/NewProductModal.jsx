@@ -1,3 +1,4 @@
+var React = require('react');
 var assert = require('assert');
 var sinon = require('sinon');
 var $ = require('jquery');
@@ -11,130 +12,130 @@ var NewProductModal = require("../jsx/Order/NewProductModal.jsx");
 
 // notes: for a bunch of these, we actually need to check to see if the disabled button is clicked, and handle accordingly
 
-renderNewProductModal = function() {
+var renderNewProductModal = function() {
 	renderedNewProductModal = ReactTestUtils.renderIntoDocument(< NewProductModal showModal = {
 		true
-	} />)
-	productNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedNewProductModal.refs.NewProductModal._modal, Input)[0].getInputDOMNode()
+	} />);
+	productNameInputNode = ReactTestUtils.scryRenderedComponentsWithType(renderedNewProductModal.refs.NewProductModal._modal, Input)[0].getInputDOMNode();
 
-	submitButton = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedNewProductModal.refs.NewProductModal._modal, "button")[2]
-	return renderedNewProductModal
-}
+	submitButton = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedNewProductModal.refs.NewProductModal._modal, "button")[2];
+	return renderedNewProductModal;
+};
 
 describe("NewProductModal", function() {
 
 	before(function() {
-		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf")
-	})
+		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf");
+	});
 	after(function() {
-		localStorage.getItem.restore()
-	})
+		localStorage.getItem.restore();
+	});
 
 	beforeEach(function() {
-		sinon.stub($, "ajax").yieldsTo("success", [1, 2, 3])
-		renderedNewProductModal = renderNewProductModal()
-	})
+		sinon.stub($, "ajax").yieldsTo("success", [1, 2, 3]);
+		renderedNewProductModal = renderNewProductModal();
+	});
 
 	afterEach(function() {
-		$.ajax.restore()
-	})
+		$.ajax.restore();
+	});
 
 	it("renders a modal", function(done) {
-		assert(ReactTestUtils.isCompositeComponentWithType(renderedNewProductModal.refs.NewProductModal, Modal))
-		done()
-	})
+		assert(ReactTestUtils.isCompositeComponentWithType(renderedNewProductModal.refs.NewProductModal, Modal));
+		done();
+	});
 	describe("validate name input", function() {
 		it("trims whitespace on either side of the name when submitted", function(done) {
-			$.ajax.restore()
+			$.ajax.restore();
 
-			ajaxMock = sinon.mock($)
-			ajaxExpects = ajaxMock.expects("ajax")
+			ajaxMock = sinon.mock($);
+			ajaxExpects = ajaxMock.expects("ajax");
 
-			productNameInputNode.value = "	   \nasdfasdfasdf\n	   "
-			ReactTestUtils.Simulate.change(productNameInputNode)
-			ReactTestUtils.Simulate.click(submitButton)
+			productNameInputNode.value = "	   \nasdfasdfasdf\n	   ";
+			ReactTestUtils.Simulate.change(productNameInputNode);
+			ReactTestUtils.Simulate.click(submitButton);
 
-			assert(ajaxExpects.calledOnce, "ajax wasn't called once")
+			assert(ajaxExpects.calledOnce, "ajax wasn't called once");
 			assert(ajaxExpects.calledWithMatch({
 				url: process.env.BURLOCK_API_URL + "/products"
-			}), "didn't have right URL")
+			}), "didn't have right URL");
 			assert(ajaxExpects.calledWithMatch({
 				data: {
 					productName: "asdfasdfasdf"
 				}
-			}), "didn't have right data")
-			ajaxMock.restore()
-			sinon.stub($, "ajax")
-			done()
-		})
-	})
+			}), "didn't have right data");
+			ajaxMock.restore();
+			sinon.stub($, "ajax");
+			done();
+		});
+	});
 	describe("button enabled/disabled", function() {
 		it("is disabled if 'name' input is empty", function(done) {
-			$.ajax.restore()
+			$.ajax.restore();
 
-			ajaxSpy = sinon.spy($, "ajax")
-			submitProductSpy = sinon.spy(renderedNewProductModal, "submitProduct")
+			ajaxSpy = sinon.spy($, "ajax");
+			submitProductSpy = sinon.spy(renderedNewProductModal, "submitProduct");
 
-			productNameInputNode.value = ""
-			ReactTestUtils.Simulate.change(productNameInputNode)
+			productNameInputNode.value = "";
+			ReactTestUtils.Simulate.change(productNameInputNode);
 
-			ReactTestUtils.Simulate.click(submitButton)
+			ReactTestUtils.Simulate.click(submitButton);
 
 			// button is (cosmetically) disabled
-			assert(submitButton.className.includes("disabled"), "button isn't disabled!")
+			assert(submitButton.className.includes("disabled"), "button isn't disabled!");
 			// submitProduct is called
-			assert(submitProductSpy.calledOnce)
+			assert(submitProductSpy.calledOnce);
 			// ajax isn't called
-			assert(ajaxSpy.callCount == 0, "ajax called")
+			assert(ajaxSpy.callCount == 0, "ajax called");
 
-			$.ajax.restore()
-			sinon.stub($, "ajax")
-			done()
-		})
+			$.ajax.restore();
+			sinon.stub($, "ajax");
+			done();
+		});
 
 		it("is disabled if 'name' input is just white space", function(done) {
-			$.ajax.restore()
+			$.ajax.restore();
 
-			ajaxSpy = sinon.spy($, "ajax")
-			submitProductSpy = sinon.spy(renderedNewProductModal, "submitProduct")
+			ajaxSpy = sinon.spy($, "ajax");
+			submitProductSpy = sinon.spy(renderedNewProductModal, "submitProduct");
 
-			productNameInputNode.value = "     	\n\n"
-			ReactTestUtils.Simulate.change(productNameInputNode)
+			productNameInputNode.value = "     	\n\n";
+			ReactTestUtils.Simulate.change(productNameInputNode);
 
-			ReactTestUtils.Simulate.click(submitButton)
+			ReactTestUtils.Simulate.click(submitButton);
 
 			// button is (cosmetically) disabled
-			assert(submitButton.className.includes("disabled"), "button isn't disabled!")
+			assert(submitButton.className.includes("disabled"), "button isn't disabled!");
 			// submitProduct is called
-			assert(submitProductSpy.calledOnce)
+			assert(submitProductSpy.calledOnce);
 			// ajax isn't called
-			assert(ajaxSpy.callCount == 0, "ajax called")
+			assert(ajaxSpy.callCount == 0, "ajax called");
 
-			$.ajax.restore()
-			sinon.stub($, "ajax")
-			done()
-		})
+			$.ajax.restore();
+			sinon.stub($, "ajax");
+			done();
+		});
 		it("clicking on enabled button makes a call to /products", function(done) {
 
-			$.ajax.restore()
+			$.ajax.restore();
 
-			ajaxSpy = sinon.spy($, "ajax")
+			ajaxSpy = sinon.spy($, "ajax");
 
-			productNameInputNode.value = "asdfasdfasdf"
-			ReactTestUtils.Simulate.change(productNameInputNode)
+			productNameInputNode.value = "asdfasdfasdf";
+			ReactTestUtils.Simulate.change(productNameInputNode);
 
-			ReactTestUtils.Simulate.click(submitButton)
+			ReactTestUtils.Simulate.click(submitButton);
 
-			assert(ajaxSpy.calledOnce)
+			assert(ajaxSpy.calledOnce);
 			assert(ajaxSpy.calledWithMatch({
 				url: process.env.BURLOCK_API_URL + "/products"
-			}), "incorrect URL")
+			}), "incorrect URL");
 			assert(ajaxSpy.calledWithMatch({
 				data: {
 					productName: "asdfasdfasdf"
 				}
-			}), "incorrect data")
-			done()
-		})
-	})
-})
+			}), "incorrect data");
+			done();
+		});
+	});
+});
