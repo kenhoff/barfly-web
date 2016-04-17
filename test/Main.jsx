@@ -1,7 +1,7 @@
 // failing to uncomment the other tests is a crime punishable by death
 
 require('./AddDistributorModal.jsx');
-// require('./AddRepModal.jsx');
+require('./AddRepModal.jsx');
 // require("./DistributorField.jsx");
 // require('./NewBarModal.jsx');
 // require('./NewProductModal.jsx');

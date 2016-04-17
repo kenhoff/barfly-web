@@ -1,5 +1,5 @@
+var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require('sinon');
-var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 var $ = require('jquery');
 var assert = require('assert');
@@ -7,6 +7,13 @@ var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 
 var AddRepModal = require("../jsx/Order/AddRepModal.jsx");
+
+var renderedAddRepModal;
+var radioButtons;
+var newRepForm;
+var submitButton;
+var newRepNameInput;
+var newRepPhoneInput;
 
 var renderAddRepModal = function() {
 	var renderedAddRepModal = ReactTestUtils.renderIntoDocument(< AddRepModal distributorID = {
@@ -33,7 +40,7 @@ var renderAddRepModal = function() {
 
 	var buttons = ReactTestUtils.scryRenderedDOMComponentsWithTag(renderedAddRepModal.refs.AddRepModal._modal, "button");
 
-	var newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
+	newRepForm = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
 		if (component.id == "newRepForm") {
 			return true;
 		} else {
@@ -41,7 +48,7 @@ var renderAddRepModal = function() {
 		}
 	})[0];
 
-	var radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
+	radioButtons = ReactTestUtils.findAllInRenderedTree(renderedAddRepModal.refs.AddRepModal._modal, function(component) {
 		if (ReactTestUtils.isCompositeComponentWithType(component, Input) && (component.getInputDOMNode().type == "radio")) {
 			return true;
 		} else {
@@ -49,10 +56,10 @@ var renderAddRepModal = function() {
 		}
 	});
 
-	var submitButton = buttons[2];
+	submitButton = buttons[2];
 
-	var newRepNameInput = inputs[0];
-	var newRepPhoneInput = inputs[1];
+	newRepNameInput = inputs[0];
+	newRepPhoneInput = inputs[1];
 
 	return renderedAddRepModal;
 };
@@ -88,10 +95,10 @@ describe("AddRepModal", function() {
 		done();
 	});
 	it("renders radio buttons instead of select dropdown", function(done) {
-		for (radioButton of radioButtons) {
+		for (var radioButton of radioButtons) {
 			assert(radioButton.getInputDOMNode().type == "radio");
 		}
-		for (input of ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)) {
+		for (var input of ReactTestUtils.scryRenderedComponentsWithType(renderedAddRepModal.refs.AddRepModal._modal, Input)) {
 			assert(input.getInputDOMNode().type != "select");
 		}
 		done();
@@ -116,7 +123,7 @@ describe("AddRepModal", function() {
 			]);
 			renderedAddRepModal = renderAddRepModal();
 
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				assert(!radioButton.getChecked());
 			}
 			assert(!newRepForm.className.includes("show"));
@@ -135,7 +142,7 @@ describe("AddRepModal", function() {
 			]);
 			renderedAddRepModal = renderAddRepModal();
 
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				assert(!radioButton.getChecked());
 			}
 			assert(!newRepForm.className.includes("show"));
@@ -152,7 +159,7 @@ describe("AddRepModal", function() {
 		});
 		it('clicking submit button makes a POST to /accounts', function(done) {
 			$.ajax.restore();
-			ajaxSpy = sinon.spy($, "ajax");
+			var ajaxSpy = sinon.spy($, "ajax");
 
 			ReactTestUtils.Simulate.click(submitButton);
 
@@ -170,7 +177,7 @@ describe("AddRepModal", function() {
 			done();
 		});
 		it("clicking the 'newRep' radio button causes the rep name and phone inputs to show", function(done) {
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				if (radioButton.getValue() == "newRep") {
 					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode());
 				}
@@ -181,7 +188,7 @@ describe("AddRepModal", function() {
 	});
 	describe("'newRep' is selected", function() {
 		beforeEach(function() {
-			for (radioButton of radioButtons) {
+			for (var radioButton of radioButtons) {
 				if (radioButton.getValue() == "newRep") {
 					ReactTestUtils.Simulate.change(radioButton.getInputDOMNode());
 				}
@@ -206,7 +213,7 @@ describe("AddRepModal", function() {
 			});
 			it("nothing happens when submit button is clicked", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
 				done();
@@ -226,7 +233,7 @@ describe("AddRepModal", function() {
 			});
 			it("nothing happens when submit button is clicked", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
 				done();
@@ -246,7 +253,7 @@ describe("AddRepModal", function() {
 			});
 			it("nothing happens when submit button is clicked", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
 				done();
@@ -266,7 +273,7 @@ describe("AddRepModal", function() {
 			});
 			it("nothing happens when submit button is clicked", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
 				done();
@@ -286,7 +293,7 @@ describe("AddRepModal", function() {
 			});
 			it("nothing happens when submit button is clicked", function(done) {
 				$.ajax.restore();
-				ajaxSpy = sinon.spy($, "ajax");
+				var ajaxSpy = sinon.spy($, "ajax");
 				ReactTestUtils.Simulate.click(submitButton);
 				assert.equal(ajaxSpy.callCount, 0);
 				done();
@@ -307,8 +314,8 @@ describe("AddRepModal", function() {
 			});
 			it('clicking submit button makes a POST to /reps, then a POST to /reps/:repID/memberships, then a POST to /accounts', function(done) {
 				$.ajax.restore();
-				ajaxMock = sinon.mock($);
-				ajaxExpects = ajaxMock.expects("ajax").thrice();
+				var ajaxMock = sinon.mock($);
+				var ajaxExpects = ajaxMock.expects("ajax").thrice();
 
 				ajaxExpects.onFirstCall().yieldsTo("success", {user_id: "asdf1"});
 				ajaxExpects.onSecondCall().yieldsTo("success");
@@ -351,7 +358,7 @@ describe("AddRepModal", function() {
 					ReactTestUtils.Simulate.change(newRepNameInput.getInputDOMNode());
 
 					$.ajax.restore();
-					ajaxSpy = sinon.spy($, "ajax");
+					var ajaxSpy = sinon.spy($, "ajax");
 
 					ReactTestUtils.Simulate.click(submitButton);
 
