@@ -2,6 +2,10 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Provider = require('react-redux').Provider;
+var createStore = require('redux').createStore;
+var compose = require('redux').compose;
+var reducer = require('./Reducer.jsx');
 
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
@@ -16,12 +20,16 @@ var Order = require('./Order/Order.jsx');
 var Account = require("./Account/Account.jsx");
 var Landing = require('./Landing.jsx');
 
+var store = createStore(reducer, {}, compose(window.devToolsExtension
+	? window.devToolsExtension()
+	: f => f));
+
 var Main = React.createClass({
 
 	// if we haven't loaded a bar yet, currentBar == null.
 	// if there isn't a currentBar available (e.g. a user hasn't created a bar yet) then currentBar == -1.
 	getInitialState: function() {
-		return {currentBar: null}
+		return {currentBar: null};
 	},
 	render: function() {
 		if (this.state.idToken) {
@@ -32,20 +40,19 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/>
-					{React.cloneElement(this.props.children, {bar: this.state.currentBar})}
+					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/> {React.cloneElement(this.props.children, {bar: this.state.currentBar})}
 				</div>
-			)
+			);
 		} else {
 			return (
 				<div className="landing">
 					<Landing showLock={this.showLock}/>
 				</div>
-			)
+			);
 		}
 	},
 	componentWillMount: function() {
-		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN)
+		this.lock = new Auth0Lock(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
 		this.setState({
 			idToken: this.getIdToken()
 		}, function() {
@@ -57,67 +64,67 @@ var Main = React.createClass({
 				this.lock.getProfile(localStorage.getItem("access_jwt"), function(err, profile) {
 					if (err) {
 						this.refreshToken(function() {
-							this.componentWillMount()
-						}.bind(this))
-						return
+							this.componentWillMount();
+						}.bind(this));
+						return;
 					} else {
 						window.Intercom('boot', {
 							app_id: process.env.INTERCOM_APP_ID,
 							user_id: profile.sub,
 							name: profile.name
-						})
+						});
 					}
-				}.bind(this))
+				}.bind(this));
 
 			} else {
-				window.Intercom("boot", {app_id: "nuxvgj9g"})
+				window.Intercom("boot", {app_id: "nuxvgj9g"});
 			}
-		})
+		});
 		$(document).ajaxError(function(event, request, settings) {
 			if (request.status == 401) {
 				this.refreshToken(function() {
-					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt")
-					$.ajax(settings)
-				})
+					settings["headers"]["Authorization"] = "Bearer " + localStorage.getItem("access_jwt");
+					$.ajax(settings);
+				});
 			}
-		}.bind(this))
+		}.bind(this));
 	},
 	refreshToken: function(cb) {
 		this.lock.getClient().refreshToken(localStorage.getItem("refresh_token"), function(err, delegationResult) {
 			if (!err) {
 				// this is correct - store and use the full JWT, not the "access_token" in the authHash
-				localStorage.setItem("access_jwt", delegationResult.id_token)
-				cb()
+				localStorage.setItem("access_jwt", delegationResult.id_token);
+				cb();
 			} else {
-				this.signOut()
+				this.signOut();
 			}
-		}.bind(this))
+		}.bind(this));
 	},
 	signOut: function() {
-		localStorage.removeItem("access_jwt")
-		localStorage.removeItem("refresh_token")
-		window.location.href = "/"
+		localStorage.removeItem("access_jwt");
+		localStorage.removeItem("refresh_token");
+		window.location.href = "/";
 	},
 	getIdToken: function() {
-		var idToken = localStorage.getItem("access_jwt")
-		var authHash = this.lock.parseHash(window.location.hash)
+		var idToken = localStorage.getItem("access_jwt");
+		var authHash = this.lock.parseHash(window.location.hash);
 		if (!idToken && authHash) {
 			if (authHash.id_token) {
-				idToken = authHash.id_token
+				idToken = authHash.id_token;
 				// this is correct - we want to store and use the full JWT, not just the "access_token" in the authHash
-				localStorage.setItem("access_jwt", authHash.id_token)
+				localStorage.setItem("access_jwt", authHash.id_token);
 				if ("refresh_token" in authHash) {
-					localStorage.setItem("refresh_token", authHash.refresh_token)
+					localStorage.setItem("refresh_token", authHash.refresh_token);
 				}
 				// this is pretty hacky - get rid of the hash when the page gets redirected.
-				window.location.hash = ""
+				window.location.hash = "";
 			}
 			if (authHash.error) {
-				console.log("Error signing in with authHash:", authHash)
-				return null
+				console.log("Error signing in with authHash:", authHash);
+				return null;
 			}
 		}
-		return idToken
+		return idToken;
 	},
 	showLock: function() {
 		this.lock.show({
@@ -125,13 +132,13 @@ var Main = React.createClass({
 				scope: "openid offline_access user_id given_name name app_metadata"
 			},
 			connections: ['facebook']
-		})
+		});
 	},
 	handleBarChange: function(barID) {
-		this.setState({currentBar: barID})
+		this.setState({currentBar: barID});
 	},
 	componentDidMount: function() {
-		this.getCurrentBar()
+		this.getCurrentBar();
 	},
 	getCurrentBar: function() {
 		// just loads the first bar we get back, for now.
@@ -142,14 +149,14 @@ var Main = React.createClass({
 			},
 			success: function(data) {
 				if (data.length != 0) {
-					this.setState({currentBar: data[0]})
+					this.setState({currentBar: data[0]});
 				} else {
-					this.setState({currentBar: -1})
+					this.setState({currentBar: -1});
 				}
 			}.bind(this)
-		})
+		});
 	}
-})
+});
 
 var MainRouter = React.createClass({
 	render: function() {
@@ -164,8 +171,12 @@ var MainRouter = React.createClass({
 					<Route component={Account} path="/account"></Route>
 				</Route>
 			</Router>
-		)
+		);
 	}
-})
+});
 
-ReactDOM.render(< MainRouter />, document.getElementById('content'))
+ReactDOM.render((
+	<Provider store={store}>
+		<MainRouter/>
+	</Provider>
+), document.getElementById('content'));
