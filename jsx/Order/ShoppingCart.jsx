@@ -38,11 +38,9 @@ var ShoppingCart = React.createClass({
 						? <MenuItem>{"You don't have any items in this order yet. Add some below to get started!"}</MenuItem>
 						: productOrderElements)}
 					<MenuItem divider/>
-					<MenuItem>
-						<Button onClick={this.handleClick} bsStyle="primary" active={this.props.sending} disabled={this.props.disabled}>{this.props.sending
-								? "Sending order..."
-								: "Send Order"}</Button>
-					</MenuItem>
+					<Button onClick={this.handleClick} bsStyle="primary" active={this.props.sending} disabled={this.props.disabled}>{this.props.sending
+							? "Sending order..."
+							: "Send Order"}</Button>
 				</DropdownButton>
 			</div>
 		);
