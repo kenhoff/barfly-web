@@ -212,56 +212,68 @@ var Order = React.createClass({
 		}
 		// else, insert that particular combination of productID, productSizeID and productQuantity into productOrders
 		if (!isNaN(productQuantity)) {
+			// first, push the new quantity, with the product ID, size ID, and quantity onto state
+			// then, shoot off the requests to get the name, container name, and packaging name
 			var newProductOrder = {
 				productID: productID,
 				productSizeID: productSizeID,
 				productQuantity: productQuantity
 			};
-			async.parallel([
-				function(cb2) {
-					// get product name
-					$.ajax({
-						url: process.env.BURLOCK_API_URL + "/products/" + productID,
-						method: "GET",
-						success: function(product) {
-							newProductOrder.productName = product.productName;
-							cb2(null);
-						}
-					});
-				},
-				function(cb2) {
-					$.ajax({
-						url: process.env.BURLOCK_API_URL + "/sizes/" + productSizeID,
-						method: "GET",
-						success: function(size) {
-							$.ajax({
-								url: process.env.BURLOCK_API_URL + "/containers/" + size.containerID,
-								method: "GET",
-								success: function(container) {
-									newProductOrder.containerName = container.containerName;
-									$.ajax({
-										url: process.env.BURLOCK_API_URL + "/packaging/" + size.packagingID,
-										method: "GET",
-										success: function(packaging) {
-											newProductOrder.packagingName = packaging.packagingName;
-											cb2(null);
-										}
-									});
-								}
+			newProductOrders.push(newProductOrder);
+			this.setState({
+				productOrders: newProductOrders
+			}, function() {
+				async.parallel([
+					function(cb2) {
+						$.ajax({
+							url: process.env.BURLOCK_API_URL + "/products/" + productID,
+							method: "GET",
+							success: function(product) {
+								newProductOrder.productName = product.productName;
+								cb2(null);
+							}
+						});
+					},
+					function(cb2) {
+						$.ajax({
+							url: process.env.BURLOCK_API_URL + "/sizes/" + productSizeID,
+							method: "GET",
+							success: function(size) {
+								$.ajax({
+									url: process.env.BURLOCK_API_URL + "/containers/" + size.containerID,
+									method: "GET",
+									success: function(container) {
+										newProductOrder.containerName = container.containerName;
+										$.ajax({
+											url: process.env.BURLOCK_API_URL + "/packaging/" + size.packagingID,
+											method: "GET",
+											success: function(packaging) {
+												newProductOrder.packagingName = packaging.packagingName;
+												cb2(null);
+											}
+										});
+									}
+								});
+							}
+						});
+					}
+				], function() {
+					// once the requests come back, find those productOrders and update their name, container name, and packaging name
+					var currentProductOrders = Object.assign([], this.state.productOrders);
+					for (var currentProductOrder of currentProductOrders) {
+						if (((currentProductOrder.productID == productID) && (currentProductOrder.productSizeID == productSizeID))) {
+							currentProductOrder = Object.assign({}, currentProductOrder, {
+								productName: newProductOrder.productName,
+								containerName: newProductOrder.containerName,
+								packagingName: newProductOrder.packagingName
 							});
 						}
-					});
-				}
-			], function() {
-				newProductOrders.push(newProductOrder);
-				// next, send a PATCH to /orders/:orderID with new order state
-				// this.patchOrder(newOrderProducts)
-				// this should be setState?
-				this.setState({productOrders: newProductOrders});
-			}.bind(this));
+					}
+					this.setState({productOrders: currentProductOrders});
+				}.bind(this));
+			});
+
 		}
-		// how fast can we make the round trip? do we just send it and hope state catches up, or do we ensure that the response contains exactly the right information?
-		// keep in mind that we're sending entire state on change, so if anything needs to catch up it'll happen later
 	},
 	reresolveOrder: function() {
 		this.setState({allProducts: [], productOrders: []});
