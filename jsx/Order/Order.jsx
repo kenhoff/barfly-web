@@ -219,7 +219,7 @@ var Order = React.createClass({
 				productSizeID: productSizeID,
 				productQuantity: productQuantity
 			};
-			newProductOrders.push(newProductOrder)
+			newProductOrders.push(newProductOrder);
 			this.setState({
 				productOrders: newProductOrders
 			}, function() {
@@ -259,14 +259,14 @@ var Order = React.createClass({
 					}
 				], function() {
 					// once the requests come back, find those productOrders and update their name, container name, and packaging name
-					var currentProductOrders = Object.assign([], this.state.productOrders)
+					var currentProductOrders = Object.assign([], this.state.productOrders);
 					for (var currentProductOrder of currentProductOrders) {
 						if (((currentProductOrder.productID == productID) && (currentProductOrder.productSizeID == productSizeID))) {
 							currentProductOrder = Object.assign({}, currentProductOrder, {
 								productName: newProductOrder.productName,
 								containerName: newProductOrder.containerName,
 								packagingName: newProductOrder.packagingName
-							})
+							});
 						}
 					}
 					this.setState({productOrders: currentProductOrders});
