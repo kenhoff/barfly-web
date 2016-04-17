@@ -1,4 +1,4 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var ReactTestUtils = require("react-addons-test-utils");
 var chai = require('chai');
 var assert = chai.assert;
@@ -11,14 +11,21 @@ var browserHistory = require('react-router').browserHistory;
 var Order = require("../jsx/Order/Order.jsx");
 var ProductCard = require("../jsx/Order/ProductCard.jsx");
 
+var productCards;
+var renderedOrder;
+var ajaxStub;
+var h1Tag;
+var browserHistoryMock;
+var browserHistoryExpect;
+
 var renderOrder = function() {
 	renderedOrder = ReactTestUtils.renderIntoDocument(< Order bar = {
 		1
 	}
 	params = {
-		{
-			orderID: 10
-		}
+	{
+		orderID: 10
+	}
 	} />);
 	productCards = ReactTestUtils.scryRenderedComponentsWithType(renderedOrder, ProductCard);
 	return renderedOrder;

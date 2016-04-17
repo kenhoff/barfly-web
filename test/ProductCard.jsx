@@ -1,8 +1,6 @@
-var React = require('react');
+var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require('sinon');
 var assert = require('chai').assert;
-
-var React = require('react');
 var ReactTestUtils = require('react-addons-test-utils');
 
 var $ = require('jquery');
@@ -30,6 +28,15 @@ var SizeList = React.createClass({
 ProductCard.__set__("DistributorField", DistributorField);
 ProductCard.__set__("RepField", RepField);
 ProductCard.__set__("SizeList", SizeList);
+
+var renderedProductCard;
+var title;
+var distributorFieldComponent;
+var repFieldComponent;
+var repFields;
+var sizeListComponent;
+var sizeLists;
+var consoleStub;
 
 var renderProductCard = function(jsx) {
 	renderedProductCard = ReactTestUtils.renderIntoDocument(jsx);
@@ -78,10 +85,10 @@ describe("ProductCard", function() {
 	});
 
 	// stupid shitty console.error isn't stubbing or something
-	it.skip("throws an error if neither a productID or barID is provided", function(done) {
+	it.skip("throws an error if neither a productID or barID is provided", function() {
 		consoleStub = sinon.stub(console, "error");
 		renderedProductCard = renderProductCard(< ProductCard />);
-		console.log(consoleStub.callCount);
+		// console.log(consoleStub.callCount);
 	});
 	it.skip("throws an error if a productID is provided, but a barID isn't provided");
 	it.skip("throws an error if a barID is provided, but a productID isn't provided");
