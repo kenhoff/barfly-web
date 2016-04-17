@@ -14,6 +14,7 @@ var async = require('async');
 var ProductList = require('./ProductList.jsx');
 var NewProductModal = require('./NewProductModal.jsx');
 var OrderNav = require('./OrderNav.jsx');
+var OrderNavBottom = require('./OrderNavBottom.jsx');
 var SentOrderContents = require('./SentOrderContents.jsx');
 var SentOrderMessages = require('./SentOrderMessages.jsx');
 var ShoppingCart = require('./ShoppingCart.jsx');
@@ -99,6 +100,7 @@ var Order = React.createClass({
 							<a onClick={this.showNewProductModal}>Create a new product</a>
 						</p>
 					</div>
+					<OrderNavBottom showNewProductModal={this.showNewProductModal}/>
 					<NewProductModal showModal={this.state.showNewProductModal} onHide={this.closeNewProductModal} newProductCreated={this.getProducts}/>
 				</div>
 			);
