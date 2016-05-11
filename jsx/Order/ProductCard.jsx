@@ -74,7 +74,6 @@ var ProductCard = React.createClass({
 		if (!this.props.productName) {
 			this.props.getProduct();
 		}
-
 	},
 	handleStarredChange: function(starredChange) {
 		starredChange.productID = this.props.productID;
