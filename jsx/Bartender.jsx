@@ -34,7 +34,20 @@ module.exports = {
 					// console.log("Resolved", object.collection, object.id, ", dispatching action");
 					this.store.dispatch({type: "UPDATE_PRODUCT", product: product});
 					// when async request for object returns, pop off of inProgressList
-					this.resolvingList.splice(this.resolvingList.indexOf(object), 1);
+					// TODO: this doesn't work. split this out into popObjectOffResolvingList
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object.collection == "distributors") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/distributors/" + object.id,
+				method: "GET",
+				success: (distributor) => {
+					// console.log("Resolved", object.collection, object.id, ", dispatching action");
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: distributor});
+					// when async request for object returns, pop off of inProgressList
+					// TODO: this doesn't work. split this out into popObjectOffResolvingList
+					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
 		}
@@ -57,4 +70,13 @@ var inResolvingList = function(object, resolvingList) {
 	}
 	// (else)
 	return false;
+};
+
+var popObjectOffResolvingList = function(object, resolvingList) {
+	for (var i = 0; i < resolvingList.length; i++) {
+		if ((resolvingList[i].id == object.id) && (resolvingList[i].collection == object.collection)) {
+			resolvingList.splice(i, 1);
+			break;
+		}
+	}
 };
