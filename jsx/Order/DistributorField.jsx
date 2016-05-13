@@ -1,10 +1,10 @@
-var React = require('react')
-var Button = require('react-bootstrap').Button
+var React = require('react');
+var Button = require('react-bootstrap').Button;
 
-var $ = require('jquery')
+var $ = require('jquery');
 
-var AddDistributorModal = require('./AddDistributorModal.jsx')
-var ChangeDistributorModal = require('./ChangeDistributorModal.jsx')
+var AddDistributorModal = require('./AddDistributorModal.jsx');
+var ChangeDistributorModal = require('./ChangeDistributorModal.jsx');
 
 var DistributorField = React.createClass({
 	getInitialState: function() {
@@ -14,14 +14,14 @@ var DistributorField = React.createClass({
 			zipCode: null,
 			resolving: true,
 			showChangeDistributorModal: false
-		}
-		return (state)
+		};
+		return (state);
 	},
 	render: function() {
 		if (this.state.resolving) {
 			return (
 				<p>Looking up the distributor for&nbsp;{this.props.productName}...</p>
-			)
+			);
 		} else if (this.state.distributorName == -1) {
 			return (
 				<div>
@@ -30,7 +30,7 @@ var DistributorField = React.createClass({
 					</p>
 					<AddDistributorModal showModal={this.state.showAddDistributorModal} onHide={this.closeModal} productID={this.props.productID} zipCode={this.state.zipCode} productName={this.props.productName} reresolveOrder={this.props.reresolveOrder}/>
 				</div>
-			)
+			);
 		} else {
 			var changeDistributorProps = {
 				zipCode: this.state.zipCode,
@@ -38,31 +38,31 @@ var DistributorField = React.createClass({
 				productName: this.props.productName,
 				showModal: this.state.showChangeDistributorModal,
 				closeModal: function() {
-					this.setState({showChangeDistributorModal: false})
+					this.setState({showChangeDistributorModal: false});
 				}.bind(this),
 				reresolveOrder: this.props.reresolveOrder
-			}
+			};
 			return (
 				<div>
 					<span>
 						{this.state.distributorName}</span>
 					<Button bsStyle="link" bsSize="xs" onClick={function() {
-						this.setState({showChangeDistributorModal: true})
+						this.setState({showChangeDistributorModal: true});
 					}.bind(this)}>Change distributor</Button>
 					<ChangeDistributorModal {...changeDistributorProps}/>
 				</div>
-			)
+			);
 		}
 	},
 	openModal: function() {
-		this.setState({showAddDistributorModal: true})
+		this.setState({showAddDistributorModal: true});
 	},
 	closeModal: function() {
-		this.setState({showAddDistributorModal: false})
-		this.resolveDistributor()
+		this.setState({showAddDistributorModal: false});
+		this.resolveDistributor();
 	},
 	componentDidMount: function() {
-		this.resolveDistributor()
+		this.resolveDistributor();
 	},
 	resolveDistributor: function() {
 		// resolve distributor
@@ -76,30 +76,30 @@ var DistributorField = React.createClass({
 			success: function(bar) {
 				this.setState({
 					zipCode: parseInt(bar.zipCode)
-				})
+				});
 				// then resolve distributor for that product in that zip code
 				$.ajax({
 					url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID + "/zipcodes/" + bar.zipCode + "/distributor",
 					method: "GET",
 					success: function(distributor) {
 						if (Object.keys(distributor).length == 0) {
-							this.setState({distributorName: -1, resolving: false})
-							this.props.changeDistributor(null, null)
+							this.setState({distributorName: -1, resolving: false});
+							this.props.changeDistributor(null, null);
 						} else {
 							$.ajax({
 								url: process.env.BURLOCK_API_URL + "/distributors/" + distributor.distributorID,
 								method: "GET",
 								success: function(finalDistributor) {
-									this.setState({distributorName: finalDistributor.distributorName, resolving: false})
-									this.props.changeDistributor(parseInt(distributor.distributorID), finalDistributor.distributorName)
+									this.setState({distributorName: finalDistributor.distributorName, resolving: false});
+									this.props.changeDistributor(parseInt(distributor.distributorID), finalDistributor.distributorName);
 								}.bind(this)
-							})
+							});
 						}
 					}.bind(this)
-				})
+				});
 			}.bind(this)
-		})
+		});
 	}
-})
+});
 
-module.exports = DistributorField
+module.exports = DistributorField;
