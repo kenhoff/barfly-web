@@ -95,14 +95,6 @@ var mapStateToProps = function(state, ownProps) {
 var mapDispatchToProps = function(dispatch, ownProps) {
 	return {
 		getProduct: function() {
-			// $.ajax({
-			// 	url: process.env.BURLOCK_API_URL + "/products/" + ownProps.productID,
-			// 	method: "GET",
-			// 	success: function(product) {
-			// 		dispatch({type: "UPDATE_PRODUCT", product: product});
-			// 		bartender.resolve({collection: "products", id: ownProps.productID});
-			// 	}
-			// });
 			bartender.resolve({collection: "products", id: ownProps.productID});
 		}
 	};
