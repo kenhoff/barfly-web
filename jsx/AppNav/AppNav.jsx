@@ -1,17 +1,17 @@
-var React = require('react')
-var BarSelector = require('./BarSelector.jsx')
-var AccountDropdown = require('./AccountDropdown.jsx')
-var Navbar = require('react-bootstrap').Navbar
-var Nav = require('react-bootstrap').Nav
+var React = require('react');
+var BarSelector = require('./BarSelector.jsx');
+var AccountDropdown = require('./AccountDropdown.jsx');
+var Navbar = require('react-bootstrap').Navbar;
+var Nav = require('react-bootstrap').Nav;
 
-var browserHistory = require('react-router').browserHistory
+var browserHistory = require('react-router').browserHistory;
 
 var AppNav = React.createClass({
 	propTypes: {
 		currentBar: React.PropTypes.number
 	},
 	getInitialState: function() {
-		return {profile: null}
+		return {profile: null};
 	},
 	render: function() {
 		return (
