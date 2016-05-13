@@ -24,6 +24,9 @@ var store = createStore(reducer, {}, compose(window.devToolsExtension
 	? window.devToolsExtension()
 	: f => f));
 
+var bartender = require('./Bartender.jsx');
+bartender.store = store;
+
 var Main = React.createClass({
 
 	// if we haven't loaded a bar yet, currentBar == null.

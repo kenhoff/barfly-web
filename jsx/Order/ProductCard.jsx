@@ -8,17 +8,21 @@ var DistributorField = require('./DistributorField.jsx');
 var RepField = require('./RepField.jsx');
 var SizeList = require('./SizeList.jsx');
 
-var $ = require('jquery');
+var bartender = require('../Bartender.jsx');
+
+var connect = require('react-redux').connect;
 
 var ProductCard = React.createClass({
 	propTypes: {
 		productID: React.PropTypes.number.isRequired,
-		barID: React.PropTypes.number.isRequired
+		barID: React.PropTypes.number.isRequired,
+		productName: React.PropTypes.string
 	},
 	getInitialState: function() {
 		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null});
 	},
 	render: function() {
+		// console.log(bartender.store.getState());
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
 			return (<div/>);
 		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
@@ -33,7 +37,7 @@ var ProductCard = React.createClass({
 					<Row>
 						<Col xs={12} sm={4}>
 							<p>
-								<b>{this.state.productName}</b>
+								<b>{this.props.productName}</b>
 							</p>
 						</Col>
 						<Col xs={12} sm={4}>
@@ -67,14 +71,10 @@ var ProductCard = React.createClass({
 		this.setState({repID: repID, repName: repName});
 	},
 	componentDidMount: function() {
-		// resolve name
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID,
-			method: "GET",
-			success: function(product) {
-				this.setState({productName: product.productName});
-			}.bind(this)
-		});
+		// if productName is null, resolve, and dispatch action
+		if (!this.props.productName) {
+			this.props.getProduct();
+		}
 	},
 	handleStarredChange: function(starredChange) {
 		starredChange.productID = this.props.productID;
@@ -82,4 +82,25 @@ var ProductCard = React.createClass({
 	}
 });
 
-module.exports = ProductCard;
+var mapStateToProps = function(state, ownProps) {
+	if (("products" in state) && (ownProps.productID in state.products)) {
+		return {
+			productName: state.products[ownProps.productID].productName
+		};
+	} else {
+		return {productName: null};
+	}
+};
+
+var mapDispatchToProps = function(dispatch, ownProps) {
+	return {
+		getProduct: function() {
+			bartender.resolve({collection: "products", id: ownProps.productID});
+		}
+	};
+
+};
+
+var ConnectedProductCard = connect(mapStateToProps, mapDispatchToProps)(ProductCard);
+
+module.exports = ConnectedProductCard;
