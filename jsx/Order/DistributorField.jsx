@@ -5,6 +5,7 @@ var $ = require('jquery');
 
 var AddDistributorModal = require('./AddDistributorModal.jsx');
 var ChangeDistributorModal = require('./ChangeDistributorModal.jsx');
+var DistributorName = require('./DistributorName.jsx');
 
 var DistributorField = React.createClass({
 	getInitialState: function() {
@@ -44,8 +45,7 @@ var DistributorField = React.createClass({
 			};
 			return (
 				<div>
-					<span>
-						{this.state.distributorName}</span>
+					<DistributorName distributorID={this.state.distributorID}/>
 					<Button bsStyle="link" bsSize="xs" onClick={function() {
 						this.setState({showChangeDistributorModal: true});
 					}.bind(this)}>Change distributor</Button>
@@ -86,14 +86,7 @@ var DistributorField = React.createClass({
 							this.setState({distributorName: -1, resolving: false});
 							this.props.changeDistributor(null, null);
 						} else {
-							$.ajax({
-								url: process.env.BURLOCK_API_URL + "/distributors/" + distributor.distributorID,
-								method: "GET",
-								success: function(finalDistributor) {
-									this.setState({distributorName: finalDistributor.distributorName, resolving: false});
-									this.props.changeDistributor(parseInt(distributor.distributorID), finalDistributor.distributorName);
-								}.bind(this)
-							});
+							this.setState({distributorID: distributor.distributorID, resolving: false});
 						}
 					}.bind(this)
 				});
