@@ -19,12 +19,17 @@ var browserHistoryExpect;
 
 var Order = require("../jsx/Order/Order.jsx");
 var ProductCard = require('../jsx/Order/ProductCard.jsx');
+var bartender = require('../jsx/Bartender.jsx');
+
+var store = createStore(function() {
+	return {};
+}, {});
+
+bartender.store = store;
 
 var renderOrder = function() {
 	renderedOrder = ReactTestUtils.renderIntoDocument((
-		<Provider store={createStore(function() {
-			return {};
-		}, {})}>
+		<Provider store={store}>
 			<Order bar={1} params={{
 				orderID: 10
 			}}/>
