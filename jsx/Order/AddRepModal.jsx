@@ -2,6 +2,7 @@ var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var $ = require('jquery');
+var DistributorName = require('./DistributorName.jsx');
 
 var AddRepModal = React.createClass({
 	getInitialState: function() {
@@ -15,12 +16,17 @@ var AddRepModal = React.createClass({
 		});
 	},
 	render: function() {
+		if (this.props.changeRep) {
+			var modalTitle = <Modal.Title>{"We're sorry that we've got the wrong rep for you at "}
+				<DistributorName distributorID={this.props.distributorID}></DistributorName>{"! Let's get that fixed."}</Modal.Title>;
+		} else {
+			modalTitle = <Modal.Title>{"Looks like we don't have a rep listed for you at "}
+				<DistributorName distributorID={this.props.distributorID}></DistributorName>{". Mind helping us out?"}</Modal.Title>;
+		}
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
 				<Modal.Header closeButton>
-					<Modal.Title>{this.props.changeRep
-							? "We're sorry that we've got the wrong rep for you at " + this.props.distributorName + "! Let's get that fixed."
-							: "Looks like we don't have a rep listed for you at " + this.props.distributorName + ". Mind helping us out?"}</Modal.Title>
+					{modalTitle}
 				</Modal.Header>
 				<Modal.Body>
 					{this.state.reps.map(function(rep) {
