@@ -87,6 +87,7 @@ var DistributorField = React.createClass({
 							this.props.changeDistributor(null, null);
 						} else {
 							this.setState({distributorID: distributor.distributorID, resolving: false});
+							this.props.changeDistributor(distributor.distributorID, null);
 						}
 					}.bind(this)
 				});

@@ -71,7 +71,7 @@ describe("RepField", function() {
 		});
 	});
 
-	describe('if rep is not resolved', function() {
+	describe.skip('if rep is not resolved', function() {
 		before(function() {
 			// this all fires before the beforeEach of the parent block
 			ajaxStub = sinon.stub($, "ajax");
