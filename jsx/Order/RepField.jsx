@@ -1,18 +1,19 @@
-var React = require('react')
-var $ = require('jquery')
-var Button = require('react-bootstrap').Button
+var React = require('react');
+var $ = require('jquery');
+var Button = require('react-bootstrap').Button;
 
-var AddRepModal = require('./AddRepModal.jsx')
+var AddRepModal = require('./AddRepModal.jsx');
+var DistributorName = require('./DistributorName.jsx');
 
 var RepField = React.createClass({
 	getInitialState: function() {
-		return ({repName: "Finding rep...", repID: null, addNewRepModalOpen: false, resolving: true})
+		return ({repName: "Finding rep...", repID: null, addNewRepModalOpen: false, resolving: true});
 	},
 	render: function() {
 		if (this.state.resolving) {
 			return (
 				<p>Looking up your rep at&nbsp;{this.props.distributorName}...</p>
-			)
+			);
 		} else {
 			if (this.state.repID) {
 				return (
@@ -23,34 +24,35 @@ var RepField = React.createClass({
 						<Button bsStyle="link" bsSize="xs" onClick={this.openModal}>Change rep</Button>
 						<AddRepModal changeRep={true} showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 					</div>
-				)
+				);
 			} else {
 				return (
 					<div>
 						<p>
-							<button className="btn btn-default" onClick={this.openModal}>Add my rep at&nbsp;
-								{this.props.distributorName}</button>
+							<button className="btn btn-default" onClick={this.openModal}>{"Add my rep at "}
+								<DistributorName distributorID={this.props.distributorID}></DistributorName>
+							</button>
 						</p>
 						<AddRepModal showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
 					</div>
-				)
+				);
 			}
 		}
 	},
 	openModal: function() {
-		this.setState({addNewRepModalOpen: true})
+		this.setState({addNewRepModalOpen: true});
 	},
 	closeModal: function() {
-		this.setState({addNewRepModalOpen: false})
+		this.setState({addNewRepModalOpen: false});
 		this.resolveAccount(function(account) {
 			if (account) {
 				this.resolveRepName(account.repID, function(repName) {
-					this.setState({repID: account.repID, repName: repName})
-					this.props.changeRep(account.repID, repName)
-					this.props.reresolveOrder()
-				}.bind(this))
+					this.setState({repID: account.repID, repName: repName});
+					this.props.changeRep(account.repID, repName);
+					this.props.reresolveOrder();
+				}.bind(this));
 			}
-		}.bind(this))
+		}.bind(this));
 	},
 	componentDidMount: function() {
 		this.setState({
@@ -62,15 +64,15 @@ var RepField = React.createClass({
 				this.resolveAccount(function(account) {
 					if (account) {
 						this.resolveRepName(account.repID, function(repName) {
-							this.props.changeRep(account.repID, repName)
-							this.setState({repID: account.repID, repName: repName, resolving: false})
-						}.bind(this))
+							this.props.changeRep(account.repID, repName);
+							this.setState({repID: account.repID, repName: repName, resolving: false});
+						}.bind(this));
 					} else {
-						this.setState({repID: null, repName: null, resolving: false})
+						this.setState({repID: null, repName: null, resolving: false});
 					}
-				}.bind(this))
+				}.bind(this));
 			}
-		}.bind(this))
+		}.bind(this));
 	},
 	componentDidUpdate: function(prevProps) {
 		if (prevProps.distributorID != this.props.distributorID) {
@@ -80,13 +82,13 @@ var RepField = React.createClass({
 				this.resolveAccount(function(account) {
 					if (account) {
 						this.resolveRepName(account.repID, function(repName) {
-							this.setState({repID: account.repID, repName: repName, resolving: false})
-						}.bind(this))
+							this.setState({repID: account.repID, repName: repName, resolving: false});
+						}.bind(this));
 					} else {
-						this.setState({repID: null, repName: null, resolving: false})
+						this.setState({repID: null, repName: null, resolving: false});
 					}
-				}.bind(this))
-			}.bind(this))
+				}.bind(this));
+			}.bind(this));
 		}
 	},
 	resolveAccount: function(cb) {
@@ -102,23 +104,23 @@ var RepField = React.createClass({
 			},
 			success: function(account) {
 				if (Object.keys(account).length == 0) {
-					cb(null)
+					cb(null);
 				} else {
-					cb(account)
+					cb(account);
 				}
 			}
-		})
+		});
 	},
 	resolveRepName: function(repID, cb) {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
 			method: "GET",
 			success: function(rep) {
-				cb(rep.name)
+				cb(rep.name);
 			}
-		})
+		});
 	}
 
-})
+});
 
-module.exports = RepField
+module.exports = RepField;
