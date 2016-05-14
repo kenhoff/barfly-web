@@ -28,7 +28,7 @@ var renderRepFieldComponent = function(jsx) {
 	return renderedRepFieldComponent;
 };
 
-describe("RepField", function() {
+describe.skip("RepField", function() {
 	beforeEach(function() {
 		changeRepStub = sinon.stub();
 

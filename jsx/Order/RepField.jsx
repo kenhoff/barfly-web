@@ -12,7 +12,9 @@ var RepField = React.createClass({
 	render: function() {
 		if (this.state.resolving) {
 			return (
-				<p>Looking up your rep at&nbsp;{this.props.distributorName}...</p>
+				<p>{"Looking up your rep at "}
+					<DistributorName distributorID={this.props.distributorID}></DistributorName>
+					{"..."}</p>
 			);
 		} else {
 			if (this.state.repID) {

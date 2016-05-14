@@ -64,7 +64,7 @@ var renderAddRepModal = function() {
 	return renderedAddRepModal;
 };
 
-describe("AddRepModal", function() {
+describe.skip("AddRepModal", function() {
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf");
 	});
