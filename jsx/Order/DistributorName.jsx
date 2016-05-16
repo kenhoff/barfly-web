@@ -12,11 +12,6 @@ var DistributorNameContainer = React.createClass({
 		return (
 			<span>{this.props.distributorName}</span>
 		);
-	},
-	componentDidMount: function() {
-		if (!("distributorName" in this.props)) {
-			bartender.resolve({collection: "distributors", id: this.props.distributorID});
-		}
 	}
 });
 
@@ -26,6 +21,7 @@ var mapStateToProps = function(state, ownProps) {
 			distributorName: state.distributors[ownProps.distributorID].distributorName
 		};
 	} else {
+		bartender.resolve({collection: "distributors", id: ownProps.distributorID});
 		return {};
 	}
 };

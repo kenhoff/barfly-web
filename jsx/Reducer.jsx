@@ -17,6 +17,8 @@ module.exports = function(state = {}, action) {
 				[action.product.id]: action.product
 			});
 			return (Object.assign({}, state, {products: newProducts}));
+		case "UPDATE_PRODUCTS":
+			return (Object.assign({}, state, {products: action.products}));
 		case "UPDATE_COLLECTION":
 			if ([action.collection] in state) {
 				var currentCollection = state[action.collection];
