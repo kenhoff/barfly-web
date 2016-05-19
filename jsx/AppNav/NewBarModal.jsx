@@ -1,79 +1,85 @@
 var React = require('react');
 var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
-var $ = require('jquery');
+var bartender = require('../Bartender.jsx');
 
-var NewBarModal = React.createClass({
+var connect = require('react-redux').connect;
+
+var PresentationalNewBarModal = React.createClass({
 	getInitialState: function() {
-		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false})
+		return ({zipCodeInputValue: "", barNameInputValue: "", buttonEnabled: false});
 	},
 	render: function() {
 		return (
-			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="NewBarModal">
+			<Modal show={this.props.show} onHide={this.props.close} ref="NewBarModal">
 				<Modal.Header closeButton>
-					<Modal.Title>Let's add a new bar.</Modal.Title>
+					<Modal.Title>{"Let's add a new bar."}</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<Input value={this.state.barNameInputValue} type="text" label="What's the name of your bar?" placeholder="Bob's Burgers" ref={function(thisInput) {
-						this.barNameInput = thisInput
+						this.barNameInput = thisInput;
 					}.bind(this)} onChange={this.handleBarNameInputChange}/>
 					<Input value={this.state.zipCodeInputValue} type="text" label="What zip code is your bar in?" placeholder="80302" ref={function(thisInput) {
-						this.zipCodeInput = thisInput
+						this.zipCodeInput = thisInput;
 					}.bind(this)} onChange={this.handleZipCodeInputChange}/>
 				</Modal.Body>
 				<Modal.Footer>
-					<button className="btn btn-default" onClick={this.props.onHide}>Cancel</button>
+					<button className="btn btn-default" onClick={this.props.close}>Cancel</button>
 					<button className={"btn btn-primary " + (this.state.buttonEnabled
 						? ""
 						: "disabled")} onClick={this.submitBar}>Create</button>
 				</Modal.Footer>
 			</Modal>
-		)
+		);
 	},
 	handleBarNameInputChange: function(event) {
-		var newValue = event.target.value
+		var newValue = event.target.value;
 		this.setState({
 			barNameInputValue: newValue
 		}, function() {
-			this.updateButtonState()
-		})
+			this.updateButtonState();
+		});
 	},
 	handleZipCodeInputChange: function(event) {
-		var newValue = event.target.value.replace(/[^0-9]/g, "").slice(0, 5)
+		var newValue = event.target.value.replace(/[^0-9]/g, "").slice(0, 5);
 		this.setState({
 			zipCodeInputValue: newValue
 		}, function() {
-			this.updateButtonState()
-		})
+			this.updateButtonState();
+		});
 	},
 	updateButtonState: function() {
 		if ((this.state.barNameInputValue == "") || (this.state.zipCodeInputValue.length != 5)) {
-			this.setState({buttonEnabled: false})
+			this.setState({buttonEnabled: false});
 		} else {
-			this.setState({buttonEnabled: true})
+			this.setState({buttonEnabled: true});
 		}
 	},
 	submitBar: function() {
-		if ((this.state.barNameInputValue.trim() == "") || (this.state.zipCodeInputValue.length != 5)) {
-			// handle some kind of err?
-		} else {
-			$.ajax({
-				url: process.env.BURLOCK_API_URL + "/user/bars",
-				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-				},
-				method: "POST",
-				data: {
-					barName: this.barNameInput.getValue().trim(),
-					zipCode: this.zipCodeInput.getValue()
-				},
-				success: function(data) {
-					this.props.onBarChange(data.id)
-					this.props.onHide()
-				}.bind(this)
-			})
+		if (this.state.buttonEnabled) {
+			bartender.submitNewBar(this.barNameInput.getValue().trim(), this.zipCodeInput.getValue());
 		}
 	}
-})
+});
 
-module.exports = NewBarModal
+var mapStateToProps = function(state) {
+	var props = {};
+	if (("ui" in state) && ("newBarModal" in state.ui) && (state.ui.newBarModal)) {
+		props.show = true;
+	} else {
+		props.show = false;
+	}
+	return props;
+};
+
+var mapDispatchToProps = function(dispatch) {
+	var props = {};
+	props.close = function() {
+		dispatch({type: "CLOSE_NEW_BAR_MODAL"});
+	};
+	return props;
+};
+
+var ContainerNewBarModal = connect(mapStateToProps, mapDispatchToProps)(PresentationalNewBarModal);
+
+module.exports = ContainerNewBarModal;

@@ -1,4 +1,5 @@
 # burlock-web
+
 The part that serves the pages
 
 ## Pipeline
@@ -20,3 +21,49 @@ Set up hot reloading for app.js: `node_modules/.bin/watchify ./jsx/Main.jsx -t b
 Build and run tests: `nodemon --exec 'npm test -- --bail' -e jsx`
 
 Run development server: `nodemon --watch server.js`
+
+## Component Hierarchy
+
+-   Provider (for Redux)
+    -   MainRouter
+        -   Main
+            -   App
+                -   Orders (list of all orders in a bar)
+                    -   OrderListItem (multiple)
+                        -   ProductOrderSummaryItem (multiple)
+                -   Order (individual order, sent or unsent)
+                    -   _if Order is sent:_
+                        -   SentOrderContents
+                        -   SentOrderMessages
+                    -   _if Order is unsent:_
+                        -   OrderNav
+                            -   (searching)(not a separate component)
+                            -   ShoppingCart
+                        -   ProductList (multiple)
+                            -   ProductCard (multiple)
+                                -   DistributorField
+                                    -   _if there's a distributor for the product:_
+                                        -   DistributorName
+                                        -   ChangeDistributorModal
+                                            -   DistributorSelect
+                                    -   _if there's no distributor for the product:_
+                                        -   AddDistributorModal
+                                            -   DistributorSelect
+                                -   RepField
+                                    -   DistributorName
+                                    -   _if there's a rep on the account:_
+                                        -   AddRepModal
+                                            -   DistributorName
+                                    -   _if there's no rep on the account:_
+                                        -   DistributorName
+                                        -   AddRepModal
+                                            -   DistributorName
+                                -   SizeList
+                                    -   QuantityInputWithSize (multiple)
+                                    -   NewSizeForm
+                                        -   AddNewSizeModal
+                                            -   ContainerSelect
+                                            -   PackagingSelect
+                        -   OrderNavBottom (button to create new product)
+                        -   NewProductModal
+            -   Account
