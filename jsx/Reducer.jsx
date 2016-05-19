@@ -17,20 +17,28 @@ module.exports = function(state = {}, action) {
 				[action.product.id]: action.product
 			});
 			return (Object.assign({}, state, {products: newProducts}));
+		case "UPDATE_BARS":
+			return (Object.assign({}, state, {bars: action.bars}));
 		case "UPDATE_PRODUCTS":
 			return (Object.assign({}, state, {products: action.products}));
 		case "UPDATE_COLLECTION":
-			if ([action.collection] in state) {
-				var currentCollection = state[action.collection];
+			if ("object" in action) {
+				if ([action.collection] in state) {
+					var currentCollection = state[action.collection];
+				} else {
+					currentCollection = {};
+				}
+				var newCollection = Object.assign({}, currentCollection, {
+					[action.object.id]: action.object
+				});
+				return Object.assign({}, state, {
+					[action.collection]: newCollection
+				});
 			} else {
-				currentCollection = {};
+				return (Object.assign({}, state, {
+					[action.collection]: action.newCollection
+				}));
 			}
-			var newCollection = Object.assign({}, currentCollection, {
-				[action.object.id]: action.object
-			});
-			return Object.assign({}, state, {
-				[action.collection]: newCollection
-			});
 	}
 	return state;
 };

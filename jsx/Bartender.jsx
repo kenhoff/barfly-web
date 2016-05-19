@@ -45,7 +45,18 @@ module.exports = {
 						productObject[product.productID] = product;
 					}
 
-					this.store.dispatch({type: "UPDATE_PRODUCTS", products: productObject});
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: productObject});
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object == "bar_memberships") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/user/bars",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				success: (bars) => {
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: bars});
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
@@ -54,7 +65,7 @@ module.exports = {
 				url: process.env.BURLOCK_API_URL + "/products/" + object.id,
 				method: "GET",
 				success: (product) => {
-					this.store.dispatch({type: "UPDATE_PRODUCT", product: product});
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: product});
 					// when async request for object returns, pop off of inProgressList
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
@@ -64,10 +75,18 @@ module.exports = {
 				url: process.env.BURLOCK_API_URL + "/distributors/" + object.id,
 				method: "GET",
 				success: (distributor) => {
-					// console.log("Resolved", object.collection, object.id, ", dispatching action");
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: distributor});
-					// when async request for object returns, pop off of inProgressList
-					// TODO: this doesn't work. split this out into popObjectOffResolvingList
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object.collection == "bars") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + object.id,
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				success: (barInfo) => {
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: barInfo});
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
