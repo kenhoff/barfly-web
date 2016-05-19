@@ -9,7 +9,7 @@ var Col = require("react-bootstrap").Col
 var ListGroupItem = require('react-bootstrap').ListGroupItem
 var $ = require('jquery')
 
-var QuantityInputWithSize = React.createClass({
+var QuantityInputWithSize = React.createClass({~/
 	getInitialState: function() {
 		return ({sizeName: "", quantity: this.props.quantity, containerName: "", packagingName: ""})
 	},
