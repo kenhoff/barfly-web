@@ -12,7 +12,7 @@ var sinon = require('sinon');
 var renderedComponent;
 var buttons;
 
-describe("NewBarModal", function() {
+describe.skip("NewBarModal", function() {
 
 	before(function() {
 		sinon.stub(localStorage, "getItem").returns("asdfasdfasdf");

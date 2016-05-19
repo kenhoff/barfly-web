@@ -8,21 +8,17 @@ var DistributorField = require('./DistributorField.jsx');
 var RepField = require('./RepField.jsx');
 var SizeList = require('./SizeList.jsx');
 
-var bartender = require('../Bartender.jsx');
-
-var connect = require('react-redux').connect;
+var $ = require('jquery');
 
 var ProductCard = React.createClass({
 	propTypes: {
 		productID: React.PropTypes.number.isRequired,
-		barID: React.PropTypes.number.isRequired,
-		productName: React.PropTypes.string
+		barID: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
 		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null});
 	},
 	render: function() {
-		// console.log(bartender.store.getState());
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
 			return (<div/>);
 		} else if ((this.props.inOrderList) && (this.props.quantities.length == 0)) {
@@ -37,11 +33,11 @@ var ProductCard = React.createClass({
 					<Row>
 						<Col xs={12} sm={4}>
 							<p>
-								<b>{this.props.productName}</b>
+								<b>{this.state.productName}</b>
 							</p>
 						</Col>
 						<Col xs={12} sm={4}>
-							<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.props.productName} changeDistributor={this.handleDistributorChange} reresolveOrder={this.props.reresolveOrder}/>
+							<DistributorField barID={this.props.barID} productID={this.props.productID} productName={this.state.productName} changeDistributor={this.handleDistributorChange} reresolveOrder={this.props.reresolveOrder}/>
 						</Col>
 						<Col xs={12} sm={4}>
 							{this.state.distributorID
@@ -52,7 +48,7 @@ var ProductCard = React.createClass({
 					<Row>
 						<Col xs={12}>
 							{(this.state.distributorID && this.state.repID)
-								? <SizeList inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList} starredSizes={this.props.starredSizes} productID={this.props.productID} productName={this.props.productName} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
+								? <SizeList inStarredProductsList={this.props.inStarredProductsList} inOrderList={this.props.inOrderList} starredSizes={this.props.starredSizes} productID={this.props.productID} productName={this.state.productName} quantities={this.props.quantities} changeQuantity={this.handleQuantityChange.bind(this, this.props.productID)} disabled={this.props.disabled} changeStarred={this.handleStarredChange}/>
 								: null}
 						</Col>
 					</Row>
@@ -71,10 +67,14 @@ var ProductCard = React.createClass({
 		this.setState({repID: repID, repName: repName});
 	},
 	componentDidMount: function() {
-		// if productName is null, resolve, and dispatch action
-		if (!this.props.productName) {
-			this.props.getProduct();
-		}
+		// resolve name
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/products/" + this.props.productID,
+			method: "GET",
+			success: function(product) {
+				this.setState({productName: product.productName});
+			}.bind(this)
+		});
 	},
 	handleStarredChange: function(starredChange) {
 		starredChange.productID = this.props.productID;
@@ -82,25 +82,4 @@ var ProductCard = React.createClass({
 	}
 });
 
-var mapStateToProps = function(state, ownProps) {
-	if (("products" in state) && (ownProps.productID in state.products)) {
-		return {
-			productName: state.products[ownProps.productID].productName
-		};
-	} else {
-		return {productName: null};
-	}
-};
-
-var mapDispatchToProps = function(dispatch, ownProps) {
-	return {
-		getProduct: function() {
-			bartender.resolve({collection: "products", id: ownProps.productID});
-		}
-	};
-
-};
-
-var ConnectedProductCard = connect(mapStateToProps, mapDispatchToProps)(ProductCard);
-
-module.exports = ConnectedProductCard;
+module.exports = ProductCard;
