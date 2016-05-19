@@ -10,6 +10,32 @@ var $ = require("jquery");
 module.exports = {
 	store: {},
 	resolvingList: [],
+	submitNewBar: function(barName, zipCode) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/user/bars",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "POST",
+			data: {
+				barName,
+				zipCode
+			},
+			success: (newBar) => {
+				// add new bar to list of bar memberships
+				this.store.dispatch({type: "ADD_BAR_MEMBERSHIP", barID: newBar.id});
+				// add new bar to list of bars
+				this.store.dispatch({type: "ADD_NEW_BAR", bar: Object.assign({}, newBar)});
+				// change current bar to new bar
+				this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: newBar.id});
+				// close modal
+				this.store.dispatch({type: "CLOSE_NEW_BAR_MODAL"});
+			},
+			failure: (data) => {
+				console.log(data);
+			}
+		});
+	},
 	resolve: function(object) {
 		// check if object is in store - if so, return
 		if (!object.force) {
@@ -57,6 +83,7 @@ module.exports = {
 				},
 				success: (bars) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: bars});
+					this.store.dispatch({type: "INITIALIZE_CURRENT_BAR"});
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});

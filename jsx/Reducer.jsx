@@ -7,20 +7,35 @@ module.exports = function(state = {}, action) {
 			}));
 		case "UPDATE_PHONE_DRAFT":
 			return (Object.assign({}, state, {phoneDraft: action.phoneDraft}));
-		case "UPDATE_PRODUCT":
-			if ("products" in state) {
-				var allProducts = state.products;
+		case "ADD_BAR_MEMBERSHIP":
+			if (!("bar_memberships" in state)) {
+				var bar_memberships = [];
 			} else {
-				allProducts = {};
+				bar_memberships = [...state.bar_memberships];
 			}
-			var newProducts = Object.assign({}, allProducts, {
-				[action.product.id]: action.product
-			});
-			return (Object.assign({}, state, {products: newProducts}));
-		case "UPDATE_BARS":
-			return (Object.assign({}, state, {bars: action.bars}));
-		case "UPDATE_PRODUCTS":
-			return (Object.assign({}, state, {products: action.products}));
+			bar_memberships.push(action.barID);
+			return Object.assign({}, state, {bar_memberships: bar_memberships});
+		case "INITIALIZE_CURRENT_BAR":
+			if (state.bar_memberships.length != 0) {
+				var currentBar = state.bar_memberships[0];
+			} else {
+				currentBar = null;
+			}
+			if ("ui" in state) {
+				var currentUI = state.ui;
+			} else {
+				currentUI = {};
+			}
+			var ui = Object.assign({}, currentUI, {currentBar: currentBar});
+			return (Object.assign({}, state, {ui: ui}));
+		case "CHANGE_CURRENT_BAR":
+			if ("ui" in state) {
+				currentUI = state.ui;
+			} else {
+				currentUI = {};
+			}
+			ui = Object.assign({}, currentUI, {currentBar: action.barID});
+			return (Object.assign({}, state, {ui: ui}));
 		case "UPDATE_COLLECTION":
 			if ("object" in action) {
 				if ([action.collection] in state) {
@@ -39,6 +54,23 @@ module.exports = function(state = {}, action) {
 					[action.collection]: action.newCollection
 				}));
 			}
+		case "OPEN_NEW_BAR_MODAL":
+			if ("ui" in state) {
+				currentUI = state.ui;
+			} else {
+				currentUI = {};
+			}
+			ui = Object.assign({}, currentUI, {newBarModal: true});
+			return (Object.assign({}, state, {ui: ui}));
+		case "CLOSE_NEW_BAR_MODAL":
+			if ("ui" in state) {
+				currentUI = state.ui;
+			} else {
+				currentUI = {};
+			}
+			ui = Object.assign({}, currentUI, {newBarModal: false});
+			return (Object.assign({}, state, {ui: ui}));
+
 	}
 	return state;
 };
