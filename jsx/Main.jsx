@@ -16,7 +16,7 @@ var $ = require('jquery');
 var App = require('./App.jsx');
 var AppNav = require("./AppNav/AppNav.jsx");
 var Orders = require('./OrderList/Orders.jsx');
-var Order = require('./Order/Order2.jsx');
+var Order = require('./Order/Order.jsx');
 var Account = require("./Account/Account.jsx");
 var Landing = require('./Landing.jsx');
 
