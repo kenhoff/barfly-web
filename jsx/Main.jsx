@@ -136,28 +136,6 @@ var Main = React.createClass({
 			},
 			connections: ['facebook']
 		});
-	},
-	handleBarChange: function(barID) {
-		this.setState({currentBar: barID});
-	},
-	componentDidMount: function() {
-		this.getCurrentBar();
-	},
-	getCurrentBar: function() {
-		// just loads the first bar we get back, for now.
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/user/bars",
-			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			},
-			success: function(data) {
-				if (data.length != 0) {
-					this.setState({currentBar: data[0]});
-				} else {
-					this.setState({currentBar: -1});
-				}
-			}.bind(this)
-		});
 	}
 });
 

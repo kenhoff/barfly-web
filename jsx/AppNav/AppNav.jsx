@@ -15,7 +15,7 @@ var AppNav = React.createClass({
 			<Navbar>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="#" onClick={function() {
+						<a onClick={function() {
 							browserHistory.push('/');
 						}} className="logo">barfly</a>
 					</Navbar.Brand>
