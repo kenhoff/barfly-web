@@ -43,7 +43,7 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/> {this.props.children}
+					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock} signOut={this.signOut}/> {this.props.children}
 				</div>
 			);
 		} else {
