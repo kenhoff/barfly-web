@@ -4,6 +4,8 @@ var Button = require('react-bootstrap').Button;
 var Col = require('react-bootstrap').Col;
 var Row = require('react-bootstrap').Row;
 var Grid = require('react-bootstrap').Grid;
+var connect = require('react-redux').connect;
+var bartender = require('../Bartender.jsx');
 
 var browserHistory = require('react-router').browserHistory;
 
@@ -11,7 +13,10 @@ var $ = require('jquery');
 
 var OrderListItem = require('./OrderListItem.jsx');
 
-var Orders = React.createClass({
+var PresentationalOrders = React.createClass({
+	propTypes: {
+		bar: React.PropTypes.number.isRequired
+	},
 	getInitialState: function() {
 		return {orders: []};
 	},
@@ -73,4 +78,17 @@ var Orders = React.createClass({
 	}
 });
 
-module.exports = Orders;
+var mapStateToProps = function(state, ownProps) {
+	var props = {};
+	if (("bar_orders" in state) && (ownProps.bar in state.bar_orders)) {
+		// then there's a list of orders in state.bar_orders[ownProps.bar]
+		props.orders = state.bar_orders[ownProps.bar];
+	} else {
+		bartender.resolve({collection: "bar_orders", id: ownProps.bar});
+	}
+	return props;
+};
+
+var ContainerOrders = connect(mapStateToProps)(PresentationalOrders);
+
+module.exports = ContainerOrders;

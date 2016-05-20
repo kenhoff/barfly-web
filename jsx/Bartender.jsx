@@ -120,6 +120,22 @@ module.exports = {
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
+		} else if (object.collection == "bar_orders") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + object.id + "/orders",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				success: (orders) => {
+					var orderIDs = [];
+					for (var order of orders) {
+						orderIDs.push(order.id);
+					}
+					// for the record - i'm setting a key/value pair within an array here
+					orderIDs.id = object.id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: orderIDs});
+				}
+			});
 		}
 	}
 };
