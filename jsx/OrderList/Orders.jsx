@@ -28,9 +28,9 @@ var PresentationalOrders = React.createClass({
 				</Row>
 				<Row>
 					<Col xs={12}>
-						{this.props.orders.map(function(order) {
+						{this.props.orders.map((order) => {
 							return (<OrderListItem key={order} barID={this.props.bar}/>);
-						}.bind(this))}
+						})}
 					</Col>
 				</Row>
 			</Grid>
