@@ -12,6 +12,9 @@ var OrderListItem = React.createClass({
 	getInitialState: function() {
 		return {productOrders: []};
 	},
+	getDefaultProps: function() {
+		return {order: {}};
+	},
 	render: function() {
 		var displayTime;
 		var timezone = jstz.determine().name();

@@ -39,6 +39,19 @@ module.exports = {
 			}
 		});
 	},
+	createNewOrder: function(opts) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/bars/" + opts.barID + "/orders",
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: (data) => {
+				this.store.dispatch({type: "PUSH_NEW_ORDER", barID: opts.barID, orderID: data})
+				browserHistory.push("/orders/" + data);
+			}
+		});
+	},
 	resolve: function(object) {
 		// check if object is in store - if so, return
 		if (!object.force) {

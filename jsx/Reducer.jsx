@@ -70,7 +70,19 @@ module.exports = function(state = {}, action) {
 			}
 			ui = Object.assign({}, currentUI, {newBarModal: false});
 			return (Object.assign({}, state, {ui: ui}));
-
+		case "PUSH_NEW_ORDER":
+			// barID, orderID
+			if ("bar_orders" in state) {
+				var newBarOrders = Object.assign({}, state.bar_orders);
+			} else {
+				newBarOrders = {};
+			}
+			if (action.barID in newBarOrders) {
+				newBarOrders[action.barID].push(action.orderID);
+			} else {
+				newBarOrders[action.barID] = [action.orderID];
+			}
+			return Object.assign({}, state, {bar_orders: newBarOrders});
 	}
 	return state;
 };
