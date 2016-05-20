@@ -5,6 +5,8 @@
 // 	}
 // }
 
+var browserHistory = require('react-router').browserHistory;
+
 var $ = require("jquery");
 
 module.exports = {
@@ -30,6 +32,7 @@ module.exports = {
 				this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: newBar.id});
 				// close modal
 				this.store.dispatch({type: "CLOSE_NEW_BAR_MODAL"});
+				browserHistory.push("/orders");
 			},
 			failure: (data) => {
 				console.log(data);
