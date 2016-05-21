@@ -83,6 +83,20 @@ module.exports = function(state = {}, action) {
 				newBarOrders[action.barID] = [action.orderID];
 			}
 			return Object.assign({}, state, {bar_orders: newBarOrders});
+		case "UPDATE_ORDER":
+			if (("orders" in state) && (action.orderID in state.orders)) {
+				var newProductOrders = [...state.orders[action.orderID].productOrders];
+				for (var newProductOrder of newProductOrders) {
+					if ((newProductOrder.productID == action.productID) && (newProductOrder.productSizeID == action.productSizeID)) {
+						newProductOrder.productQuantity = action.productQuantity;
+					}
+				}
+				return Object.assign({}, state, {orders: Object.assign({}, state.orders, {
+						[action.orderID]: Object.assign({}, state.orders[action.orderID], {productOrders: newProductOrders}) // eslint-disable-line indent
+					})}); // eslint-disable-line indent
+			} else {
+				return state;
+			}
 		case "SEND_ORDER":
 			if (("orders" in state) && (action.id in state.orders)) {
 				var newOrder = Object.assign({}, state.orders[action.id], {
@@ -90,8 +104,8 @@ module.exports = function(state = {}, action) {
 					sentAt: action.sentAt
 				});
 				var newState = Object.assign({}, state, {orders: Object.assign({}, state.orders, {
-						[action.id]: newOrder
-					})});
+						[action.id]: newOrder // eslint-disable-line indent
+					})}); // eslint-disable-line indent
 				return newState;
 			} else {
 				return state;

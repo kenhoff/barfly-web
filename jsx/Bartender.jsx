@@ -52,6 +52,13 @@ module.exports = {
 			}
 		});
 	},
+	updateOrder: function(opts) {
+		// opts: {orderID, productID, productSizeID, productQuantity}
+		// mocking out for now - later will include resetting timeout to save order
+		this.store.dispatch(Object.assign({
+			type: "UPDATE_ORDER"
+		}, opts));
+	},
 	sendOrder: function(id) {
 		// mostly mocked out for now
 		// dispatch event to update order as "sent"
