@@ -10,6 +10,7 @@ var MenuItem = require('react-bootstrap').MenuItem;
 var connect = require('react-redux').connect;
 
 var bartender = require('../Bartender.jsx');
+var browserHistory = require('react-router').browserHistory;
 
 var NewBarModal = require('./NewBarModal.jsx');
 
@@ -108,6 +109,7 @@ var mapDispatchToProps = function(dispatch) {
 	};
 	props.changeBar = function(barID) {
 		dispatch({type: "CHANGE_CURRENT_BAR", barID});
+		browserHistory.push("/orders");
 	};
 	return props;
 };

@@ -3,6 +3,9 @@ var React = require('react');
 var connect = require('react-redux').connect;
 
 var PresentationalApp = React.createClass({
+	propTypes: {
+		bar: React.PropTypes.number
+	},
 	render: function() {
 		if (this.props.bar) {
 			return (
