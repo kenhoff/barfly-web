@@ -15,7 +15,7 @@ var PresentationalOrderListItem = React.createClass({
 		orderID: React.PropTypes.number.isRequired,
 		productOrders: React.PropTypes.array,
 		sent: React.PropTypes.bool,
-		sentAt: React.PropTypes.string
+		sentAt: React.PropTypes.instanceOf(Date)
 	},
 	getDefaultProps: function() {
 		return {productOrders: [], sent: false};
@@ -65,6 +65,9 @@ var mapStateToProps = function(state, ownProps) {
 	// get info about order
 	if (("orders" in state) && (ownProps.orderID in state.orders)) {
 		props = Object.assign(props, state.orders[ownProps.orderID]);
+		if ("sentAt" in props) {
+			props.sentAt = new Date(props.sentAt);
+		}
 	} else {
 		bartender.resolve({collection: "orders", id: ownProps.orderID, bar: ownProps.barID});
 	}
