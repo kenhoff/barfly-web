@@ -52,6 +52,11 @@ module.exports = {
 			}
 		});
 	},
+	sendOrder: function(id) {
+		// mostly mocked out for now
+		// dispatch event to update order as "sent"
+		this.store.dispatch({type: "SEND_ORDER", id: id, sentAt: new Date()});
+	},
 	resolve: function(object) {
 		// check if object is in store - if so, return
 		if (!object.force) {
