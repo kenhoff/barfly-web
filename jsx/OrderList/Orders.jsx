@@ -46,6 +46,14 @@ var mapStateToProps = function(state, ownProps) {
 	if (("bar_orders" in state) && (ownProps.bar in state.bar_orders)) {
 		// then there's a list of orders in state.bar_orders[ownProps.bar]
 		props.orders = state.bar_orders[ownProps.bar];
+		// sort props.orders
+		props.orders.sort(function(a, b) {
+			if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		});
 	} else {
 		bartender.resolve({collection: "bar_orders", id: ownProps.bar});
 	}
