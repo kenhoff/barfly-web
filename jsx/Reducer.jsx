@@ -83,6 +83,19 @@ module.exports = function(state = {}, action) {
 				newBarOrders[action.barID] = [action.orderID];
 			}
 			return Object.assign({}, state, {bar_orders: newBarOrders});
+		case "SEND_ORDER":
+			if (("orders" in state) && (action.id in state.orders)) {
+				var newOrder = Object.assign({}, state.orders[action.id], {
+					sent: true,
+					sentAt: action.sentAt
+				});
+				var newState = Object.assign({}, state, {orders: Object.assign({}, state.orders, {
+						[action.id]: newOrder
+					})});
+				return newState;
+			} else {
+				return state;
+			}
 	}
 	return state;
 };
