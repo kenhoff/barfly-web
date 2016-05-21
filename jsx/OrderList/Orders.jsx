@@ -29,7 +29,7 @@ var PresentationalOrders = React.createClass({
 				<Row>
 					<Col xs={12}>
 						{this.props.orders.map((order) => {
-							return (<OrderListItem key={order} barID={this.props.bar}/>);
+							return (<OrderListItem key={order} orderID={order} barID={this.props.bar}/>);
 						})}
 					</Col>
 				</Row>

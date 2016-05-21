@@ -6,9 +6,14 @@ var Row = require('react-bootstrap').Row;
 var Col = require('react-bootstrap').Col;
 var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
 
+var connect = require('react-redux').connect;
+
 var browserHistory = require('react-router').browserHistory;
 
-var OrderListItem = React.createClass({
+var PresentationalOrderListItem = React.createClass({
+	propTypes: {
+		orderID: React.PropTypes.number.isRequired
+	},
 	getInitialState: function() {
 		return {productOrders: []};
 	},
@@ -74,4 +79,14 @@ var OrderListItem = React.createClass({
 	}
 });
 
-module.exports = OrderListItem;
+var mapStateToProps = function (state, ownProps) {
+	var props = {};
+	// get info about order
+	// check and see if orderID is in product_orders_by_order
+	// then, get all of the product_orders associated with it
+	return props;
+}
+
+var ContainerOrderListItem = connect(mapStateToProps)(PresentationalOrderListItem);
+
+module.exports = ContainerOrderListItem;
