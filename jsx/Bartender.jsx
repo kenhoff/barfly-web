@@ -35,7 +35,7 @@ module.exports = {
 				browserHistory.push("/orders");
 			},
 			failure: (data) => {
-				console.log(data);
+				throw data;
 			}
 		});
 	},
@@ -47,7 +47,7 @@ module.exports = {
 				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: (data) => {
-				this.store.dispatch({type: "PUSH_NEW_ORDER", barID: opts.barID, orderID: data})
+				this.store.dispatch({type: "PUSH_NEW_ORDER", barID: opts.barID, orderID: data});
 				browserHistory.push("/orders/" + data);
 			}
 		});
@@ -147,6 +147,24 @@ module.exports = {
 					// for the record - i'm setting a key/value pair within an array here
 					orderIDs.id = object.id;
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: orderIDs});
+				}
+			});
+		} else if (object.collection == "orders") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + object.bar + "/orders/" + object.id,
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "GET",
+				success: (data) => {
+					// handle if sent isn't actually in the order yet
+					// dispatch
+					data.id = object.id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: data});
+					// this.setState({
+					// 	productOrders: data.productOrders,
+					// 	sent: (data.sent || false)
+					// });
 				}
 			});
 		}
