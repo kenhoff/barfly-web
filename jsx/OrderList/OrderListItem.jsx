@@ -42,7 +42,7 @@ var PresentationalOrderListItem = React.createClass({
 						<Col xs={12} sm={7} smPull={3}>
 							<ul>
 								{this.props.productOrders.map(function(productOrder) {
-									return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} productOrder={productOrder}/>);
+									return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} {...productOrder}/>);
 								})}
 							</ul>
 						</Col>
