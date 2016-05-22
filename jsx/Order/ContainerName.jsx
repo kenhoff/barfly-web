@@ -8,6 +8,9 @@ var PresentationalContainerName = React.createClass({
 		containerID: React.PropTypes.number.isRequired,
 		containerName: React.PropTypes.string
 	},
+	getDefaultProps: function() {
+		return {containerName: ""};
+	},
 	render: function() {
 		return (
 			<span>{this.props.containerName}</span>
@@ -16,14 +19,13 @@ var PresentationalContainerName = React.createClass({
 });
 
 var mapStateToProps = function(state, ownProps) {
+	let props = {};
 	if (("containers" in state) && (ownProps.containerID in state.containers)) {
-		return {
-			containerName: state.containers[ownProps.containerID].containerName
-		};
+		props.containerName = state.containers[ownProps.containerID].containerName;
 	} else {
 		bartender.resolve({collection: "containers", id: ownProps.containerID});
-		return {containerName: ""};
 	}
+	return props;
 };
 
 var ContainerContainerName = connect(mapStateToProps)(PresentationalContainerName);

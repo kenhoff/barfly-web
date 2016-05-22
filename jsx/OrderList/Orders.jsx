@@ -1,10 +1,7 @@
 var React = require('react');
 
-var Button = require('react-bootstrap').Button;
-var Col = require('react-bootstrap').Col;
-var Row = require('react-bootstrap').Row;
-var Grid = require('react-bootstrap').Grid;
-var connect = require('react-redux').connect;
+import {Button, Col, Row, Grid} from "react-bootstrap";
+import {connect} from "react-redux";
 var bartender = require('../Bartender.jsx');
 
 var OrderListItem = require('./OrderListItem.jsx');
@@ -42,17 +39,11 @@ var PresentationalOrders = React.createClass({
 });
 
 var mapStateToProps = function(state, ownProps) {
-	var props = {};
+	let props = {};
 	if (("bar_orders" in state) && (ownProps.bar in state.bar_orders)) {
-		// then there's a list of orders in state.bar_orders[ownProps.bar]
-		props.orders = state.bar_orders[ownProps.bar];
-		// sort props.orders
+		props.orders = [...state.bar_orders[ownProps.bar]];
 		props.orders.sort(function(a, b) {
-			if (a > b) {
-				return -1;
-			} else {
-				return 1;
-			}
+			return (b - a);
 		});
 	} else {
 		bartender.resolve({collection: "bar_orders", id: ownProps.bar});

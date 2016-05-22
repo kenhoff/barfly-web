@@ -71,7 +71,7 @@ var SentOrderMessagesDistributor = React.createClass({
 					<p>{this.props.distributor.distributorName + ", " + this.state.repName}</p>
 					<ul>
 						{this.state.filteredProductOrders.map(function(filteredProductOrder) {
-							return (<ProductOrderSummaryItem key={filteredProductOrder.id} productOrder={filteredProductOrder}/>)
+							return (<ProductOrderSummaryItem key={filteredProductOrder.id} {...filteredProductOrder}/>)
 						})}
 					</ul>
 				</div>
