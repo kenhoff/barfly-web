@@ -161,14 +161,8 @@ module.exports = {
 				},
 				method: "GET",
 				success: (data) => {
-					// handle if sent isn't actually in the order yet
-					// dispatch
 					data.id = object.id;
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: data});
-					// this.setState({
-					// 	productOrders: data.productOrders,
-					// 	sent: (data.sent || false)
-					// });
 				}
 			});
 		} else if (object.collection == "sizes") {
@@ -176,7 +170,9 @@ module.exports = {
 				url: process.env.BURLOCK_API_URL + "/sizes/" + object.id,
 				method: "GET",
 				success: (size) => {
-					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: size});
+					if (size) { // sometimes we get a null size - in the future, the API will just fail this call
+						this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: size});
+					}
 				}
 			});
 		} else if (object.collection == "containers") {
