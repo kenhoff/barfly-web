@@ -86,10 +86,20 @@ module.exports = function(state = {}, action) {
 		case "UPDATE_ORDER":
 			if (("orders" in state) && (action.orderID in state.orders)) {
 				var newProductOrders = [...state.orders[action.orderID].productOrders];
-				for (var newProductOrder of newProductOrders) {
-					if ((newProductOrder.productID == action.productID) && (newProductOrder.productSizeID == action.productSizeID)) {
-						newProductOrder.productQuantity = action.productQuantity;
+				var createNewProductOrder = true;
+				for (var i = 0; i < newProductOrders.length; i++) {
+					if ((newProductOrders[i].productID == action.productID) && (newProductOrders[i].productSizeID == action.productSizeID)) {
+						createNewProductOrder = false;
+						if (action.productQuantity == 0) {
+							newProductOrders.splice(i, 1);
+						} else {
+							newProductOrders[i].productQuantity = action.productQuantity;
+						}
+						// set a flag that we shouldn't create a new product order
 					}
+				}
+				if (createNewProductOrder) {
+					newProductOrders.push({productID: action.productID, productQuantity: action.productQuantity, productSizeID: action.productSizeID});
 				}
 				return Object.assign({}, state, {orders: Object.assign({}, state.orders, {
 						[action.orderID]: Object.assign({}, state.orders[action.orderID], {productOrders: newProductOrders}) // eslint-disable-line indent
