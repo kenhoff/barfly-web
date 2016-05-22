@@ -1,13 +1,5 @@
-// state should look like:
-// state = {
-// 	products: {
-// 		1: {...}
-// 	}
-// }
-
-var browserHistory = require('react-router').browserHistory;
-
 var $ = require("jquery");
+import {browserHistory} from "react-router";
 
 module.exports = {
 	store: {},
@@ -177,6 +169,30 @@ module.exports = {
 					// 	productOrders: data.productOrders,
 					// 	sent: (data.sent || false)
 					// });
+				}
+			});
+		} else if (object.collection == "sizes") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/sizes/" + object.id,
+				method: "GET",
+				success: (size) => {
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: size});
+				}
+			});
+		} else if (object.collection == "containers") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/containers/" + object.id,
+				method: "GET",
+				success: (container) => {
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: container});
+				}
+			});
+		} else if (object.collection == "packaging") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/packaging/" + object.id,
+				method: "GET",
+				success: (packaging) => {
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: packaging});
 				}
 			});
 		}
