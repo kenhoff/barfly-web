@@ -9,7 +9,7 @@ var SentOrderContents = React.createClass({
 				<h4>Order contents</h4>
 				<ul>
 					{this.props.productOrders.map(function(productOrder) {
-						return (<ProductOrderSummaryItem key={productOrder.id} productOrder={productOrder}/>)
+						return (<ProductOrderSummaryItem key={productOrder.id} {...productOrder}/>)
 					})}
 				</ul>
 			</div>
