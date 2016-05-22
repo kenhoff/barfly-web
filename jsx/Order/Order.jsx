@@ -198,7 +198,7 @@ var Order = React.createClass({
 	},
 	// yay clusterfuck!
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
-		bartender.updateOrder({orderID: this.props.params.orderID, productID, productSizeID, productQuantity});
+		bartender.updateOrder({orderID: parseInt(this.props.params.orderID), productID, productSizeID, productQuantity});
 		// updateTimeout handles the order patching
 		this.updateTimeout();
 		// change existing state to reflect new quantity change
