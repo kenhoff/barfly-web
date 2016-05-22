@@ -1,14 +1,13 @@
 var React = require('react');
 var moment = require('moment-timezone');
 var jstz = require('jstimezonedetect');
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
+
+import {Row, Col} from 'react-bootstrap';
+import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
+
 var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
 var bartender = require('../Bartender.jsx');
-
-var connect = require('react-redux').connect;
-
-var browserHistory = require('react-router').browserHistory;
 
 var PresentationalOrderListItem = React.createClass({
 	propTypes: {
@@ -21,11 +20,9 @@ var PresentationalOrderListItem = React.createClass({
 		return {productOrders: [], sent: false};
 	},
 	render: function() {
-		var displayTime;
-		var timezone = jstz.determine().name();
 		if (this.props.sent) {
 			if ("sentAt" in this.props) {
-				displayTime = "Sent: " + moment(this.props.sentAt).tz(timezone).format('llll');
+				var displayTime = "Sent: " + moment(this.props.sentAt).tz(jstz.determine().name()).format('llll');
 			} else {
 				displayTime = "Sent";
 			}
@@ -45,7 +42,7 @@ var PresentationalOrderListItem = React.createClass({
 						<Col xs={12} sm={7} smPull={3}>
 							<ul>
 								{this.props.productOrders.map(function(productOrder) {
-									return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} productOrder={productOrder}/>);
+									return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} {...productOrder}/>);
 								})}
 							</ul>
 						</Col>
@@ -54,15 +51,13 @@ var PresentationalOrderListItem = React.createClass({
 			</div>
 		);
 	},
-
 	navigateToOrder: function() {
 		browserHistory.push("/orders/" + this.props.orderID);
 	}
 });
 
 var mapStateToProps = function(state, ownProps) {
-	var props = {};
-	// get info about order
+	let props = {};
 	if (("orders" in state) && (ownProps.orderID in state.orders)) {
 		props = Object.assign(props, state.orders[ownProps.orderID]);
 		if ("sentAt" in props) {

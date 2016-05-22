@@ -11,7 +11,8 @@ module.exports = {
 		"ecmaFeatures": {
 			"experimentalObjectRestSpread": true,
 			"jsx": true
-		}
+		},
+		"sourceType": "module"
 	},
 	"plugins": [
 		"react"
