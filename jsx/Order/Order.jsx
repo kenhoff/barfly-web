@@ -19,6 +19,8 @@ var SentOrderContents = require('./SentOrderContents.jsx');
 var SentOrderMessages = require('./SentOrderMessages.jsx');
 var ShoppingCart = require('./ShoppingCart.jsx');
 
+var bartender = require('../Bartender.jsx');
+
 var Order = React.createClass({
 	propTypes: {},
 	// every update to the order causes the updateTimeout to fire - when updateTimeout hits 0, the order is updated
@@ -181,6 +183,7 @@ var Order = React.createClass({
 				};
 				window.Intercom('trackEvent', "sent_order", metadata);
 				browserHistory.push("/orders");
+				bartender.sendOrder(this.props.params.orderID);
 			}.bind(this),
 			error: function() {
 				this.setState({sending: false});
@@ -195,6 +198,7 @@ var Order = React.createClass({
 	},
 	// yay clusterfuck!
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
+		bartender.updateOrder({orderID: parseInt(this.props.params.orderID), productID, productSizeID, productQuantity});
 		// updateTimeout handles the order patching
 		this.updateTimeout();
 		// change existing state to reflect new quantity change

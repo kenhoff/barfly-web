@@ -5,6 +5,8 @@
 // 	}
 // }
 
+var browserHistory = require('react-router').browserHistory;
+
 var $ = require("jquery");
 
 module.exports = {
@@ -30,11 +32,37 @@ module.exports = {
 				this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: newBar.id});
 				// close modal
 				this.store.dispatch({type: "CLOSE_NEW_BAR_MODAL"});
+				browserHistory.push("/orders");
 			},
 			failure: (data) => {
-				console.log(data);
+				throw data;
 			}
 		});
+	},
+	createNewOrder: function(opts) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/bars/" + opts.barID + "/orders",
+			method: "POST",
+			headers: {
+				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+			},
+			success: (data) => {
+				this.store.dispatch({type: "PUSH_NEW_ORDER", barID: opts.barID, orderID: data});
+				browserHistory.push("/orders/" + data);
+			}
+		});
+	},
+	updateOrder: function(opts) {
+		// opts: {orderID, productID, productSizeID, productQuantity}
+		// mocking out for now - later will include resetting timeout to save order
+		this.store.dispatch(Object.assign({
+			type: "UPDATE_ORDER"
+		}, opts));
+	},
+	sendOrder: function(id) {
+		// mostly mocked out for now
+		// dispatch event to update order as "sent"
+		this.store.dispatch({type: "SEND_ORDER", id: id, sentAt: new Date()});
 	},
 	resolve: function(object) {
 		// check if object is in store - if so, return
@@ -115,6 +143,40 @@ module.exports = {
 				success: (barInfo) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: barInfo});
 					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object.collection == "bar_orders") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + object.id + "/orders",
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				success: (orders) => {
+					var orderIDs = [];
+					for (var order of orders) {
+						orderIDs.push(order.id);
+					}
+					// for the record - i'm setting a key/value pair within an array here
+					orderIDs.id = object.id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: orderIDs});
+				}
+			});
+		} else if (object.collection == "orders") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/bars/" + object.bar + "/orders/" + object.id,
+				headers: {
+					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "GET",
+				success: (data) => {
+					// handle if sent isn't actually in the order yet
+					// dispatch
+					data.id = object.id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: data});
+					// this.setState({
+					// 	productOrders: data.productOrders,
+					// 	sent: (data.sent || false)
+					// });
 				}
 			});
 		}

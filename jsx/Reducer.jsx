@@ -70,7 +70,56 @@ module.exports = function(state = {}, action) {
 			}
 			ui = Object.assign({}, currentUI, {newBarModal: false});
 			return (Object.assign({}, state, {ui: ui}));
-
+		case "PUSH_NEW_ORDER":
+			// barID, orderID
+			if ("bar_orders" in state) {
+				var newBarOrders = Object.assign({}, state.bar_orders);
+			} else {
+				newBarOrders = {};
+			}
+			if (action.barID in newBarOrders) {
+				newBarOrders[action.barID].push(action.orderID);
+			} else {
+				newBarOrders[action.barID] = [action.orderID];
+			}
+			return Object.assign({}, state, {bar_orders: newBarOrders});
+		case "UPDATE_ORDER":
+			if (("orders" in state) && (action.orderID in state.orders)) {
+				var newProductOrders = [...state.orders[action.orderID].productOrders];
+				var createNewProductOrder = true;
+				for (var i = 0; i < newProductOrders.length; i++) {
+					if ((newProductOrders[i].productID == action.productID) && (newProductOrders[i].productSizeID == action.productSizeID)) {
+						createNewProductOrder = false;
+						if (action.productQuantity == 0) {
+							newProductOrders.splice(i, 1);
+						} else {
+							newProductOrders[i].productQuantity = action.productQuantity;
+						}
+						// set a flag that we shouldn't create a new product order
+					}
+				}
+				if (createNewProductOrder) {
+					newProductOrders.push({productID: action.productID, productQuantity: action.productQuantity, productSizeID: action.productSizeID});
+				}
+				return Object.assign({}, state, {orders: Object.assign({}, state.orders, {
+						[action.orderID]: Object.assign({}, state.orders[action.orderID], {productOrders: newProductOrders}) // eslint-disable-line indent
+					})}); // eslint-disable-line indent
+			} else {
+				return state;
+			}
+		case "SEND_ORDER":
+			if (("orders" in state) && (action.id in state.orders)) {
+				var newOrder = Object.assign({}, state.orders[action.id], {
+					sent: true,
+					sentAt: action.sentAt
+				});
+				var newState = Object.assign({}, state, {orders: Object.assign({}, state.orders, {
+						[action.id]: newOrder // eslint-disable-line indent
+					})}); // eslint-disable-line indent
+				return newState;
+			} else {
+				return state;
+			}
 	}
 	return state;
 };

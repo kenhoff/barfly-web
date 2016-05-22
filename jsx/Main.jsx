@@ -43,7 +43,7 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock}/> {this.props.children}
+					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock} signOut={this.signOut}/> {this.props.children}
 				</div>
 			);
 		} else {
@@ -135,28 +135,6 @@ var Main = React.createClass({
 				scope: "openid offline_access user_id given_name name app_metadata"
 			},
 			connections: ['facebook']
-		});
-	},
-	handleBarChange: function(barID) {
-		this.setState({currentBar: barID});
-	},
-	componentDidMount: function() {
-		this.getCurrentBar();
-	},
-	getCurrentBar: function() {
-		// just loads the first bar we get back, for now.
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/user/bars",
-			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			},
-			success: function(data) {
-				if (data.length != 0) {
-					this.setState({currentBar: data[0]});
-				} else {
-					this.setState({currentBar: -1});
-				}
-			}.bind(this)
 		});
 	}
 });

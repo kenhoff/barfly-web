@@ -1,72 +1,65 @@
-var React = require('react')
+var React = require('react');
 
-var Button = require('react-bootstrap').Button
-var Col = require('react-bootstrap').Col
-var Row = require('react-bootstrap').Row
-var Grid = require('react-bootstrap').Grid
+var Button = require('react-bootstrap').Button;
+var Col = require('react-bootstrap').Col;
+var Row = require('react-bootstrap').Row;
+var Grid = require('react-bootstrap').Grid;
+var connect = require('react-redux').connect;
+var bartender = require('../Bartender.jsx');
 
-var browserHistory = require('react-router').browserHistory
+var OrderListItem = require('./OrderListItem.jsx');
 
-var $ = require('jquery')
-
-var OrderListItem = require('./OrderListItem.jsx')
-
-var Orders = React.createClass({
-	getInitialState: function() {
-		return {orders: []}
+var PresentationalOrders = React.createClass({
+	propTypes: {
+		bar: React.PropTypes.number.isRequired,
+		orders: React.PropTypes.arrayOf(React.PropTypes.number)
+	},
+	getDefaultProps: function() {
+		return {orders: []};
 	},
 	render: function() {
 		return (
 			<Grid>
 				<Row>
-					<h1>Orders</h1>
-					<Button bsStyle="primary" bsSize="large" onClick={this.newOrder}>New Order</Button>
+					<Col xs={12}>
+						<h1>Orders</h1>
+						<Button bsStyle="primary" bsSize="large" onClick={this.newOrder}>New Order</Button>
+					</Col>
 				</Row>
 				<Row>
-					{this.state.orders.map(function(order) {
-						return (<OrderListItem key={order.id} order={order} barID={this.props.bar}/>)
-					}.bind(this))}
+					<Col xs={12}>
+						{this.props.orders.map((order) => {
+							return (<OrderListItem key={order} orderID={order} barID={this.props.bar}/>);
+						})}
+					</Col>
 				</Row>
 			</Grid>
-		)
-	},
-	componentDidMount: function() {
-		// make an ajax call to retrieve all orders for this.props.bar
-		if (this.props.bar > 0) {
-			this.loadOrdersForBar(this.props.bar)
-		}
-	},
-	componentWillReceiveProps: function(newProps) {
-		if (newProps.bar > 0) {
-			this.loadOrdersForBar(newProps.bar)
-		}
-	},
-	loadOrdersForBar: function(bar) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/bars/" + bar + "/orders",
-			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			},
-			success: function(orders) {
-				orders.sort(function(a, b) {
-					return b.id - a.id
-				})
-				this.setState({orders: orders})
-			}.bind(this)
-		})
+		);
 	},
 	newOrder: function() {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders",
-			method: "POST",
-			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
-			},
-			success: function(data) {
-				browserHistory.push("/orders/" + data)
-			}.bind(this)
-		})
+		bartender.createNewOrder({barID: this.props.bar});
 	}
-})
+});
 
-module.exports = Orders
+var mapStateToProps = function(state, ownProps) {
+	var props = {};
+	if (("bar_orders" in state) && (ownProps.bar in state.bar_orders)) {
+		// then there's a list of orders in state.bar_orders[ownProps.bar]
+		props.orders = state.bar_orders[ownProps.bar];
+		// sort props.orders
+		props.orders.sort(function(a, b) {
+			if (a > b) {
+				return -1;
+			} else {
+				return 1;
+			}
+		});
+	} else {
+		bartender.resolve({collection: "bar_orders", id: ownProps.bar});
+	}
+	return props;
+};
+
+var ContainerOrders = connect(mapStateToProps)(PresentationalOrders);
+
+module.exports = ContainerOrders;
