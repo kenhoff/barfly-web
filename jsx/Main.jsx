@@ -36,7 +36,6 @@ var Main = React.createClass({
 	},
 	render: function() {
 		if (this.state.idToken) {
-
 			// oh my god, this is stupid, but let me explain.
 			// react-router forces us to specify the children that we're going to render as part of our route, but neglects to give us a way to pass ""default"" props to these children - in our case, our "default" props is the barID that we're working with.
 			// (the reason we're doing this is so that we have /orders/1234 instead of /bars/1234/orders/1234)
