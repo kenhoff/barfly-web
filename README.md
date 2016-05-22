@@ -14,13 +14,11 @@ On the `master` branch, `BURLOCK_API_URL` points to `https://api.burlockorders.c
 
 ## Building
 
-**Build everything:** `nodemon --exec 'npm i' -e jsx,jade,styl`
-
-Set up hot reloading for app.js: `node_modules/.bin/watchify ./jsx/Main.jsx -t babelify -t localenvify -p livereactload -o static/app.js`
+**Build everything:** `npm i`
 
 Build and run tests: `nodemon --exec 'npm test -- --bail' -e jsx`
 
-Run development server: `nodemon --watch server.js`
+Run development server: `npm run dev`
 
 ## Component Hierarchy
 
