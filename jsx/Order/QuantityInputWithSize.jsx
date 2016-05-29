@@ -1,10 +1,23 @@
 var React = require('react');
-import {Button, Glyphicon, Input, FormControls, Row, Col, ListGroupItem} from 'react-bootstrap';
-var $ = require('jquery');
+import {
+	Button,
+	Glyphicon,
+	Input,
+	FormControls,
+	Row,
+	Col,
+	ListGroupItem
+} from 'react-bootstrap';
+var SizeDescription = require('../_shared/SizeDescription.jsx');
 
 var QuantityInputWithSize = React.createClass({
+	propTypes: {
+		// shouldn't have inStarredList or inOrderList - should be handled by the Order
+		quantity: React.PropTypes.number, // TODO: should be required - we'll get there
+		sizeID: React.PropTypes.number
+	},
 	getInitialState: function() {
-		return ({sizeName: "", quantity: this.props.quantity, containerName: "", packagingName: ""});
+		return ({quantity: this.props.quantity});
 	},
 	render: function() {
 		if (this.props.inStarredProductsList && !this.props.starred) {
@@ -21,7 +34,7 @@ var QuantityInputWithSize = React.createClass({
 				<ListGroupItem>
 					<Row>
 						<Col sm={8} xs={6} smPush={3}>
-							<label>{this.state.containerName + ", " + this.state.packagingName}</label>
+							<label><SizeDescription sizeID={this.props.sizeID}/></label>
 						</Col>
 						<Col sm={1} xs={6} smPush={3}>
 							<Button onClick={this.changeStarred} className="pull-right" active={this.props.starred}>
@@ -37,47 +50,10 @@ var QuantityInputWithSize = React.createClass({
 		}
 	},
 	componentDidMount: function() {
-		// resolve size (container & packaging)
-		this.getContainerAndPackagingID(function(err, size) {
-			this.getContainerName(size.containerID, function(err, containerName) {
-				this.setState({containerName: containerName});
-			}.bind(this));
-			this.getPackagingName(size.packagingID, function(err, packagingName) {
-				this.setState({packagingName: packagingName});
-			}.bind(this));
-		}.bind(this));
-
 		// change negative or zero quantities to null
 		if (this.props.quantity <= 0) {
 			this.setState({quantity: null});
 		}
-	},
-	getContainerAndPackagingID: function(cb) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/sizes/" + this.props.sizeID,
-			method: "GET",
-			success: function(size) {
-				cb(null, size);
-			}.bind(this)
-		});
-	},
-	getContainerName: function(containerID, cb) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/containers/" + containerID,
-			method: "GET",
-			success: function(container) {
-				cb(null, container.containerName);
-			}
-		});
-	},
-	getPackagingName: function(packagingID, cb) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/packaging/" + packagingID,
-			method: "GET",
-			success: function(packaging) {
-				cb(null, packaging.packagingName);
-			}
-		});
 	},
 	componentWillReceiveProps: function(nextProps) {
 		// change negative or zero quantities to null
