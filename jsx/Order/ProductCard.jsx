@@ -16,7 +16,7 @@ var ProductCard = React.createClass({
 		barID: React.PropTypes.number.isRequired
 	},
 	getInitialState: function() {
-		return ({productName: "", distributorID: null, distributorName: null, repID: null, repName: null});
+		return ({productName: "", distributorID: null, distributorName: null, repID: null});
 	},
 	render: function() {
 		if (this.props.inStarredProductsList && (this.props.starredSizes.length == 0)) {
@@ -63,8 +63,8 @@ var ProductCard = React.createClass({
 	handleDistributorChange: function(distributorID, distributorName) {
 		this.setState({distributorID: distributorID, distributorName: distributorName});
 	},
-	handleRepChange: function(repID, repName) {
-		this.setState({repID: repID, repName: repName});
+	handleRepChange: function(repID) {
+		this.setState({repID: repID});
 	},
 	componentDidMount: function() {
 		// resolve name

@@ -126,6 +126,17 @@ module.exports = {
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
+		} else if (object.collection == "reps") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/reps/" + object.id,
+				method: "GET",
+				success: (rep) => {
+					rep.id = rep.user_id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: rep});
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+
 		} else if (object.collection == "bars") {
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + object.id,
@@ -151,6 +162,7 @@ module.exports = {
 					// for the record - i'm setting a key/value pair within an array here
 					orderIDs.id = object.id;
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: orderIDs});
+					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
 		} else if (object.collection == "orders") {
@@ -163,6 +175,7 @@ module.exports = {
 				success: (data) => {
 					data.id = object.id;
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: data});
+					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
 		} else if (object.collection == "sizes") {
@@ -172,6 +185,7 @@ module.exports = {
 				success: (size) => {
 					if (size) { // sometimes we get a null size - in the future, the API will just fail this call
 						this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: size});
+						popObjectOffResolvingList(object, this.resolvingList);
 					}
 				}
 			});
@@ -181,6 +195,7 @@ module.exports = {
 				method: "GET",
 				success: (container) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: container});
+					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
 		} else if (object.collection == "packaging") {
@@ -189,6 +204,7 @@ module.exports = {
 				method: "GET",
 				success: (packaging) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: packaging});
+					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
 		}
