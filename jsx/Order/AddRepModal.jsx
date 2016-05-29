@@ -3,6 +3,7 @@ var Modal = require('react-bootstrap').Modal;
 var Input = require('react-bootstrap').Input;
 var $ = require('jquery');
 var DistributorName = require('./DistributorName.jsx');
+var RepName = require('./RepName.jsx');
 
 var AddRepModal = React.createClass({
 	getInitialState: function() {
@@ -18,10 +19,10 @@ var AddRepModal = React.createClass({
 	render: function() {
 		if (this.props.changeRep) {
 			var modalTitle = <Modal.Title>{"We're sorry that we've got the wrong rep for you at "}
-				<DistributorName distributorID={this.props.distributorID}></DistributorName>{"! Let's get that fixed."}</Modal.Title>;
+				<DistributorName distributorID={this.props.distributorID}/>{"! Let's get that fixed."}</Modal.Title>;
 		} else {
 			modalTitle = <Modal.Title>{"Looks like we don't have a rep listed for you at "}
-				<DistributorName distributorID={this.props.distributorID}></DistributorName>{". Mind helping us out?"}</Modal.Title>;
+				<DistributorName distributorID={this.props.distributorID}/>{". Mind helping us out?"}</Modal.Title>;
 		}
 		return (
 			<Modal show={this.props.showModal} onHide={this.props.onHide} ref="AddRepModal">
@@ -196,25 +197,14 @@ var RepOption = React.createClass({
 		repID: React.PropTypes.string.isRequired,
 		repPhone: React.PropTypes.number.isRequired
 	},
-	getInitialState: function() {
-		return {repName: ""};
-	},
 	render: function() {
-		return (<Input name="reps" label={this.state.repName + ", " + this.props.repPhone} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>);
-	},
-	componentDidMount: function() {
-		this.resolveRepName(function(repName) {
-			this.setState({repName: repName});
-		}.bind(this));
-	},
-	resolveRepName: function(cb) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/reps/" + this.props.repID,
-			method: "GET",
-			success: function(rep) {
-				cb(rep.name);
-			}
-		});
+		let rep = (
+			<div>
+				<RepName repID={this.props.repID}/>{", "}
+				<span>{this.props.repPhone}</span>
+			</div>
+		);
+		return (<Input name="reps" label={rep} onChange={this.props.handleRepSelectChange} checked={this.props.checked} value={this.props.repID} type="radio"/>);
 	}
 });
 

@@ -8,5 +8,5 @@ require('./NewProductModal.jsx');
 require('./Order.jsx');
 require('./Orders.jsx');
 require("./ProductCard.jsx");
-require('./QuantityInputWithSize.jsx');
+// require('./QuantityInputWithSize.jsx');
 require('./RepField.jsx');

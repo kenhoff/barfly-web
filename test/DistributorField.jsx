@@ -2,9 +2,11 @@ var React = require('react'); // eslint-disable-line no-unused-vars
 var sinon = require('sinon');
 var assert = require('assert');
 
+var rewire = require('rewire');
+
 var ReactTestUtils = require('react-addons-test-utils');
 
-var DistributorField = require("../jsx/Order/DistributorField.jsx");
+var DistributorField = rewire("../jsx/Order/DistributorField.jsx");
 
 var $ = require('jquery');
 
@@ -95,11 +97,11 @@ describe("DistributorField", function() {
 			assert.equal(button.innerHTML, "Add a Distributor for Product X");
 			done();
 		});
-		it.skip('when button is clicked, "AddDistributorModal" is opened', function() {
-			openModalSpy = sinon.spy(renderedDistributorField, "openModal");
-			button = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "button");
-			ReactTestUtils.Simulate.click(button);
-		});
+		// it.skip('when button is clicked, "AddDistributorModal" is opened', function() {
+		// 	var openModalSpy = sinon.spy(renderedDistributorField, "openModal");
+		// 	button = ReactTestUtils.findRenderedDOMComponentWithTag(renderedDistributorField, "button");
+		// 	ReactTestUtils.Simulate.click(button);
+		// });
 		it('calls this.props.changeDistributor with a null distributorID and distributorName', function(done) {
 			assert.equal(changeDistributorSpy.callCount, 1);
 			assert(changeDistributorSpy.calledWith(null, null));

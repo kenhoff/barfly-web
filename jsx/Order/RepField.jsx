@@ -4,10 +4,14 @@ var Button = require('react-bootstrap').Button;
 
 var AddRepModal = require('./AddRepModal.jsx');
 var DistributorName = require('./DistributorName.jsx');
+var RepName = require('./RepName.jsx');
 
 var RepField = React.createClass({
+	propTypes: {
+		distributorID: React.PropTypes.number.isRequired
+	},
 	getInitialState: function() {
-		return ({repName: "Finding rep...", repID: null, addNewRepModalOpen: false, resolving: true});
+		return ({repID: null, addNewRepModalOpen: false, resolving: true});
 	},
 	render: function() {
 		if (this.state.resolving) {
@@ -21,7 +25,7 @@ var RepField = React.createClass({
 				return (
 					<div>
 						<span>
-							{this.state.repName}
+							<RepName repID={this.state.repID}/>
 						</span>
 						<Button bsStyle="link" bsSize="xs" onClick={this.openModal}>Change rep</Button>
 						<AddRepModal changeRep={true} showModal={this.state.addNewRepModalOpen} onHide={this.closeModal} distributorName={this.props.distributorName} distributorID={this.props.distributorID} barID={this.props.barID}/>
@@ -48,49 +52,44 @@ var RepField = React.createClass({
 		this.setState({addNewRepModalOpen: false});
 		this.resolveAccount(function(account) {
 			if (account) {
-				this.resolveRepName(account.repID, function(repName) {
-					this.setState({repID: account.repID, repName: repName});
-					this.props.changeRep(account.repID, repName);
-					this.props.reresolveOrder();
-				}.bind(this));
+				this.setState({repID: account.repID});
+				this.props.changeRep(account.repID);
+				this.props.reresolveOrder();
 			}
 		}.bind(this));
 	},
 	componentDidMount: function() {
 		this.setState({
 			resolving: true
-		}, function() {
+		}, () => {
 			// if this.props.distributorID == null, then don't display anything yet.
 			// if this.props.distributorID != null, then attempt to resolve the account.
 			if (this.props.distributorID) {
-				this.resolveAccount(function(account) {
+				this.resolveAccount((account) => {
 					if (account) {
-						this.resolveRepName(account.repID, function(repName) {
-							this.props.changeRep(account.repID, repName);
-							this.setState({repID: account.repID, repName: repName, resolving: false});
-						}.bind(this));
+						this.props.changeRep(account.repID);
+						this.setState({repID: account.repID, resolving: false});
 					} else {
-						this.setState({repID: null, repName: null, resolving: false});
+						this.setState({repID: null, resolving: false});
 					}
-				}.bind(this));
+				});
 			}
-		}.bind(this));
+		});
 	},
 	componentDidUpdate: function(prevProps) {
 		if (prevProps.distributorID != this.props.distributorID) {
 			this.setState({
 				resolving: true
-			}, function() {
-				this.resolveAccount(function(account) {
+			}, () => {
+				this.resolveAccount((account) => {
 					if (account) {
-						this.resolveRepName(account.repID, function(repName) {
-							this.setState({repID: account.repID, repName: repName, resolving: false});
-						}.bind(this));
+						this.props.changeRep(account.repID);
+						this.setState({repID: account.repID, resolving: false});
 					} else {
-						this.setState({repID: null, repName: null, resolving: false});
+						this.setState({repID: null, resolving: false});
 					}
-				}.bind(this));
-			}.bind(this));
+				});
+			});
 		}
 	},
 	resolveAccount: function(cb) {
@@ -112,17 +111,7 @@ var RepField = React.createClass({
 				}
 			}
 		});
-	},
-	resolveRepName: function(repID, cb) {
-		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
-			method: "GET",
-			success: function(rep) {
-				cb(rep.name);
-			}
-		});
 	}
-
 });
 
 module.exports = RepField;
