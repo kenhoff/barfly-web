@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "mocha",
     "postinstall": "npm run build && stylus static/style.styl && jade static/index.jade",
-    "pretest": "rm ./test/test.js; browserify ./test/Main.jsx -t babelify -t localenvify -t rewireify -o ./test/test.js",
+    "pretest": "webpack --config webpack-test.config.js",
     "build": "webpack",
     "dev": "webpack --progress --colors --watch"
   },
@@ -56,8 +56,10 @@
     "react-waypoint": "^1.3.0",
     "redux": "^3.4.0",
     "request": "^2.67.0",
+    "rewire": "^2.5.1",
+    "rewire-webpack": "^1.0.1",
     "rewireify": "^0.2.5",
-    "sinon": "^1.17.2",
+    "sinon": "^2.0.0-pre",
     "stylus": "^0.53.0",
     "transform-loader": "^0.2.3",
     "webpack": "^1.13.1"

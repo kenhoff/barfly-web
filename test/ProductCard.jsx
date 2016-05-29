@@ -7,7 +7,8 @@ var createStore = require('redux').createStore;
 
 var $ = require('jquery');
 
-var ProductCard = require("../jsx/Order/ProductCard.jsx");
+var rewire = require('rewire');
+var ProductCard = rewire("../jsx/Order/ProductCard.jsx");
 
 var DistributorField = React.createClass({
 	render: function() {
