@@ -5,7 +5,7 @@ var bartender = require('../Bartender.jsx');
 
 var RepName = React.createClass({
 	propTypes: {
-		repID: React.PropTypes.number.isRequired,
+		repID: React.PropTypes.string.isRequired, // auth0 string
 		repName: React.PropTypes.string
 	},
 	render: function() {
@@ -18,7 +18,7 @@ var RepName = React.createClass({
 var mapStateToProps = function(state, ownProps) {
 	let props = {};
 	if (("reps" in state) && (ownProps.repID in state.reps)) {
-		props.repName = state.reps[ownProps.repID].repName;
+		props.repName = state.reps[ownProps.repID].name;
 	} else {
 		bartender.resolve({collection: "reps", id: ownProps.repID});
 	}
