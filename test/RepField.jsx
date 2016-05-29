@@ -5,7 +5,9 @@ var ReactTestUtils = require('react-addons-test-utils');
 
 var $ = require('jquery');
 
-var RepField = require("../jsx/Order/RepField.jsx");
+var rewire = require('rewire');
+
+var RepField = rewire("../jsx/Order/RepField.jsx");
 
 var AddRepModal = React.createClass({
 	render: function() {
@@ -21,7 +23,6 @@ var pElement;
 var ajaxStub;
 var spanElement;
 var button;
-
 
 var renderRepFieldComponent = function(jsx) {
 	renderedRepFieldComponent = ReactTestUtils.renderIntoDocument(jsx);
