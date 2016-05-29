@@ -1,5 +1,5 @@
 var React = require('react');
-var connect = require('react-redux').connect;
+import {connect} from 'react-redux';
 
 var bartender = require('../Bartender.jsx');
 
