@@ -1,12 +1,5 @@
 var React = require('react');
-$ = require('jquery');
-var Button = require("react-bootstrap").Button;
-var Glyphicon = require("react-bootstrap").Glyphicon;
-var Input = require("react-bootstrap").Input;
-var FormControls = require("react-bootstrap").FormControls;
-var Row = require("react-bootstrap").Row;
-var Col = require("react-bootstrap").Col;
-var ListGroupItem = require('react-bootstrap').ListGroupItem;
+import {Button, Glyphicon, Input, FormControls, Row, Col, ListGroupItem} from 'react-bootstrap';
 var $ = require('jquery');
 
 var QuantityInputWithSize = React.createClass({
