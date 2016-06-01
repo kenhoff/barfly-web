@@ -3,8 +3,12 @@ var Modal = require('react-bootstrap').Modal;
 var Button = require('react-bootstrap').Button;
 var $ = require('jquery');
 
+import {connect} from "react-redux";
+
 var ContainerSelect = require('./ContainerSelect.jsx');
 var PackagingSelect = require('./PackagingSelect.jsx');
+
+var bartender = require('../Bartender.jsx');
 
 var AddNewSizeModal = React.createClass({
 	getInitialState: function() {
@@ -40,7 +44,9 @@ var AddNewSizeModal = React.createClass({
 						if (!err) {
 							this.setState({selectedContainerID: null, selectedPackagingID: null});
 							// do whatever it is that we do once saving a product
-							this.props.refreshSizes();
+							this.props.saveSizeToProduct(this.props.productID, size.id);
+							bartender.resolve({collection: "sizes", id: size.id});
+							// this.props.refreshSizes();
 							this.props.onHide();
 						}
 					}.bind(this));
@@ -51,7 +57,9 @@ var AddNewSizeModal = React.createClass({
 							if (!err) {
 								// do whatever it is that we do once saving a product
 								this.setState({selectedContainerID: null, selectedPackagingID: null});
-								this.props.refreshSizes();
+								this.props.saveSizeToProduct(this.props.productID, sizeID);
+								bartender.resolve({collection: "sizes", id: sizeID});
+								// this.props.refreshSizes();
 								this.props.onHide();
 							}
 						}.bind(this));
@@ -124,5 +132,20 @@ var AddNewSizeModal = React.createClass({
 		}
 	}
 });
+
+let mapDispatchToProps = function(dispatch) {
+	return {
+		saveSizeToProduct: (productID, sizeID) => {
+			let action = {
+				type: "SAVE_NEW_SIZE_TO_PRODUCT",
+				productID: productID,
+				sizeID: sizeID
+			};
+			dispatch(action);
+		}
+	};
+};
+
+AddNewSizeModal = connect(() => ({}), mapDispatchToProps)(AddNewSizeModal);
 
 module.exports = AddNewSizeModal;
