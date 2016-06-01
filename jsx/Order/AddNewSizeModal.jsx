@@ -1,14 +1,18 @@
-var React = require('react')
-var Modal = require('react-bootstrap').Modal
-var Button = require('react-bootstrap').Button
-var $ = require('jquery')
+var React = require('react');
+var Modal = require('react-bootstrap').Modal;
+var Button = require('react-bootstrap').Button;
+var $ = require('jquery');
 
-var ContainerSelect = require('./ContainerSelect.jsx')
-var PackagingSelect = require('./PackagingSelect.jsx')
+import {connect} from "react-redux";
+
+var ContainerSelect = require('./ContainerSelect.jsx');
+var PackagingSelect = require('./PackagingSelect.jsx');
+
+var bartender = require('../Bartender.jsx');
 
 var AddNewSizeModal = React.createClass({
 	getInitialState: function() {
-		return {selectedContainerID: null, selectedPackagingID: null}
+		return {selectedContainerID: null, selectedPackagingID: null};
 	},
 	render: function() {
 		return (
@@ -29,7 +33,7 @@ var AddNewSizeModal = React.createClass({
 					</Modal.Footer>
 				</form>
 			</Modal>
-		)
+		);
 	},
 	handleModalSave: function() {
 		if (this.state.selectedContainerID && this.state.selectedPackagingID) {
@@ -38,26 +42,30 @@ var AddNewSizeModal = React.createClass({
 					// if size exists, save returned size to product
 					this.saveSizeToProduct(size.id, function(err) {
 						if (!err) {
-							this.setState({selectedContainerID: null, selectedPackagingID: null})
+							this.setState({selectedContainerID: null, selectedPackagingID: null});
 							// do whatever it is that we do once saving a product
-							this.props.refreshSizes()
-							this.props.onHide()
+							this.props.saveSizeToProduct(this.props.productID, size.id);
+							bartender.resolve({collection: "sizes", id: size.id});
+							// this.props.refreshSizes();
+							this.props.onHide();
 						}
-					}.bind(this))
+					}.bind(this));
 				} else {
 					// if not, create new size (and save new size to product)
 					this.createNewSize(this.state.selectedContainerID, this.state.selectedPackagingID, function(err, sizeID) {
 						this.saveSizeToProduct(sizeID, function(err) {
 							if (!err) {
 								// do whatever it is that we do once saving a product
-								this.setState({selectedContainerID: null, selectedPackagingID: null})
-								this.props.refreshSizes()
-								this.props.onHide()
+								this.setState({selectedContainerID: null, selectedPackagingID: null});
+								this.props.saveSizeToProduct(this.props.productID, sizeID);
+								bartender.resolve({collection: "sizes", id: sizeID});
+								// this.props.refreshSizes();
+								this.props.onHide();
 							}
-						}.bind(this))
-					}.bind(this))
+						}.bind(this));
+					}.bind(this));
 				}
-			}.bind(this))
+			}.bind(this));
 		}
 	},
 	checkToSeeIfSizeExists: function(containerID, packagingID, cb) {
@@ -69,9 +77,9 @@ var AddNewSizeModal = React.createClass({
 			},
 			method: "GET",
 			success: function(size) {
-				cb(null, size)
+				cb(null, size);
 			}
-		})
+		});
 	},
 	createNewSize: function(containerID, packagingID, cb) {
 		$.ajax({
@@ -86,10 +94,10 @@ var AddNewSizeModal = React.createClass({
 			},
 			success: function(sizeID) {
 				if (cb) {
-					cb(null, sizeID)
+					cb(null, sizeID);
 				}
 			}
-		})
+		});
 	},
 	saveSizeToProduct: function(sizeID, cb) {
 		$.ajax({
@@ -103,26 +111,41 @@ var AddNewSizeModal = React.createClass({
 			},
 			success: function() {
 				if (cb) {
-					cb(null)
+					cb(null);
 				}
 			}
-		})
+		});
 	},
 	handleNewSizeChange: function(e) {
 		if (e.target.id == "ContainerSelect") {
 			if (e.target.value == "nullContainer") {
-				this.setState({selectedContainerID: null})
+				this.setState({selectedContainerID: null});
 			} else {
-				this.setState({selectedContainerID: e.target.value})
+				this.setState({selectedContainerID: e.target.value});
 			}
 		} else if (e.target.id == "PackagingSelect") {
 			if (e.target.value == "nullPackaging") {
-				this.setState({selectedPackagingID: null})
+				this.setState({selectedPackagingID: null});
 			} else {
-				this.setState({selectedPackagingID: e.target.value})
+				this.setState({selectedPackagingID: e.target.value});
 			}
 		}
 	}
-})
+});
 
-module.exports = AddNewSizeModal
+let mapDispatchToProps = function(dispatch) {
+	return {
+		saveSizeToProduct: (productID, sizeID) => {
+			let action = {
+				type: "SAVE_NEW_SIZE_TO_PRODUCT",
+				productID: productID,
+				sizeID: sizeID
+			};
+			dispatch(action);
+		}
+	};
+};
+
+AddNewSizeModal = connect(() => ({}), mapDispatchToProps)(AddNewSizeModal);
+
+module.exports = AddNewSizeModal;

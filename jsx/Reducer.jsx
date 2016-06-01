@@ -120,6 +120,21 @@ module.exports = function(state = {}, action) {
 			} else {
 				return state;
 			}
+		case "SAVE_NEW_SIZE_TO_PRODUCT":
+			if (("products" in state) && (action.productID in state.products)) {
+				let newProduct = Object.assign({}, state.products[action.productID], {
+					productSizes: [
+						...state.products[action.productID].productSizes,
+						action.sizeID
+					]
+				});
+				let newProducts = Object.assign({}, state.products, {
+					[action.productID]: newProduct
+				});
+				return Object.assign({}, state, {products: newProducts});
+			} else {
+				return state;
+			}
 	}
 	return state;
 };
