@@ -55,7 +55,7 @@
     "rewire": "^2.5.1",
     "rewire-webpack": "^1.0.1",
     "sinon": "^2.0.0-pre",
-    "stylus": "^0.53.0",
+    "stylus": "^0.54.5",
     "webpack": "^1.13.1"
   },
   "engines": {
