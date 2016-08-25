@@ -16,7 +16,6 @@ var SentOrderMessages = React.createClass({
 		if (this.state.zipCode) {
 			return (
 				<div>
-					<h4>Messages sent</h4>
 					{this.state.distributors.map(function(distributor) {
 						return (<SentOrderMessagesDistributor key={distributor.id} distributor={distributor} productOrders={this.props.productOrders} barID={this.props.barID} zipCode={this.state.zipCode}/>)
 					}.bind(this))}

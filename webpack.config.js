@@ -1,8 +1,14 @@
 if (process.env.NODE_ENV != "production") {
-	require('dotenv').load();
+	require("dotenv").load();
 }
 
-var InlineEnviromentVariablesPlugin = require('inline-environment-variables-webpack-plugin');
+if (process.env.NODE_ENV != "production") {
+	var sourceMap = "cheap-module-eval-source-map";
+} else {
+	sourceMap = "";
+}
+
+var InlineEnviromentVariablesPlugin = require("inline-environment-variables-webpack-plugin");
 
 module.exports = {
 	entry: __dirname + "/jsx/Main.jsx",
@@ -14,9 +20,9 @@ module.exports = {
 		loaders: [{
 			test: /\.jsx?$/,
 			exclude: /(node_modules|bower_components)/,
-			loader: 'babel', // 'babel-loader' is also a legal name to reference
+			loader: "babel", // 'babel-loader' is also a legal name to reference
 			query: {
-				presets: ['react', 'es2015']
+				presets: ["react", "es2015"]
 			}
 		}, {
 			test: /.json$/,
@@ -25,5 +31,6 @@ module.exports = {
 	},
 	plugins: [
 		new InlineEnviromentVariablesPlugin(process.env)
-	]
+	],
+	devtool: sourceMap
 };

@@ -32,6 +32,8 @@ module.exports = {
 			2,
 			"always"
 		],
+		"quotes": [2, "double"],
+		"quote-props": [2, "consistent-as-needed"],
 		"react/jsx-uses-vars": 2,
 		"jsx-quotes": [2, "prefer-double"],
 		"no-console": 1

@@ -33,3 +33,4 @@ test/test.js
 .env
 index.html
 style.css
+*.map
