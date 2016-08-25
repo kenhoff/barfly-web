@@ -30,23 +30,22 @@ var PresentationalOrderListItem = React.createClass({
 			displayTime = "Unsent";
 		}
 		return (
-			<div className="panel panel-default" onClick={this.navigateToOrder}>
-				<div className="panel-body">
-					<Row>
-						<Col xs={4} sm={2}>
-							Order #{this.props.orderID}
-						</Col>
-						<Col xs={8} sm={3} smPush={7}>
-							{displayTime}
-						</Col>
-						<Col xs={12} sm={7} smPull={3}>
-							<ul>
-								{this.props.productOrders.map(function(productOrder) {
-									return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} {...productOrder}/>);
-								})}
-							</ul>
-						</Col>
-					</Row>
+			<div onClick={this.navigateToOrder}>
+				<div className="listItemContents">
+					<h3>
+						Order #{this.props.orderID}
+					</h3>
+					<p>
+						{displayTime}
+					</p>
+					<ul>
+						{this.props.productOrders.map(function(productOrder) {
+							return (<ProductOrderSummaryItem key={productOrder.productID + "_" + productOrder.productQuantity + "_" + productOrder.productSizeID} {...productOrder}/>);
+						})}
+					</ul>
+				</div>
+				<div className="chevron">
+					<i className="fa fa-chevron-right" aria-hidden="true"></i>
 				</div>
 			</div>
 		);
