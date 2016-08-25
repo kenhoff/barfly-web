@@ -70,9 +70,20 @@ var Catalog = React.createClass({
 				</Grid>
 			);
 		} else {
+			var clearSearchButton;
+			if (this.state.search.length > 0) {
+				clearSearchButton = (
+					<button type="reset" className="barfly primary" onClick={() => {
+						this.setState({search: ""});
+					}}>
+						<i className="fa fa-times" aria-hidden="true"></i>
+					</button>
+				);
+			} else {
+				clearSearchButton = (null);
+			}
 			return (
 				<div>
-
 					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
@@ -85,10 +96,11 @@ var Catalog = React.createClass({
 
 						<form action="" onSubmit={(e) => {
 							e.preventDefault();
+							this.input.blur();
 						}} className="catalogSearch">
-							<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" type="search" placeholder="Search for products" onChange={(event) => {
+							<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" type="search" placeholder="Search for products" value={this.state.search} ref={(c) => this.input = c} onChange={(event) => {
 								this.setState({search: event.target.value});
-							}}></input>
+							}}></input>{clearSearchButton}
 						</form>
 						<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
 						<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false} search={this.state.search}/>
