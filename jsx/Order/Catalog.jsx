@@ -83,7 +83,7 @@ var Catalog = React.createClass({
 							<i className="fa fa-long-arrow-left" aria-hidden="true"></i>{" back to order summary"}
 						</button>
 
-						<form onSubmit={(e) => {
+						<form action="" onSubmit={(e) => {
 							e.preventDefault();
 						}} className="catalogSearch">
 							<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" type="search" placeholder="Search for products" onChange={(event) => {
