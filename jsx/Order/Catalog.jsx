@@ -1,23 +1,19 @@
 var React = require("react");
 var PageHeader = require("react-bootstrap").PageHeader;
 var browserHistory = require("react-router").browserHistory;
-var Waypoint = require("react-waypoint");
 var $ = require("jquery");
 var Row = require("react-bootstrap").Row;
 var Col = require("react-bootstrap").Col;
 var Grid = require("react-bootstrap").Grid;
-var Nav = require("react-bootstrap").Nav;
 var moment = require("moment-timezone");
 var jstz = require("jstimezonedetect");
 var async = require("async");
 
 var ProductList = require("./ProductList.jsx");
 var NewProductModal = require("./NewProductModal.jsx");
-var OrderNav = require("./OrderNav.jsx");
 var OrderNavBottom = require("./OrderNavBottom.jsx");
 var SentOrderContents = require("./SentOrderContents.jsx");
 var SentOrderMessages = require("./SentOrderMessages.jsx");
-var ShoppingCart = require("./ShoppingCart.jsx");
 
 var bartender = require("../Bartender.jsx");
 
@@ -40,7 +36,6 @@ var Catalog = React.createClass({
 			showNewProductModal: false,
 			search: "",
 			sent: false,
-			OrderNavFixed: false,
 			resolving: true,
 			sentAt: null
 		};
@@ -77,23 +72,19 @@ var Catalog = React.createClass({
 		} else {
 			return (
 				<div>
-					<Waypoint onEnter={function() {
-						this.setState({OrderNavFixed: false});
-					}.bind(this)} onLeave={function() {
-						this.setState({OrderNavFixed: true});
-					}.bind(this)}/>
+
 					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
-					<OrderNav fixedTop={this.state.OrderNavFixed} value={this.state.search} updateSearch={function(event) {
-						this.setState({search: event.target.value});
-					}.bind(this)}></OrderNav>
 					<div className="orderCatalogScreen">
 						<button onClick={() => {
 							browserHistory.push("/orders/" + this.props.routeParams.orderID);
 						}} className="barfly primary">
 							<i className="fa fa-long-arrow-left" aria-hidden="true"></i>{" back to order summary"}
 						</button>
+						<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" className="catalogSearch" type="text" placeholder="Search for products" onChange={(event) => {
+							this.setState({search: event.target.value});
+						}}></input>
 						<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
 						<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false} search={this.state.search}/>
 						<p>Can't find what you're looking for?&nbsp;
@@ -112,7 +103,7 @@ var Catalog = React.createClass({
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				method: "POST",
 				data: {
@@ -131,7 +122,7 @@ var Catalog = React.createClass({
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				method: "DELETE",
 				data: {
@@ -156,7 +147,7 @@ var Catalog = React.createClass({
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/starred",
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			method: "GET",
 			success: function(stars) {
@@ -169,7 +160,7 @@ var Catalog = React.createClass({
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			method: "POST",
 			success: function() {
@@ -293,7 +284,7 @@ var Catalog = React.createClass({
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			method: "GET",
 			success: function(data) {
@@ -357,7 +348,7 @@ var Catalog = React.createClass({
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			method: "PATCH",
 			data: data,
