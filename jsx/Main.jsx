@@ -1,30 +1,31 @@
 /*global Auth0Lock*/
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Provider = require('react-redux').Provider;
-var createStore = require('redux').createStore;
-var compose = require('redux').compose;
-var reducer = require('./Reducer.jsx');
+var React = require("react");
+var ReactDOM = require("react-dom");
+var Provider = require("react-redux").Provider;
+var createStore = require("redux").createStore;
+var compose = require("redux").compose;
+var reducer = require("./Reducer.jsx");
 
-var Router = require('react-router').Router;
-var Route = require('react-router').Route;
-var Redirect = require('react-router').Redirect;
-var browserHistory = require('react-router').browserHistory;
-var $ = require('jquery');
+var Router = require("react-router").Router;
+var Route = require("react-router").Route;
+var Redirect = require("react-router").Redirect;
+var browserHistory = require("react-router").browserHistory;
+var $ = require("jquery");
 
-var App = require('./App.jsx');
+var App = require("./App.jsx");
 var AppNav = require("./AppNav/AppNav.jsx");
-var Orders = require('./OrderList/Orders.jsx');
-var Order = require('./Order/Order.jsx');
+var Orders = require("./OrderList/Orders.jsx");
+import Order from "./Order/Order.jsx";
+var Catalog = require("./Order/Catalog.jsx");
 var Account = require("./Account/Account.jsx");
-var Landing = require('./Landing.jsx');
+var Landing = require("./Landing.jsx");
 
 var store = createStore(reducer, {}, compose(window.devToolsExtension
 	? window.devToolsExtension()
 	: f => f));
 
-var bartender = require('./Bartender.jsx');
+var bartender = require("./Bartender.jsx");
 bartender.store = store;
 
 var Main = React.createClass({
@@ -70,7 +71,7 @@ var Main = React.createClass({
 						}.bind(this));
 						return;
 					} else {
-						window.Intercom('boot', {
+						window.Intercom("boot", {
 							app_id: process.env.INTERCOM_APP_ID,
 							user_id: profile.sub,
 							name: profile.name
@@ -133,7 +134,7 @@ var Main = React.createClass({
 			authParams: {
 				scope: "openid offline_access user_id given_name name app_metadata"
 			},
-			connections: ['facebook']
+			connections: ["facebook"]
 		});
 	}
 });
@@ -147,6 +148,7 @@ var MainRouter = React.createClass({
 					<Route component={App}>
 						<Route path="orders" component={Orders}/>
 						<Route path="orders/:orderID" component={Order}></Route>
+						<Route path="orders/:orderID/catalog" component={Catalog}></Route>
 					</Route>
 					<Route component={Account} path="/account"></Route>
 				</Route>
@@ -159,4 +161,4 @@ ReactDOM.render((
 	<Provider store={store}>
 		<MainRouter/>
 	</Provider>
-), document.getElementById('content'));
+), document.getElementById("content"));
