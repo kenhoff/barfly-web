@@ -1,25 +1,25 @@
 var React = require("react");
 var PageHeader = require("react-bootstrap").PageHeader;
 var browserHistory = require("react-router").browserHistory;
-var Waypoint = require('react-waypoint');
-var $ = require('jquery');
-var Row = require('react-bootstrap').Row;
-var Col = require('react-bootstrap').Col;
-var Grid = require('react-bootstrap').Grid;
-var Nav = require('react-bootstrap').Nav;
-var moment = require('moment-timezone');
-var jstz = require('jstimezonedetect');
-var async = require('async');
+var Waypoint = require("react-waypoint");
+var $ = require("jquery");
+var Row = require("react-bootstrap").Row;
+var Col = require("react-bootstrap").Col;
+var Grid = require("react-bootstrap").Grid;
+var Nav = require("react-bootstrap").Nav;
+var moment = require("moment-timezone");
+var jstz = require("jstimezonedetect");
+var async = require("async");
 
-var ProductList = require('./ProductList.jsx');
-var NewProductModal = require('./NewProductModal.jsx');
-var OrderNav = require('./OrderNav.jsx');
-var OrderNavBottom = require('./OrderNavBottom.jsx');
-var SentOrderContents = require('./SentOrderContents.jsx');
-var SentOrderMessages = require('./SentOrderMessages.jsx');
-var ShoppingCart = require('./ShoppingCart.jsx');
+var ProductList = require("./ProductList.jsx");
+var NewProductModal = require("./NewProductModal.jsx");
+var OrderNav = require("./OrderNav.jsx");
+var OrderNavBottom = require("./OrderNavBottom.jsx");
+var SentOrderContents = require("./SentOrderContents.jsx");
+var SentOrderMessages = require("./SentOrderMessages.jsx");
+var ShoppingCart = require("./ShoppingCart.jsx");
 
-var bartender = require('../Bartender.jsx');
+var bartender = require("../Bartender.jsx");
 
 var Catalog = React.createClass({
 	propTypes: {},
@@ -38,7 +38,7 @@ var Catalog = React.createClass({
 			productOrders: [],
 			starred: [],
 			showNewProductModal: false,
-			search: '',
+			search: "",
 			sent: false,
 			OrderNavFixed: false,
 			resolving: true,
@@ -60,7 +60,7 @@ var Catalog = React.createClass({
 					<Row>
 						<PageHeader>{"Order #" + this.props.params.orderID + " "}
 							<small>{(this.state.sentAt
-									? moment(this.state.sentAt).tz(timezone).format('llll')
+									? moment(this.state.sentAt).tz(timezone).format("llll")
 									: "Sent")}</small>
 						</PageHeader>
 					</Row>
@@ -179,7 +179,7 @@ var Catalog = React.createClass({
 					product_orders: this.state.productOrders.length,
 					sent_date: Math.floor((new Date()).getTime() / 1000)
 				};
-				window.Intercom('trackEvent', "sent_order", metadata);
+				window.Intercom("trackEvent", "sent_order", metadata);
 				browserHistory.push("/orders");
 				bartender.sendOrder(this.props.params.orderID);
 			}.bind(this),
