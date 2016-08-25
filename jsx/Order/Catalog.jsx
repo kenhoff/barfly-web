@@ -82,9 +82,14 @@ var Catalog = React.createClass({
 						}} className="barfly primary">
 							<i className="fa fa-long-arrow-left" aria-hidden="true"></i>{" back to order summary"}
 						</button>
-						<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" className="catalogSearch" type="text" placeholder="Search for products" onChange={(event) => {
-							this.setState({search: event.target.value});
-						}}></input>
+
+						<form onSubmit={(e) => {
+							e.preventDefault();
+						}} className="catalogSearch">
+							<input autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" type="search" placeholder="Search for products" onChange={(event) => {
+								this.setState({search: event.target.value});
+							}}></input>
+						</form>
 						<ProductList title="Starred Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} isStarredList={true} isOrderList={false} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} search={this.state.search}/>
 						<ProductList title="All Products" allProducts={this.state.allProducts} productOrders={this.state.productOrders} sent={this.state.sent} barID={this.props.bar} handleQuantityChange={this.handleQuantityChange} starred={this.state.starred} changeStarred={this.handleStarredChange} reresolveOrder={this.reresolveOrder} isStarredList={false} isOrderList={false} search={this.state.search}/>
 						<p>Can't find what you're looking for?&nbsp;
