@@ -9,6 +9,8 @@ import jstz from "jstimezonedetect";
 import moment from "moment-timezone";
 import SentOrderMessages from "./SentOrderMessages.jsx";
 import SentOrderContents from "./SentOrderContents.jsx";
+import AppNav from "../AppNav/AppNav.jsx";
+
 
 var timezone = jstz.determine().name();
 
@@ -23,14 +25,16 @@ class Order_Presentational extends React.Component {
 	render() {
 		if (this.props.sent) {
 			return (
-				<div className="orderSummaryScreen">
-					<h1>{"Order #" + this.props.id}</h1>
-					<p>{(this.props.sentAt
-							? moment(this.props.sentAt).tz(timezone).format("llll")
-							: "Sent")}</p>
-					<SentOrderContents productOrders={this.props.productOrders}/>
-					<SentOrderMessages productOrders={this.props.productOrders} barID={this.props.bar}/>
-
+				<div>
+					<AppNav backURL="/orders" backText={"Orders"}></AppNav>
+					<div className="orderSummaryScreen">
+						<h1>{"Order #" + this.props.id}</h1>
+						<p>{(this.props.sentAt
+								? moment(this.props.sentAt).tz(timezone).format("llll")
+								: "Sent")}</p>
+						<SentOrderContents productOrders={this.props.productOrders}/>
+						<SentOrderMessages productOrders={this.props.productOrders} barID={this.props.bar}/>
+					</div>
 				</div>
 			);
 		} else {
@@ -67,16 +71,19 @@ class Order_Presentational extends React.Component {
 
 			}
 			return (
-				<div className="orderSummaryScreen">
-					<button onClick={() => {
-						browserHistory.push("/orders/" + this.props.routeParams.orderID + "/catalog");
-					}} className="barfly primary">{"add items "}
-						<i className="fa fa-long-arrow-right" aria-hidden="true"></i>
-					</button>
-					<h1>{"Order #" + this.props.id}</h1>
-					<p>Unsent</p>
-					{productOrderList}
-					<button onClick={this.sendOrder} className="barfly primary" disabled={this.state.sending}>{sendOrderButtonText}</button>
+				<div>
+					<AppNav backURL="/orders" backText={"Orders"}></AppNav>
+					<div className="orderSummaryScreen">
+						<button onClick={() => {
+							browserHistory.push("/orders/" + this.props.routeParams.orderID + "/catalog");
+						}} className="barfly primary">{"add items "}
+							<i className="fa fa-chevron-right" aria-hidden="true"></i>
+						</button>
+						<h1>{"Order #" + this.props.id}</h1>
+						<p>Unsent</p>
+						{productOrderList}
+						<button onClick={this.sendOrder} className="barfly primary" disabled={this.state.sending}>{sendOrderButtonText}</button>
+					</div>
 				</div>
 			);
 		}

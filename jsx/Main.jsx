@@ -9,17 +9,20 @@ var reducer = require("./Reducer.jsx");
 
 var Router = require("react-router").Router;
 var Route = require("react-router").Route;
-var Redirect = require("react-router").Redirect;
 var browserHistory = require("react-router").browserHistory;
 var $ = require("jquery");
 
-var App = require("./App.jsx");
-var AppNav = require("./AppNav/AppNav.jsx");
+var BarContext = require("./BarContext.jsx");
 var Orders = require("./OrderList/Orders.jsx");
 import Order from "./Order/Order.jsx";
 var Catalog = require("./Order/Catalog.jsx");
 var Account = require("./Account/Account.jsx");
 var Landing = require("./Landing.jsx");
+import Bars from "./Bars.jsx";
+import NewBar from "./NewBar.jsx";
+import NotFound from "./NotFound.jsx";
+
+import Dashboard from "./Dashboard.jsx";
 
 var store = createStore(reducer, {}, compose(window.devToolsExtension
 	? window.devToolsExtension()
@@ -32,9 +35,6 @@ var Main = React.createClass({
 
 	// if we haven't loaded a bar yet, currentBar == null.
 	// if there isn't a currentBar available (e.g. a user hasn't created a bar yet) then currentBar == -1.
-	getInitialState: function() {
-		return {currentBar: null};
-	},
 	render: function() {
 		if (this.state.idToken) {
 			// oh my god, this is stupid, but let me explain.
@@ -43,7 +43,7 @@ var Main = React.createClass({
 			// so, we basically just clone the child elements and pass props to them manually.
 			return (
 				<div>
-					<AppNav currentBar={this.state.currentBar} changeBar={this.handleBarChange} lock={this.lock} signOut={this.signOut}/> {this.props.children}
+					{this.props.children}
 				</div>
 			);
 		} else {
@@ -123,7 +123,7 @@ var Main = React.createClass({
 				window.location.hash = "";
 			}
 			if (authHash.error) {
-				console.log("Error signing in with authHash:", authHash);
+				console.log("Error signing in with authHash:", authHash); // eslint-disable-line no-console
 				return null;
 			}
 		}
@@ -143,14 +143,17 @@ var MainRouter = React.createClass({
 	render: function() {
 		return (
 			<Router history={browserHistory}>
-				<Redirect from="/" to="/orders"/>
 				<Route component={Main}>
-					<Route component={App}>
-						<Route path="orders" component={Orders}/>
-						<Route path="orders/:orderID" component={Order}></Route>
-						<Route path="orders/:orderID/catalog" component={Catalog}></Route>
+					<Route path="/account" component={Account}></Route>
+					<Route path="/bars" component={Bars}></Route>
+					<Route path="/bars/new" component={NewBar}></Route>
+					<Route component={BarContext}>
+						<Route path="/" component={Dashboard}/>
+						<Route path="/orders" component={Orders}/>
+						<Route path="/orders/:orderID" component={Order}></Route>
+						<Route path="/orders/:orderID/catalog" component={Catalog}></Route>
 					</Route>
-					<Route component={Account} path="/account"></Route>
+					<Route path="*" component={NotFound}></Route>
 				</Route>
 			</Router>
 		);

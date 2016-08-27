@@ -13,9 +13,6 @@ html, body
 	width 100%
 	margin 0
 	padding 0
-
-.app
-	padding-bottom 72px
 .logo
 	font-family: 'Raleway', sans-serif
 .landing
@@ -67,15 +64,33 @@ html, body
 .starredProductCard
 	background-color: #d9edf7
 
-.orderSummaryScreen, .orderCatalogScreen, .orderListScreen
+.orderSummaryScreen, .orderCatalogScreen, .orderListScreen, .dashboard, .account, .bars, .notfound, .newBar, .barflyContainer
 	display: flex;
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: 1em
 	color: darkGray
 
+.newBar
+	form
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		input
+			flex-grow: 1
+			padding: 1em
+			border-style: solid;
+			border-color: lightGray
+			border-width: 1px;
+			width: 100%
+			box-sizing: border-box;
+			display: block;
+
+.dashboard
+	button
+		margin-bottom: 1em
+
 .catalogSearch
-	margin: 1em 0
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
@@ -117,9 +132,62 @@ button.barfly.primary
 			padding: 1em
 			> *
 				margin: 0.5em 0
- 		.chevron
+ 		.listItemRight
 			display: flex;
 			border-left 1px solid lightGray
 			i
 				padding: 1em
 				margin: auto;
+
+.barfly.nav
+	background-color: primary
+	color: lightGray
+	text-transform: uppercase;
+	letter-spacing: 0.25em
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	.home
+		border-right: 1px solid lightGray
+		display: flex;
+		.back
+			padding: 0 1em
+			margin: auto;
+		.logo
+			padding: 0 1em
+			margin: auto;
+			text-transform: lowercase;
+			font-family: 'Raleway', sans-serif
+			letter-spacing: normal;
+	.hamburger
+		margin-left: auto;
+		background-color: inherit;
+		button
+			background-color: inherit
+			border: none
+			padding: 1em
+			border-left: 1px solid lightGray
+		.dropdown
+			border-bottom-left-radius: 5px
+			position: absolute;
+			background-color: inherit;
+			right: 0px
+			box-shadow: -1px 1px 10px darkGray
+			z-index: 101
+			ol
+				list-style-type: none
+				list-style-position: inside;
+				list-style-image: none;
+				padding: 0
+				margin: 0
+				text-align: right;
+				li
+					padding: 1em;
+					border-top: 1px solid lightGray
+		.clickCatcher
+			position: absolute;
+			top: 0
+			left: 0
+			height: 100%
+			width: 100%
+			z-index: 100

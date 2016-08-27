@@ -44,7 +44,7 @@ var PresentationalOrderListItem = React.createClass({
 						})}
 					</ul>
 				</div>
-				<div className="chevron">
+				<div className="listItemRight">
 					<i className="fa fa-chevron-right" aria-hidden="true"></i>
 				</div>
 			</div>
