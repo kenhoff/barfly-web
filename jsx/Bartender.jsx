@@ -8,7 +8,7 @@ module.exports = {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/user/bars",
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			method: "POST",
 			data: {
@@ -24,19 +24,22 @@ module.exports = {
 				this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: newBar.id});
 				// close modal
 				this.store.dispatch({type: "CLOSE_NEW_BAR_MODAL"});
-				browserHistory.push("/orders");
+				browserHistory.push("/bars");
 			},
 			failure: (data) => {
 				throw data;
 			}
 		});
 	},
+	changeBar: function (barID) {
+		this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: barID});
+	},
 	createNewOrder: function(opts) {
 		$.ajax({
 			url: process.env.BURLOCK_API_URL + "/bars/" + opts.barID + "/orders",
 			method: "POST",
 			headers: {
-				"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
 			success: (data) => {
 				this.store.dispatch({type: "PUSH_NEW_ORDER", barID: opts.barID, orderID: data});
@@ -99,7 +102,7 @@ module.exports = {
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/user/bars",
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				success: (bars) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: bars});
@@ -141,7 +144,7 @@ module.exports = {
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + object.id,
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				success: (barInfo) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: barInfo});
@@ -152,7 +155,7 @@ module.exports = {
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + object.id + "/orders",
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				success: (orders) => {
 					var orderIDs = [];
@@ -169,7 +172,7 @@ module.exports = {
 			$.ajax({
 				url: process.env.BURLOCK_API_URL + "/bars/" + object.bar + "/orders/" + object.id,
 				headers: {
-					"Authorization": "Bearer " + localStorage.getItem("access_jwt")
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
 				},
 				method: "GET",
 				success: (data) => {

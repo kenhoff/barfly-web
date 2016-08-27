@@ -15,6 +15,8 @@ var OrderNavBottom = require("./OrderNavBottom.jsx");
 var SentOrderContents = require("./SentOrderContents.jsx");
 var SentOrderMessages = require("./SentOrderMessages.jsx");
 
+import AppNav from "../AppNav/AppNav.jsx";
+
 var bartender = require("../Bartender.jsx");
 
 var Catalog = React.createClass({
@@ -84,16 +86,11 @@ var Catalog = React.createClass({
 			}
 			return (
 				<div>
+					<AppNav backURL={"/orders/" + this.props.routeParams.orderID} backText={"Order " + this.props.routeParams.orderID}></AppNav>
 					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
 					<div className="orderCatalogScreen">
-						<button onClick={() => {
-							browserHistory.push("/orders/" + this.props.routeParams.orderID);
-						}} className="barfly primary">
-							<i className="fa fa-long-arrow-left" aria-hidden="true"></i>{" back to order summary"}
-						</button>
-
 						<form action="" onSubmit={(e) => {
 							e.preventDefault();
 							this.input.blur();
