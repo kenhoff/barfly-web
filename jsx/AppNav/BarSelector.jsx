@@ -1,18 +1,18 @@
-var React = require('react');
+var React = require("react");
 // var $ = require('jquery');
-var Navbar = require('react-bootstrap').Navbar;
-var Nav = require('react-bootstrap').Nav;
-var NavItem = require('react-bootstrap').NavItem;
-var NavDropdown = require('react-bootstrap').NavDropdown;
-var Button = require('react-bootstrap').Button;
-var MenuItem = require('react-bootstrap').MenuItem;
+var Navbar = require("react-bootstrap").Navbar;
+var Nav = require("react-bootstrap").Nav;
+var NavItem = require("react-bootstrap").NavItem;
+var NavDropdown = require("react-bootstrap").NavDropdown;
+var Button = require("react-bootstrap").Button;
+var MenuItem = require("react-bootstrap").MenuItem;
 
-var connect = require('react-redux').connect;
+var connect = require("react-redux").connect;
 
-var bartender = require('../Bartender.jsx');
-var browserHistory = require('react-router').browserHistory;
+var bartender = require("../Bartender.jsx");
+var browserHistory = require("react-router").browserHistory;
 
-var NewBarModal = require('./NewBarModal.jsx');
+var NewBarModal = require("./NewBarModal.jsx");
 
 var PresentationalBarSelector = React.createClass({
 	propTypes: {

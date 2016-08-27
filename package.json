@@ -7,6 +7,7 @@
     "start": "node server.js",
     "test": "exit 0",
     "postinstall": "npm run build && stylus static/style.styl && jade static/index.jade",
+    "dev-static": "nodemon --exec 'stylus static/style.styl && jade static/index.jade' -e styl,jade" ,
     "pretest": "webpack --config webpack-test.config.js",
     "build": "webpack",
     "dev": "webpack --progress --colors --watch"

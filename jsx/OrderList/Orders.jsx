@@ -1,10 +1,10 @@
-var React = require('react');
+var React = require("react");
 
-import {Button, Col, Row, Grid} from "react-bootstrap";
 import {connect} from "react-redux";
-var bartender = require('../Bartender.jsx');
+var bartender = require("../Bartender.jsx");
 
-var OrderListItem = require('./OrderListItem.jsx');
+var OrderListItem = require("./OrderListItem.jsx");
+import AppNav from "../AppNav/AppNav.jsx";
 
 var PresentationalOrders = React.createClass({
 	propTypes: {
@@ -16,21 +16,20 @@ var PresentationalOrders = React.createClass({
 	},
 	render: function() {
 		return (
-			<Grid>
-				<Row>
-					<Col xs={12}>
-						<h1>Orders</h1>
-						<Button bsStyle="primary" bsSize="large" onClick={this.newOrder}>New Order</Button>
-					</Col>
-				</Row>
-				<Row>
-					<Col xs={12}>
+			<div>
+				<AppNav></AppNav>
+				<div className="orderListScreen">
+					<h1>Order History</h1>
+					<button className="barfly primary" onClick={this.newOrder}>{"Start New Order "}
+						<i className="fa fa-file-text-o" aria-hidden="true"></i>
+					</button>
+					<div className="barfly list">
 						{this.props.orders.map((order) => {
 							return (<OrderListItem key={order} orderID={order} barID={this.props.bar}/>);
 						})}
-					</Col>
-				</Row>
-			</Grid>
+					</div>
+				</div>
+			</div>
 		);
 	},
 	newOrder: function() {
