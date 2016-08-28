@@ -96,12 +96,16 @@ var AppNav_Presentational = React.createClass({
 								}}>{currentBarText}</li>
 								<li onClick={() => {
 									this.closeMenu();
-									browserHistory.push("/bars");
-								}}>Bars</li>
-								<li onClick={() => {
-									this.closeMenu();
 									browserHistory.push("/orders");
 								}}>Order History</li>
+								<li onClick={() => {
+									this.closeMenu();
+									browserHistory.push("/distributors");
+								}}>Distributors</li>
+								<li onClick={() => {
+									this.closeMenu();
+									browserHistory.push("/bars");
+								}}>Bars</li>
 								<li onClick={() => {
 									this.closeMenu();
 									browserHistory.push("/account");
