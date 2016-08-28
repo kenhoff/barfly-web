@@ -21,6 +21,8 @@ var Landing = require("./Landing.jsx");
 import Bars from "./Bars.jsx";
 import NewBar from "./NewBar.jsx";
 import NotFound from "./NotFound.jsx";
+import DistributorList from "./DistributorList.jsx";
+import DistributorNew from "./DistributorNew.jsx";
 
 import Dashboard from "./Dashboard.jsx";
 
@@ -152,6 +154,9 @@ var MainRouter = React.createClass({
 						<Route path="/orders" component={Orders}/>
 						<Route path="/orders/:orderID" component={Order}></Route>
 						<Route path="/orders/:orderID/catalog" component={Catalog}></Route>
+						<Route path="/distributors" component={DistributorList}></Route>
+						<Route path="/distributors/new" component={DistributorNew}></Route>
+
 					</Route>
 					<Route path="*" component={NotFound}></Route>
 				</Route>

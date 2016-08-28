@@ -1,9 +1,9 @@
-var React = require('react');
-var connect = require('react-redux').connect;
+var React = require("react");
+var connect = require("react-redux").connect;
 
-var bartender = require('../Bartender.jsx');
+var bartender = require("../Bartender.jsx");
 
-var DistributorNameContainer = React.createClass({
+var DistributorName_Presentational = React.createClass({
 	propTypes: {
 		distributorID: React.PropTypes.number.isRequired,
 		distributorName: React.PropTypes.string
@@ -16,16 +16,16 @@ var DistributorNameContainer = React.createClass({
 });
 
 var mapStateToProps = function(state, ownProps) {
-	if (("distributors" in state) && (ownProps.distributorID in state.distributors)) {
-		return {
-			distributorName: state.distributors[ownProps.distributorID].distributorName
-		};
+	var props = {};
+	if ("distributors" in state) {
+		props.distributorName = state.distributors[ownProps.distributorID].distributorName;
 	} else {
-		bartender.resolve({collection: "distributors", id: ownProps.distributorID});
-		return {};
+		// resolve all distributors
+		bartender.resolve("distributors");
 	}
+	return props;
 };
 
-var DistributorName = connect(mapStateToProps)(DistributorNameContainer);
+var DistributorName_Container = connect(mapStateToProps)(DistributorName_Presentational);
 
-module.exports = DistributorName;
+module.exports = DistributorName_Container;
