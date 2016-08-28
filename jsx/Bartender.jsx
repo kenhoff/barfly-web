@@ -31,7 +31,7 @@ module.exports = {
 			}
 		});
 	},
-	changeBar: function (barID) {
+	changeBar: function(barID) {
 		this.store.dispatch({type: "CHANGE_CURRENT_BAR", barID: barID});
 	},
 	createNewOrder: function(opts) {
@@ -59,9 +59,26 @@ module.exports = {
 		// dispatch event to update order as "sent"
 		this.store.dispatch({type: "SEND_ORDER", id: id, sentAt: new Date()});
 	},
-	resolve: function(object) {
+	createNewDistributor: function(distributorName, cb) {
+		var data = {
+			distributorName: distributorName
+		};
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/distributors",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			method: "POST",
+			data: data,
+			success: () => {
+				this.resolve("distributors", true);
+				cb();
+			}
+		});
+	},
+	resolve: function(object, force) {
 		// check if object is in store - if so, return
-		if (!object.force) {
+		if (!object.force && !force) {
 			if (inState(object, this.store.getState())) {
 				return;
 			}
@@ -107,6 +124,19 @@ module.exports = {
 				success: (bars) => {
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: bars});
 					this.store.dispatch({type: "INITIALIZE_CURRENT_BAR"});
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object == "distributors") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/distributors",
+				method: "GET",
+				success: (distributors) => {
+					var distributorsByID = {};
+					for (var distributor of distributors) {
+						distributorsByID[distributor.id] = distributor;
+					}
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: distributorsByID});
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
