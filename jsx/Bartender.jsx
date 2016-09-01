@@ -240,6 +240,24 @@ module.exports = {
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});
+		} else if (object.collection == "accounts") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/accounts",
+				headers: {
+					Authorization: "Bearer " + localStorage.getItem("access_jwt")
+				},
+				method: "GET",
+				data: {
+					barID: object.barID,
+					distributorID: object.distributorID
+				},
+				success: (account) => {
+					account.barID = object.barID;
+					account.distributorID = object.distributorID;
+					popObjectOffResolvingList(object, this.resolvingList);
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: account});
+				}
+			});
 		}
 	}
 };

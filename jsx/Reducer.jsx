@@ -37,7 +37,19 @@ module.exports = function(state = {}, action) {
 			ui = Object.assign({}, currentUI, {currentBar: action.barID});
 			return (Object.assign({}, state, {ui: ui}));
 		case "UPDATE_COLLECTION":
-			if ("object" in action) {
+			if (("object" in action) && action.collection == "accounts") {
+				var oldAccounts;
+				if ("accounts" in state) {
+					oldAccounts = state.accounts;
+				} else {
+					oldAccounts = [];
+				}
+				var newAccounts = [
+					...oldAccounts,
+					action.object
+				];
+				return (Object.assign({}, state, {accounts: newAccounts}));
+			} else if ("object" in action) {
 				if ([action.collection] in state) {
 					var currentCollection = state[action.collection];
 				} else {
