@@ -1,8 +1,9 @@
 import React, {PropTypes} from "react";
 import {connect} from "react-redux";
-import AppNav from "./AppNav/AppNav.jsx";
 import bartender from "./Bartender.jsx";
 import {browserHistory} from "react-router";
+import AppNav from "./AppNav/AppNav.jsx";
+import RepInfoResolved from "./RepInfoResolved.jsx";
 
 class DistributorList_Presentational extends React.Component {
 	render() {
@@ -28,6 +29,7 @@ class DistributorList_Presentational extends React.Component {
 										<h4>
 											{distributor.distributorName}
 										</h4>
+										<RepInfoResolved barID={this.props.bar} distributorID={distributor.id}></RepInfoResolved>
 									</div>
 								</div>
 							);
@@ -45,7 +47,8 @@ class DistributorList_Presentational extends React.Component {
 }
 
 DistributorList_Presentational.propTypes = {
-	distributors: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.number, distributorName: PropTypes.string}))
+	distributors: PropTypes.arrayOf(PropTypes.shape({id: PropTypes.number, distributorName: PropTypes.string})),
+	bar: PropTypes.number.isRequired
 };
 
 DistributorList_Presentational.defaultProps = {
@@ -59,6 +62,7 @@ var mapStateToProps = function(state) {
 		// convert distributors object to distributors array here
 		for (var distributor in state.distributors) {
 			if (state.distributors.hasOwnProperty(distributor)) {
+				// if this distributor has an account with this bar, include the rep info
 				distributorsArray.push(state.distributors[distributor]);
 			}
 		}
