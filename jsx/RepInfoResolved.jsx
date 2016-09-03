@@ -15,7 +15,7 @@ class RepInfoResolved extends React.Component {
 			);
 		} else {
 			return (
-				<div>No rep selected</div>
+				<div>No rep assigned</div>
 			);
 		}
 	}
