@@ -5,6 +5,7 @@ import DistributorName from "./Order/DistributorName.jsx";
 import bartender from "./Bartender.jsx";
 import RepName from "./Order/RepName.jsx";
 import RepPhone from "./RepPhone.jsx";
+import {browserHistory} from "react-router";
 
 class DistributorRepList extends React.Component {
 	render() {
@@ -51,6 +52,9 @@ class DistributorRepList extends React.Component {
 						<DistributorName distributorID={parseInt(this.props.routeParams.distributorID)}></DistributorName>{" Reps"}
 					</h1>
 					{repList}
+					<button className="barfly primary" onClick={() => {
+						browserHistory.push("/distributors/" + this.props.routeParams.distributorID + "/reps/new")
+					}}>{"Create new rep "}<i className="fa fa-user" aria-hidden="true"></i></button>
 				</div>
 			</div>
 		);
