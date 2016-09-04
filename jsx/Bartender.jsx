@@ -76,6 +76,37 @@ module.exports = {
 			}
 		});
 	},
+	createNewRep: function(repName, repPhone, distributorID, cb) {
+		// create rep
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/reps",
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			data: {
+				repName: repName,
+				repPhone: repPhone
+			},
+			success: (newRep) => {
+				// add rep to distributor
+				$.ajax({
+					url: process.env.BURLOCK_API_URL + "/reps/" + newRep.user_id + "/memberships",
+					method: "POST",
+					headers: {
+						Authorization: "Bearer " + localStorage.getItem("access_jwt")
+					},
+					data: {
+						distributorID: distributorID
+					},
+					success: () => {
+						this.resolve({collection: "distributor_memberships", id: distributorID}, true);
+						cb();
+					}
+				});
+			}
+		});
+	},
 	changeRep: function(opts) {
 		// opts: {barID, distributorID, repID}
 		$.ajax({
