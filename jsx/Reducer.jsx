@@ -44,10 +44,24 @@ module.exports = function(state = {}, action) {
 				} else {
 					oldAccounts = [];
 				}
-				var newAccounts = [
-					...oldAccounts,
-					action.object
-				];
+				// check and see if the account with barID and distributorID already exists - if so, just replace that
+				// if it doesn't exist, create a new account
+				var existingAccount = oldAccounts.find(function(account) {
+					if ((account.barID == action.object.barID) && (account.distributorID == action.object.distributorID)) {
+						return true;
+					} else {
+						return false;
+					}
+				});
+				if (existingAccount) {
+					existingAccount.repID = action.object.repID;
+					var newAccounts = [...oldAccounts];
+				} else {
+					newAccounts = [
+						...oldAccounts,
+						action.object
+					];
+				}
 				return (Object.assign({}, state, {accounts: newAccounts}));
 			} else if ("object" in action) {
 				if ([action.collection] in state) {

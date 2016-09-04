@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import RepInfoResolved from "./RepInfoResolved.jsx";
 import bartender from "./Bartender.jsx";
 import AppNav from "./AppNav/AppNav.jsx";
+import {browserHistory} from "react-router";
 
 class Distributor extends React.Component {
 	render() {
@@ -12,6 +13,11 @@ class Distributor extends React.Component {
 				<div className="barflyContainer">
 					<h1>{this.props.distributorName}</h1>
 					<RepInfoResolved barID={this.props.bar} distributorID={parseInt(this.props.routeParams.distributorID)}></RepInfoResolved>
+					<button className="barfly primary" onClick={() => {
+						browserHistory.push("/distributors/" + this.props.routeParams.distributorID + "/reps");
+					}}>Select Rep
+						<i className="fa fa-chevron-right" aria-hidden="true"></i>
+					</button>
 				</div>
 			</div>
 		);
@@ -19,9 +25,7 @@ class Distributor extends React.Component {
 }
 
 Distributor.propTypes = {
-	routeParams: PropTypes.shape({
-		distributorID: PropTypes.string.isRequired
-	}),
+	routeParams: PropTypes.shape({distributorID: PropTypes.string.isRequired}),
 	bar: PropTypes.number.isRequired,
 	distributorName: PropTypes.string
 };
