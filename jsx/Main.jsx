@@ -24,6 +24,7 @@ import NotFound from "./NotFound.jsx";
 import DistributorList from "./DistributorList.jsx";
 import DistributorNew from "./DistributorNew.jsx";
 import Distributor from "./Distributor.jsx";
+import DistributorRepList from "./DistributorRepList.jsx";
 
 import Dashboard from "./Dashboard.jsx";
 
@@ -158,6 +159,7 @@ var MainRouter = React.createClass({
 						<Route path="/distributors" component={DistributorList}></Route>
 						<Route path="/distributors/new" component={DistributorNew}></Route>
 						<Route path="/distributors/:distributorID" component={Distributor}></Route>
+						<Route path="/distributors/:distributorID/reps" component={DistributorRepList}></Route>
 					</Route>
 					<Route path="*" component={NotFound}></Route>
 				</Route>
