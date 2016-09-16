@@ -26,6 +26,8 @@ import DistributorNew from "./DistributorNew.jsx";
 import Distributor from "./Distributor.jsx";
 import DistributorRepList from "./DistributorRepList.jsx";
 import DistributorNewRep from "./DistributorNewRep.jsx";
+import DistributorRepView from "./DistributorRepView.jsx";
+import DistributorRepEdit from "./DistributorRepEdit.jsx";
 
 import Dashboard from "./Dashboard.jsx";
 
@@ -79,7 +81,9 @@ var Main = React.createClass({
 						window.Intercom("boot", {
 							app_id: process.env.INTERCOM_APP_ID,
 							user_id: profile.sub,
-							name: profile.name
+							name: ("user_metadata" in profile
+								? profile.user_metadata.name
+								: "")
 						});
 					}
 				}.bind(this));
@@ -162,6 +166,8 @@ var MainRouter = React.createClass({
 						<Route path="/distributors/:distributorID" component={Distributor}></Route>
 						<Route path="/distributors/:distributorID/reps" component={DistributorRepList}></Route>
 						<Route path="/distributors/:distributorID/reps/new" component={DistributorNewRep}></Route>
+						<Route path="/distributors/:distributorID/reps/:repID" component={DistributorRepView}></Route>
+						<Route path="/distributors/:distributorID/reps/:repID/edit" component={DistributorRepEdit}></Route>
 					</Route>
 					<Route path="*" component={NotFound}></Route>
 				</Route>

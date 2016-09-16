@@ -21,14 +21,20 @@ class DistributorRepList extends React.Component {
 				<div className="barfly list">
 					{this.props.reps.map((repID) => {
 						return (
-							<div key={repID} onClick={() => {
-								bartender.changeRep({distributorID: this.props.routeParams.distributorID, repID: repID, barID: this.props.bar});
-							}}>
-								<div className="listItemContents">
-									<RepName repID={repID}></RepName>
-									<RepPhone repID={repID}></RepPhone>
+							<div key={repID}>
+								<div className="listItemContents" onClick={() => {
+									bartender.changeRep({distributorID: this.props.routeParams.distributorID, repID: repID, barID: this.props.bar});
+								}}>
+									<p>
+										<RepName repID={repID}></RepName>
+									</p>
+									<p>
+										<RepPhone repID={repID}></RepPhone>
+									</p>
 								</div>
-								<div className="listItemRight">
+								<div className="listItemRight" onClick={() => {
+									bartender.changeRep({distributorID: this.props.routeParams.distributorID, repID: repID, barID: this.props.bar});
+								}}>
 									{((this.props.currentRep == repID)
 										? (
 											<i className="fa fa-check-circle" aria-hidden="true"></i>
@@ -36,6 +42,11 @@ class DistributorRepList extends React.Component {
 										: (
 											<i className="fa fa-circle-o" aria-hidden="true"></i>
 										))}
+								</div>
+								<div className="listItemRight" onClick={() => {
+									browserHistory.push("/distributors/" + this.props.routeParams.distributorID + "/reps/" + repID);
+								}}>
+									<i className="fa fa-chevron-right"></i>
 								</div>
 							</div>
 						);
@@ -54,7 +65,9 @@ class DistributorRepList extends React.Component {
 					{repList}
 					<button className="barfly primary" onClick={() => {
 						browserHistory.push("/distributors/" + this.props.routeParams.distributorID + "/reps/new")
-					}}>{"Create new rep "}<i className="fa fa-user" aria-hidden="true"></i></button>
+					}}>{"Create new rep "}
+						<i className="fa fa-user" aria-hidden="true"></i>
+					</button>
 				</div>
 			</div>
 		);
