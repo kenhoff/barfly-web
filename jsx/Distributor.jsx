@@ -15,7 +15,7 @@ class Distributor extends React.Component {
 					<RepInfoResolved barID={this.props.bar} distributorID={parseInt(this.props.routeParams.distributorID)}></RepInfoResolved>
 					<button className="barfly primary" onClick={() => {
 						browserHistory.push("/distributors/" + this.props.routeParams.distributorID + "/reps");
-					}}>Select Rep
+					}}>{"see all reps "}
 						<i className="fa fa-chevron-right" aria-hidden="true"></i>
 					</button>
 				</div>

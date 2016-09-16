@@ -5,7 +5,7 @@ import bartender from "./Bartender.jsx";
 class RepPhone extends React.Component {
 	render() {
 		return (
-			<div>{this.props.repPhone}</div>
+			<span>{this.props.repPhone}</span>
 		);
 	}
 }

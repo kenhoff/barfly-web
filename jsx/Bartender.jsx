@@ -100,10 +100,30 @@ module.exports = {
 						distributorID: distributorID
 					},
 					success: () => {
-						this.resolve({collection: "distributor_memberships", id: distributorID}, true);
+						this.resolve({
+							collection: "distributor_memberships",
+							id: distributorID
+						}, true);
 						cb();
 					}
 				});
+			}
+		});
+	},
+	editRep: function(repName, repPhone, repID, cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
+			method: "PATCH",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			data: {
+				repName: repName,
+				repPhone: parseInt(repPhone)
+			},
+			success: () => {
+				this.resolve({collection: "reps", id: repID, force: true});
+				cb();
 			}
 		});
 	},

@@ -9,8 +9,12 @@ class RepInfoResolved extends React.Component {
 		if (this.props.repID) {
 			return (
 				<div>
-					<RepName repID={this.props.repID}></RepName>
-					<RepPhone repID={this.props.repID}></RepPhone>
+					<p>
+						<RepName repID={this.props.repID}></RepName>
+					</p>
+					<p>
+						<RepPhone repID={this.props.repID}></RepPhone>
+					</p>
 				</div>
 			);
 		} else {
