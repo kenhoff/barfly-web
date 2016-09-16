@@ -18,7 +18,7 @@ var RepName = React.createClass({
 var mapStateToProps = function(state, ownProps) {
 	let props = {};
 	if (("reps" in state) && (ownProps.repID in state.reps)) {
-		props.repName = state.reps[ownProps.repID].name;
+		props.repName = state.reps[ownProps.repID].user_metadata.name;
 	} else {
 		bartender.resolve({collection: "reps", id: ownProps.repID});
 	}

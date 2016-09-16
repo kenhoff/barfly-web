@@ -76,6 +76,76 @@ module.exports = {
 			}
 		});
 	},
+	createNewRep: function(repName, repPhone, distributorID, cb) {
+		// create rep
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/reps",
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			data: {
+				repName: repName,
+				repPhone: repPhone
+			},
+			success: (newRep) => {
+				// add rep to distributor
+				$.ajax({
+					url: process.env.BURLOCK_API_URL + "/reps/" + newRep.user_id + "/memberships",
+					method: "POST",
+					headers: {
+						Authorization: "Bearer " + localStorage.getItem("access_jwt")
+					},
+					data: {
+						distributorID: distributorID
+					},
+					success: () => {
+						this.resolve({
+							collection: "distributor_memberships",
+							id: distributorID
+						}, true);
+						cb();
+					}
+				});
+			}
+		});
+	},
+	editRep: function(repName, repPhone, repID, cb) {
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
+			method: "PATCH",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			data: {
+				repName: repName,
+				repPhone: parseInt(repPhone)
+			},
+			success: () => {
+				this.resolve({collection: "reps", id: repID, force: true});
+				cb();
+			}
+		});
+	},
+	changeRep: function(opts) {
+		// opts: {barID, distributorID, repID}
+		$.ajax({
+			url: process.env.BURLOCK_API_URL + "/accounts",
+			method: "POST",
+			headers: {
+				Authorization: "Bearer " + localStorage.getItem("access_jwt")
+			},
+			data: {
+				barID: parseInt(opts.barID),
+				repID: opts.repID,
+				distributorID: parseInt(opts.distributorID)
+			},
+			success: () => {
+				this.resolve({collection: "accounts", barID: opts.barID, distributorID: opts.distributorID, force: true});
+			}
+		});
+
+	},
 	resolve: function(object, force) {
 		// check if object is in store - if so, return
 		if (!object.force && !force) {
@@ -137,6 +207,23 @@ module.exports = {
 						distributorsByID[distributor.id] = distributor;
 					}
 					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object, newCollection: distributorsByID});
+					popObjectOffResolvingList(object, this.resolvingList);
+				}
+			});
+		} else if (object.collection == "distributor_memberships") {
+			$.ajax({
+				url: process.env.BURLOCK_API_URL + "/reps",
+				method: "GET",
+				data: {
+					distributorID: object.id
+				},
+				success: (distributor_memberships) => {
+					var repList = [];
+					for (var membership of distributor_memberships) {
+						repList.push(membership.repID);
+					}
+					repList["id"] = object.id;
+					this.store.dispatch({type: "UPDATE_COLLECTION", collection: object.collection, object: repList});
 					popObjectOffResolvingList(object, this.resolvingList);
 				}
 			});

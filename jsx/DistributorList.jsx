@@ -24,12 +24,17 @@ class DistributorList_Presentational extends React.Component {
 					<div className="barfly list">
 						{distributors.map((distributor) => {
 							return (
-								<div key={Math.random()}>
+								<div key={Math.random()} onClick={() => {
+									browserHistory.push("/distributors/" + distributor.id);
+								}}>
 									<div className="listItemContents">
 										<h4>
 											{distributor.distributorName}
 										</h4>
 										<RepInfoResolved barID={this.props.bar} distributorID={distributor.id}></RepInfoResolved>
+									</div>
+									<div className="listItemRight">
+										<i className="fa fa-chevron-right" aria-hidden="true"></i>
 									</div>
 								</div>
 							);

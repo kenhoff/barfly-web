@@ -122,7 +122,7 @@ var SentOrderMessagesDistributor = React.createClass({
 			url: process.env.BURLOCK_API_URL + "/reps/" + repID,
 			method: "GET",
 			success: function(rep) {
-				cb(rep.name)
+				cb(rep.user_metadata.name)
 			}
 		})
 	},
