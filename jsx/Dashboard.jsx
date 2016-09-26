@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
 					<h1>
 						<BarName barID={this.props.bar}></BarName>
 					</h1>
-					<button className="barfly primary" onClick={this.newOrder}>{"Start New Order "}
+					<button className="barfly emphasis" onClick={this.newOrder}>{"Start New Order "}
 						<i className="fa fa-file-text-o" aria-hidden="true"></i>
 					</button>
 					<button className="barfly primary" onClick={() => browserHistory.push("/orders")}>{"Order History "}

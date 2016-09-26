@@ -20,7 +20,7 @@ var PresentationalOrders = React.createClass({
 				<AppNav></AppNav>
 				<div className="orderListScreen">
 					<h1>Order History</h1>
-					<button className="barfly primary" onClick={this.newOrder}>{"Start New Order "}
+					<button className="barfly emphasis" onClick={this.newOrder}>{"Start New Order "}
 						<i className="fa fa-file-text-o" aria-hidden="true"></i>
 					</button>
 					<div className="barfly list">

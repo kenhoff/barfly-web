@@ -25,6 +25,9 @@ var AppNav_Presentational = React.createClass({
 		localStorage.removeItem("refresh_token");
 		window.location.href = "/";
 	},
+	newOrder: function() {
+		bartender.createNewOrder({barID: this.props.currentBarID});
+	},
 	render: function() {
 		var backButton;
 		var backText;
@@ -94,6 +97,10 @@ var AppNav_Presentational = React.createClass({
 									this.closeMenu();
 									browserHistory.push("/bars");
 								}}>{currentBarText}</li>
+								<li className="emphasis" onClick={() => {
+									this.closeMenu();
+									this.newOrder();
+								}}>Start New Order</li>
 								<li onClick={() => {
 									this.closeMenu();
 									browserHistory.push("/orders");
