@@ -5,14 +5,8 @@ import ProductName from "./ProductName.jsx";
 import SizeDescription from "../_shared/SizeDescription.jsx";
 import {browserHistory} from "react-router";
 import $ from "jquery";
-import jstz from "jstimezonedetect";
-import moment from "moment-timezone";
-import SentOrderMessages from "./SentOrderMessages.jsx";
-import SentOrderContents from "./SentOrderContents.jsx";
+import SentOrderDetails from "./SentOrderDetails.jsx";
 import AppNav from "../AppNav/AppNav.jsx";
-
-
-var timezone = jstz.determine().name();
 
 class Order_Presentational extends React.Component {
 	constructor(props) {
@@ -25,17 +19,7 @@ class Order_Presentational extends React.Component {
 	render() {
 		if (this.props.sent) {
 			return (
-				<div>
-					<AppNav backURL="/orders" backText={"Orders"}></AppNav>
-					<div className="orderSummaryScreen">
-						<h1>{"Order #" + this.props.id}</h1>
-						<p>{(this.props.sentAt
-								? moment(this.props.sentAt).tz(timezone).format("llll")
-								: "Sent")}</p>
-						<SentOrderContents productOrders={this.props.productOrders}/>
-						<SentOrderMessages productOrders={this.props.productOrders} barID={this.props.bar}/>
-					</div>
-				</div>
+				<SentOrderDetails barID={this.props.bar} orderID={this.props.routeParams.orderID}></SentOrderDetails>
 			);
 		} else {
 			if (this.props.productOrders.length == 0) {
