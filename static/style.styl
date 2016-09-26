@@ -104,8 +104,7 @@ html, body
 		box-sizing: border-box;
 		display: block;
 
-button.barfly.primary
-	background-color: primary
+button.barfly
 	color: lightGray
 	border: none
 	border-radius: 3px
@@ -119,6 +118,10 @@ button.barfly.primary
 		background-color: primaryActive
 	&[disabled]
 		background-color: primaryDisabled
+	&.primary
+		background-color: primary
+	&.emphasis
+		background-color: accent
 
 .barfly.list
 	margin: 1em 0
@@ -184,6 +187,8 @@ button.barfly.primary
 				li
 					padding: 1em;
 					border-top: 1px solid lightGray
+					&.emphasis
+						background-color: accent
 		.clickCatcher
 			position: absolute;
 			top: 0
