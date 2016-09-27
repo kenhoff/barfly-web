@@ -18,6 +18,7 @@ import Order from "./Order/Order.jsx";
 var Catalog = require("./Order/Catalog.jsx");
 var Account = require("./Account/Account.jsx");
 var Landing = require("./Landing.jsx");
+import OrderReview from "./Order/OrderReview.jsx";
 import Bars from "./Bars.jsx";
 import NewBar from "./NewBar.jsx";
 import NotFound from "./NotFound.jsx";
@@ -160,7 +161,7 @@ var MainRouter = React.createClass({
 						<Route path="/" component={Dashboard}/>
 						<Route path="/orders" component={Orders}/>
 						<Route path="/orders/:orderID" component={Order}></Route>
-						<Route path="/orders/:orderID/catalog" component={Catalog}></Route>
+						<Route path="/orders/:orderID/review" component={OrderReview}></Route>
 						<Route path="/distributors" component={DistributorList}></Route>
 						<Route path="/distributors/new" component={DistributorNew}></Route>
 						<Route path="/distributors/:distributorID" component={Distributor}></Route>
