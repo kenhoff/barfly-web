@@ -15,7 +15,6 @@ var $ = require("jquery");
 var BarContext = require("./BarContext.jsx");
 var Orders = require("./OrderList/Orders.jsx");
 import Order from "./Order/Order.jsx";
-var Catalog = require("./Order/Catalog.jsx");
 var Account = require("./Account/Account.jsx");
 var Landing = require("./Landing.jsx");
 import OrderReview from "./Order/OrderReview.jsx";
