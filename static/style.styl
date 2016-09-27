@@ -69,6 +69,7 @@ html, body
 	flex-direction: column;
 	flex-wrap: nowrap;
 	padding: 1em
+	padding-top: 4em
 	color: darkGray
 
 .newBar, .newDistributor, .newRep, .editRep
@@ -148,6 +149,9 @@ button.barfly
 				margin: auto;
 
 .barfly.nav
+	position: fixed;
+	z-index: 99
+	width: 100%
 	background-color: primary
 	color: lightGray
 	text-transform: uppercase;
@@ -155,9 +159,11 @@ button.barfly
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
+	justify-content: space-between;
 	.home
 		border-right: 1px solid lightGray
 		display: flex;
+		margin-right: auto;
 		.back
 			padding: 0 1em
 			margin: auto;
@@ -167,18 +173,24 @@ button.barfly
 			text-transform: lowercase;
 			font-family: 'Raleway', sans-serif
 			letter-spacing: normal;
-	.hamburger
-		margin-left: auto;
-		background-color: inherit;
+	.cart
 		button
-			background-color: inherit
+			background-color: accent
+	.hamburger
+		button
+			background-color: primary
+	.hamburger, .cart
+		background-color: inherit;
+		border-left: 1px solid lightGray
+		button
 			border: none
 			padding: 1em
-			border-left: 1px solid lightGray
+			display: block;
 		.dropdown
 			border-bottom-left-radius: 5px
 			position: absolute;
 			background-color: inherit;
+			top: auto
 			right: 0px
 			box-shadow: -1px 1px 10px darkGray
 			z-index: 101
@@ -195,9 +207,9 @@ button.barfly
 					&.emphasis
 						background-color: accent
 		.clickCatcher
-			position: absolute;
+			position: fixed;
 			top: 0
 			left: 0
-			height: 100%
-			width: 100%
+			height: 100vh
+			width: 100vh
 			z-index: 100

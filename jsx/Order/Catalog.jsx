@@ -57,7 +57,7 @@ var Catalog = React.createClass({
 			}
 			return (
 				<div>
-					<AppNav backURL={"/orders"} backText={"Orders"}></AppNav>
+					<AppNav backURL={"/orders"} backText={"Orders"} productOrders={this.state.productOrders} orderID={parseInt(this.props.orderID)}></AppNav>
 					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
