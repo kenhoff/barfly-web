@@ -1,19 +1,11 @@
 var React = require("react");
-var PageHeader = require("react-bootstrap").PageHeader;
 var browserHistory = require("react-router").browserHistory;
 var $ = require("jquery");
-var Row = require("react-bootstrap").Row;
-var Col = require("react-bootstrap").Col;
-var Grid = require("react-bootstrap").Grid;
-var moment = require("moment-timezone");
-var jstz = require("jstimezonedetect");
 var async = require("async");
 
 var ProductList = require("./ProductList.jsx");
 var NewProductModal = require("./NewProductModal.jsx");
 var OrderNavBottom = require("./OrderNavBottom.jsx");
-var SentOrderContents = require("./SentOrderContents.jsx");
-var SentOrderMessages = require("./SentOrderMessages.jsx");
 
 import AppNav from "../AppNav/AppNav.jsx";
 
@@ -50,27 +42,6 @@ var Catalog = React.createClass({
 			return (
 				<div></div>
 			);
-		} else if (this.state.sent) {
-			var timezone = jstz.determine().name();
-			return (
-				<Grid>
-					<Row>
-						<PageHeader>{"Order #" + this.props.params.orderID + " "}
-							<small>{(this.state.sentAt
-									? moment(this.state.sentAt).tz(timezone).format("llll")
-									: "Sent")}</small>
-						</PageHeader>
-					</Row>
-					<Row>
-						<Col xs={12} sm={6}>
-							<SentOrderContents productOrders={this.state.productOrders}/>
-						</Col>
-						<Col xs={12} sm={6}>
-							<SentOrderMessages productOrders={this.state.productOrders} barID={this.props.bar} zipCode={this.props.zipcode}/>
-						</Col>
-					</Row>
-				</Grid>
-			);
 		} else {
 			var clearSearchButton;
 			if (this.state.search.length > 0) {
@@ -86,11 +57,16 @@ var Catalog = React.createClass({
 			}
 			return (
 				<div>
-					<AppNav backURL={"/orders/" + this.props.routeParams.orderID} backText={"Order " + this.props.routeParams.orderID}></AppNav>
+					<AppNav backURL={"/orders"} backText={"Orders"}></AppNav>
 					<div className={this.state.OrderNavFixed
 						? "emptyNavSpacing"
 						: null}></div>
 					<div className="orderCatalogScreen">
+						<button onClick={() => {
+							browserHistory.push("/orders/" + this.props.orderID + "/review");
+						}} className="barfly emphasis">{"Review Order "}
+							<i className="fa fa-chevron-right" aria-hidden="true"></i>
+						</button>
 						<form action="" onSubmit={(e) => {
 							e.preventDefault();
 							this.input.blur();
@@ -172,7 +148,7 @@ var Catalog = React.createClass({
 	sendOrder: function() {
 		this.setState({sending: true});
 		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.orderID,
 			headers: {
 				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -186,7 +162,7 @@ var Catalog = React.createClass({
 				};
 				window.Intercom("trackEvent", "sent_order", metadata);
 				browserHistory.push("/orders");
-				bartender.sendOrder(this.props.params.orderID);
+				bartender.sendOrder(this.props.orderID);
 			}.bind(this),
 			error: function() {
 				this.setState({sending: false});
@@ -202,7 +178,7 @@ var Catalog = React.createClass({
 	// yay clusterfuck!
 	handleQuantityChange: function(productID, productSizeID, productQuantity) {
 		bartender.updateOrder({
-			orderID: parseInt(this.props.params.orderID),
+			orderID: parseInt(this.props.orderID),
 			productID,
 			productSizeID,
 			productQuantity
@@ -296,7 +272,7 @@ var Catalog = React.createClass({
 	},
 	getOrder: function() {
 		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.orderID,
 			headers: {
 				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},
@@ -360,7 +336,7 @@ var Catalog = React.createClass({
 			orders: this.state.productOrders
 		};
 		$.ajax({
-			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.params.orderID,
+			url: process.env.BURLOCK_API_URL + "/bars/" + this.props.bar + "/orders/" + this.props.orderID,
 			headers: {
 				Authorization: "Bearer " + localStorage.getItem("access_jwt")
 			},

@@ -94,6 +94,7 @@ html, body
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
+	justify-content: space-between;
 	input
 		flex-grow: 1
 		padding: 1em
@@ -103,6 +104,9 @@ html, body
 		width: 100%
 		box-sizing: border-box;
 		display: block;
+	button.barfly.primary
+		flex-shrink: 1
+		width: unset;
 
 button.barfly
 	color: lightGray
@@ -112,6 +116,7 @@ button.barfly
 	letter-spacing: 0.25em
 	text-transform: uppercase;
 	box-sizing: border-box;
+	width: 100%
 	&:hover
 		background-color: primaryHover
 	&:active
