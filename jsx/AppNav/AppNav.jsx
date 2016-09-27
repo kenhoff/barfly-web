@@ -5,20 +5,34 @@ var browserHistory = require("react-router").browserHistory;
 
 import bartender from "../Bartender.jsx";
 import BarName from "../BarName.jsx";
+import ProductName from "../Order/ProductName.jsx";
+import SizeDescription from "../_shared/SizeDescription.jsx";
 
 var AppNav_Presentational = React.createClass({
+	getDefaultProps: function() {
+		return {productOrders: []};
+	},
 	getInitialState: function() {
-		return {menuDropdownDisplayed: false};
+		return {menuDropdownDisplayed: false, cartDropdownDisplayed: false};
 	},
 	propTypes: {
 		currentBarID: PropTypes.number,
 		backURL: PropTypes.string,
-		backText: PropTypes.string
+		backText: PropTypes.string,
+		orderID: PropTypes.number
 	},
-	closeMenu: function() {
+	toggleCart: function() {
+		this.setState({
+			cartDropdownDisplayed: !this.state.cartDropdownDisplayed
+		});
+	},
+	toggleMenu: function() {
 		this.setState({
 			menuDropdownDisplayed: !this.state.menuDropdownDisplayed
 		});
+	},
+	closeMenus: function() {
+		this.setState({menuDropdownDisplayed: false, cartDropdownDisplayed: false});
 	},
 	signOut: function() {
 		localStorage.removeItem("access_jwt");
@@ -74,12 +88,52 @@ var AppNav_Presentational = React.createClass({
 				</div>
 			);
 		}
+
+		// cart
+		if (this.props.productOrders.length > 0) {
+			var cart = (
+				<div className="cart">
+					<button onClick={this.toggleCart}>{this.props.productOrders.length + " "}
+						<i className="fa fa-shopping-cart" aria-hidden="true"></i>
+					</button>
+					<div className="dropdown" style={{
+						display: (this.state.cartDropdownDisplayed
+							? "block"
+							: "none")
+					}}>
+						<ol>
+							{this.props.productOrders.map((productOrder) => {
+								return (
+									<li key={Math.random()}>
+										{productOrder.productQuantity + " "}<ProductName productID={productOrder.productID}/>{" "}<SizeDescription sizeID={productOrder.productSizeID}/>
+									</li>
+								);
+							})}
+							<li className="emphasis" onClick={() => {
+								browserHistory.push("/orders/" + this.props.orderID + "/review")
+							}}>{"Review order "}
+								<i className="fa fa-chevron-right" aria-hidden="true"></i>
+							</li>
+						</ol>
+					</div>
+					<div className="clickCatcher" style={{
+						display: (this.state.cartDropdownDisplayed
+							? "block"
+							: "none")
+					}} onClick={this.closeMenus}></div>
+				</div>
+			);
+		} else {
+			cart = (null);
+		}
+
 		return (
 			<div>
 				<div className="barfly nav">
 					{backButton}
+					{cart}
 					<div className="hamburger">
-						<button onClick={this.closeMenu}>{(this.state.menuDropdownDisplayed
+						<button onClick={this.toggleMenu}>{(this.state.menuDropdownDisplayed
 								? (
 									<i className="fa fa-times" aria-hidden="true"></i>
 								)
@@ -94,31 +148,31 @@ var AppNav_Presentational = React.createClass({
 						}}>
 							<ol>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									browserHistory.push("/bars");
 								}}>{currentBarText}</li>
 								<li className="emphasis" onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									this.newOrder();
 								}}>Start New Order</li>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									browserHistory.push("/orders");
 								}}>Order History</li>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									browserHistory.push("/distributors");
 								}}>Distributors</li>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									browserHistory.push("/bars");
 								}}>Bars</li>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									browserHistory.push("/account");
 								}}>Account</li>
 								<li onClick={() => {
-									this.closeMenu();
+									this.toggleMenu();
 									this.signOut();
 								}}>Sign Out</li>
 							</ol>
@@ -127,7 +181,7 @@ var AppNav_Presentational = React.createClass({
 							display: (this.state.menuDropdownDisplayed
 								? "block"
 								: "none")
-						}} onClick={this.closeMenu}></div>
+						}} onClick={this.closeMenus}></div>
 					</div>
 				</div>
 			</div>
