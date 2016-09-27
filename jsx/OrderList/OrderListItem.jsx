@@ -1,13 +1,12 @@
-var React = require('react');
-var moment = require('moment-timezone');
-var jstz = require('jstimezonedetect');
+var React = require("react");
+var moment = require("moment-timezone");
+var jstz = require("jstimezonedetect");
 
-import {Row, Col} from 'react-bootstrap';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
+import {connect} from "react-redux";
+import {browserHistory} from "react-router";
 
 var ProductOrderSummaryItem = require("../_shared/ProductOrderSummaryItem.jsx");
-var bartender = require('../Bartender.jsx');
+var bartender = require("../Bartender.jsx");
 
 var PresentationalOrderListItem = React.createClass({
 	propTypes: {
@@ -22,7 +21,7 @@ var PresentationalOrderListItem = React.createClass({
 	render: function() {
 		if (this.props.sent) {
 			if ("sentAt" in this.props) {
-				var displayTime = "Sent: " + moment(this.props.sentAt).tz(jstz.determine().name()).format('llll');
+				var displayTime = "Sent: " + moment(this.props.sentAt).tz(jstz.determine().name()).format("llll");
 			} else {
 				displayTime = "Sent";
 			}
